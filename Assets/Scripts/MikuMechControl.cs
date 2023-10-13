@@ -17,7 +17,7 @@ public class MikuMechControl : MonoBehaviour
     private float stunTimer;
 
     private bool dashing;
-    private int dashDMG = 300, dashEnergy = 20; 
+    private int knockback, dashDMG = 300, dashEnergy = 20; 
     private float dashTimer, dashCDTimer; private float dashCD = 0.7f;
 
     private int w1DMG = 25, w1Energy = 3, cepheidMode = 1; private float w1CD = 0.2f;
@@ -36,7 +36,7 @@ public class MikuMechControl : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         mspeed = moveSpeed; weaponNum = 1; cepheidMode = 1;
         energy = 100; health = 390; maxShield = 200; shield = 0;
-        shieldRegen = false; dashing = false;
+        shieldRegen = false; dashing = false; knockback = 0;
         shieldRegenTimer = 0; weaponCDTimer = 0; dashCDTimer = 0;
         dashTimer = 0; chargeTimer = 0; meleeTimer = 0;
         stunTimer = 0; stunned = false; W3Locked = true; W4Locked = true;
@@ -116,6 +116,10 @@ public class MikuMechControl : MonoBehaviour
     void FixedUpdate(){
         lookDir = mousePos - rb.position;
         velocity = moveSpeed*movement.normalized;
+        if(knockback>0){
+            knockback--;
+            velocity-=5*lookDir.normalized;
+        }
         if(!dashing){
             rb.MovePosition(rb.position + Time.fixedDeltaTime*velocity);
         }else{
@@ -145,11 +149,12 @@ public class MikuMechControl : MonoBehaviour
         var range = 0.4f+0.3f*charge;
         for (int i = 0; i<15;i++){
             GameObject bullet = Instantiate (BloomPrefab, transform.position, Quaternion.identity);
-            bullet.GetComponent<IBullet>().SetValues (w3DMG+(int)(charge*10), 9+4*charge+3*Random.value, range+0.2f*Random.value, 8-charge, velocity);
+            bullet.GetComponent<IBullet>().SetValues (w3DMG+(int)(charge*10), 10+6*charge+3*Random.value, range+0.2f*Random.value, 8-charge, 0.5f*velocity);
             var a = 1;
             if(lookDir.y<0) a = -1;
             bullet.transform.eulerAngles += (a*Vector2.Angle(new Vector2(1,0), lookDir)-90+spread*(Random.value-0.5f))* Vector3.forward;
         }
+        knockback = 6;
     }
     private void FireNOVA(float charge){
         if (charge<0.3f) return;
