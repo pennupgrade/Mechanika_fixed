@@ -13,7 +13,7 @@ public class MikuMechControl : MonoBehaviour
     [Header("Player Values")]
     [SerializeField] private int health, maxShield, shield, energy, weaponNum;
     private float shieldRegenTimer, meleeTimer, weaponCDTimer, chargeTimer;
-    private bool shieldRegen, stunned;
+    private bool shieldRegen, stunned, W3Locked, W4Locked;
     private float stunTimer;
 
     private bool dashing;
@@ -35,11 +35,11 @@ public class MikuMechControl : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         mspeed = moveSpeed; weaponNum = 1; cepheidMode = 1;
-        energy = 100; health = 400; maxShield = 600; shield = 0;
+        energy = 100; health = 390; maxShield = 200; shield = 0;
         shieldRegen = false; dashing = false;
         shieldRegenTimer = 0; weaponCDTimer = 0; dashCDTimer = 0;
         dashTimer = 0; chargeTimer = 0; meleeTimer = 0;
-        stunTimer = 0; stunned = false;
+        stunTimer = 0; stunned = false; W3Locked = true; W4Locked = true;
         StartCoroutine(EnergyRegen());
     }
 
@@ -67,8 +67,8 @@ public class MikuMechControl : MonoBehaviour
         //weapon select
         if (Input.GetKeyDown(KeyCode.Alpha1)) {weaponNum = 1; chargeTimer=0;}
         if (Input.GetKeyDown(KeyCode.Alpha2)) {weaponNum = 2; chargeTimer=0;}
-        if (Input.GetKeyDown(KeyCode.Alpha3)) {weaponNum = 3; chargeTimer=0;}
-        if (Input.GetKeyDown(KeyCode.Alpha4)) {weaponNum = 4; chargeTimer=0;}
+        if (Input.GetKeyDown(KeyCode.Alpha3)&&!W3Locked) {weaponNum = 3; chargeTimer=0;}
+        if (Input.GetKeyDown(KeyCode.Alpha4)&&!W4Locked) {weaponNum = 4; chargeTimer=0;}
         if (Input.GetKeyDown(KeyCode.Q)) {weaponNum--; if(weaponNum==0) weaponNum=4; chargeTimer=0;}
         if (Input.GetKeyDown(KeyCode.E)) {weaponNum++; if(weaponNum==5) weaponNum=1; chargeTimer=0;}
 
@@ -115,9 +115,9 @@ public class MikuMechControl : MonoBehaviour
 
     void FixedUpdate(){
         lookDir = mousePos - rb.position;
+        velocity = moveSpeed*movement.normalized;
         if(!dashing){
-            velocity = moveSpeed*Time.fixedDeltaTime*movement.normalized;
-            rb.MovePosition(rb.position + velocity);
+            rb.MovePosition(rb.position + Time.fixedDeltaTime*velocity);
         }else{
             rb.MovePosition(rb.position + 16*Time.fixedDeltaTime*movement.normalized);
         }
@@ -125,7 +125,7 @@ public class MikuMechControl : MonoBehaviour
 
     private void FireCepheid(){
         GameObject bullet = Instantiate (CepheidPrefab, transform.position, Quaternion.identity);
-        bullet.GetComponent<IBullet>().SetValues (w1DMG+(int)(w1DMG*((100.0f - energy)/100)), 7+(4*(100.0f - energy)/100), 1.4f, 0);
+        bullet.GetComponent<IBullet>().SetValues (w1DMG+(int)(w1DMG*((100.0f - energy)/100)), 5+(4*(100.0f - energy)/100), 1.4f, -4, velocity);
         bullet.GetComponent<CepheidBulletScript>().SetMode(cepheidMode);
         cepheidMode++;
         if (cepheidMode == 5) cepheidMode = 1;
@@ -135,7 +135,7 @@ public class MikuMechControl : MonoBehaviour
     }
     private void FireDISC(){
         GameObject bullet = Instantiate (DISCPrefab, transform.position, Quaternion.identity);
-        bullet.GetComponent<IBullet>().SetValues (w2DMG, 7, 4, -1.5f);
+        bullet.GetComponent<IBullet>().SetValues (w2DMG, 7, 4, -1.5f, velocity);
         var a = 1;
         if(lookDir.y<0) a = -1;
         bullet.transform.eulerAngles += (a*Vector2.Angle(new Vector2(1,0), lookDir)-90+6*(Random.value-0.5f))* Vector3.forward;
@@ -145,7 +145,7 @@ public class MikuMechControl : MonoBehaviour
         var range = 0.4f+0.3f*charge;
         for (int i = 0; i<15;i++){
             GameObject bullet = Instantiate (BloomPrefab, transform.position, Quaternion.identity);
-            bullet.GetComponent<IBullet>().SetValues (w3DMG+(int)(charge*10), 9+4*charge+3*Random.value, range+0.2f*Random.value, 8-charge);
+            bullet.GetComponent<IBullet>().SetValues (w3DMG+(int)(charge*10), 9+4*charge+3*Random.value, range+0.2f*Random.value, 8-charge, velocity);
             var a = 1;
             if(lookDir.y<0) a = -1;
             bullet.transform.eulerAngles += (a*Vector2.Angle(new Vector2(1,0), lookDir)-90+spread*(Random.value-0.5f))* Vector3.forward;
@@ -154,7 +154,7 @@ public class MikuMechControl : MonoBehaviour
     private void FireNOVA(float charge){
         if (charge<0.3f) return;
         GameObject bullet = Instantiate (NOVAPrefab, transform.position, Quaternion.identity);
-        bullet.GetComponent<IBullet>().SetValues ((int)(w4DMG*charge), 5+0.5f*charge, 1.7f, -5);
+        bullet.GetComponent<IBullet>().SetValues ((int)(w4DMG*charge), 5+0.5f*charge, 1.7f, -5, velocity);
         var a = 1;
         if(lookDir.y<0) a = -1;
         bullet.transform.eulerAngles += (a*Vector2.Angle(new Vector2(1,0), lookDir)-90+3*(Random.value-0.5f))* Vector3.forward;
@@ -206,6 +206,21 @@ public class MikuMechControl : MonoBehaviour
         shieldRegenTimer = 24;
         meleeTimer = 0.5f;
         if (stun){stunTimer += 0.5f; stunned = true;}
+    }
+
+    public int UnlockWeapon(int weapon){
+        if (weapon==3) W3Locked = false;
+        else if (weapon==4) W4Locked = false;
+
+        if(W4Locked&&!W3Locked) return 3;
+        else if(!W4Locked&&W3Locked) return 4;
+        else if(!W4Locked&&!W3Locked) return 5;
+        else return 2;
+    }
+
+    public void Heal(int hp){
+        health+=hp;
+        if (health>390) {health = 390; moveSpeed=8;}
     }
 
     private float TimerF( float val){

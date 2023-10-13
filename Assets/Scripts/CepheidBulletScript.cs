@@ -7,6 +7,7 @@ public class CepheidBulletScript : MonoBehaviour, IBullet
     private bool friendly;
     private int damage;
     private float spd, duration, acc, Hspd, Hacc;
+    private Vector2 velocity;
     private Rigidbody2D rb;
     // Start is called before the first frame update
     void Start()
@@ -19,8 +20,8 @@ public class CepheidBulletScript : MonoBehaviour, IBullet
     void Update()
     {
         Hspd+=Hacc*Time.deltaTime;
-        if(Hspd>2) Hacc = -8;
-        else if(Hspd<-2) Hacc = 8;
+        if(Hspd>2.5f) Hacc = -8;
+        else if(Hspd<-2.5f) Hacc = 8;
 
         duration -=Time.deltaTime;
         spd -= acc*Time.deltaTime; if (spd<4) spd = 4;
@@ -29,7 +30,7 @@ public class CepheidBulletScript : MonoBehaviour, IBullet
 
     void FixedUpdate()
     {
-        rb.MovePosition(rb.position+(Vector2)(Time.fixedDeltaTime*(spd*transform.up+Hspd*transform.right)));
+        rb.MovePosition(rb.position+(Vector2)(Time.fixedDeltaTime*(0.4f*(Vector3)velocity+spd*transform.up+Hspd*transform.right)));
 
     }
 
@@ -45,11 +46,12 @@ public class CepheidBulletScript : MonoBehaviour, IBullet
         Destroy(gameObject);
     }
 
-    public void SetValues (int dmg, float speed, float timer, float accel){
+    public void SetValues (int dmg, float speed, float timer, float accel, Vector2 v){
         damage = dmg;
         spd = speed;
         duration = timer;
         acc = accel;
+        velocity = v;
     }
 
     public void SetMode(int mode){

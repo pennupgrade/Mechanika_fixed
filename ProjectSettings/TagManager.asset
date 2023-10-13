@@ -17,9 +17,9 @@ TagManager:
   - Player
   - DISC
   - PlayerProjectile
-  - 
-  - EnemyProjectile
   - Enemy
+  - EnemyProjectile
+  - 
   - 
   - 
   - 

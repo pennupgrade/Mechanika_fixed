@@ -63,7 +63,7 @@ public class DISCBulletScript : MonoBehaviour, IBullet
         }
     }
 
-    public void SetValues (int dmg, float speed, float timer, float accel){
+    public void SetValues (int dmg, float speed, float timer, float accel, Vector2 v){
         damage = dmg;
         spd = speed;
         duration = timer;

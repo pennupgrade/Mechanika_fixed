@@ -8,6 +8,7 @@ public class Bullet : MonoBehaviour, IBullet
     private int damage;
     private float spd, duration, acc;
     private Rigidbody2D rb;
+    private Vector2 velocity;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,7 +26,7 @@ public class Bullet : MonoBehaviour, IBullet
 
     void FixedUpdate()
     {
-        rb.MovePosition(rb.position+(Vector2)(spd*Time.fixedDeltaTime*transform.up));
+        rb.MovePosition(rb.position+(Vector2)(Time.fixedDeltaTime*(spd*transform.up+(Vector3)velocity)));
     }
 
     void OnCollisionEnter2D(Collision2D c){
@@ -46,11 +47,12 @@ public class Bullet : MonoBehaviour, IBullet
         Destroy(gameObject);
     }
 
-    public void SetValues (int dmg, float speed, float timer, float accel){
+    public void SetValues (int dmg, float speed, float timer, float accel, Vector2 v){
         damage = dmg;
         spd = speed;
         duration = timer;
         acc = accel;
+        velocity = v;
     }
 
 }

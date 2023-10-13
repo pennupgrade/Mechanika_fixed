@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public interface IEnemy
 {
     void Damage (int dmg, bool stun);
@@ -6,7 +8,7 @@ public interface IEnemy
 
 public interface IBullet
 {
-    void SetValues (int dmg, float speed, float timer, float accel);
+    void SetValues (int dmg, float speed, float timer, float accel, Vector2 v);
 }
 
 public interface IMissile
