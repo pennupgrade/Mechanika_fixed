@@ -39,6 +39,7 @@ public class CepheidBulletScript : MonoBehaviour, IBullet
             Destruction();
         }else if (c.gameObject.TryGetComponent<IEnemy>(out IEnemy enemy)){
             enemy.Damage(damage, false);
+            Destruction();
         }
     }
 

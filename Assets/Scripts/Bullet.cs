@@ -35,10 +35,12 @@ public class Bullet : MonoBehaviour, IBullet
         }else if (friendly){
             if (c.gameObject.TryGetComponent<IEnemy>(out IEnemy enemy)){
                 enemy.Damage(damage, false);
+                Destruction();
             }
         }else{
             if(c.gameObject.tag == "Player"){
                 c.gameObject.GetComponent<MikuMechControl>().Damage(damage,false);
+                Destruction();
             }
         }
     }
