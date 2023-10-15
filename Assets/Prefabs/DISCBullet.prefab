@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5488019810577101325}
   - component: {fileID: 5618962507504009559}
-  - component: {fileID: 9051485409187079380}
   - component: {fileID: 7109615297489531686}
   - component: {fileID: 584758176250782140}
+  - component: {fileID: -3505039321120154316}
   m_Layer: 7
   m_Name: DISCBullet
   m_TagString: PlayerBullet
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 6831640081525694668}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -87,18 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &9051485409187079380
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6831640081525694668}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef8647a300bfd9d45a8fb4f59d29aa15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!58 &7109615297489531686
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -136,3 +124,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &-3505039321120154316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6831640081525694668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4a3c41e4b936414cbced084449225bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -129,7 +129,7 @@ public class MikuMechControl : MonoBehaviour
         if(!dashing){
             rb.MovePosition(rb.position + Time.fixedDeltaTime*velocity);
         }else{
-            rb.MovePosition(rb.position + 12*Time.fixedDeltaTime*movement.normalized);
+            rb.MovePosition(rb.position + 16*Time.fixedDeltaTime*movement.normalized);
         }
     }
 
@@ -141,14 +141,14 @@ public class MikuMechControl : MonoBehaviour
         if (cepheidMode == 5) cepheidMode = 1;
         var a = 1;
         if(lookDir.y<0) a = -1;
-        bullet.transform.eulerAngles += (a*Vector2.Angle(new Vector2(1,0), lookDir)-90+6*(Random.value-0.5f))* Vector3.forward;
+        bullet.transform.eulerAngles = (a*Vector2.Angle(new Vector2(1,0), lookDir)-90+6*(Random.value-0.5f))* Vector3.forward;
     }
     private void FireDISC(){
         GameObject bullet = Instantiate (DISCPrefab, transform.position, Quaternion.identity);
         bullet.GetComponent<IBullet>().SetValues (w2DMG, 7, 4, -1.5f, velocity);
         var a = 1;
         if(lookDir.y<0) a = -1;
-        bullet.transform.eulerAngles += (a*Vector2.Angle(new Vector2(1,0), lookDir)-90+6*(Random.value-0.5f))* Vector3.forward;
+        bullet.transform.eulerAngles = (a*Vector2.Angle(new Vector2(1,0), lookDir)-90+6*(Random.value-0.5f))* Vector3.forward;
     }
     private void FireSenbonzakura(float charge){
         var spread = 45-(30*charge);
@@ -158,7 +158,7 @@ public class MikuMechControl : MonoBehaviour
             bullet.GetComponent<IBullet>().SetValues (w3DMG+(int)(charge*10), 10+6*charge+3*Random.value, range+0.2f*Random.value, 8-charge, 0.5f*velocity);
             var a = 1;
             if(lookDir.y<0) a = -1;
-            bullet.transform.eulerAngles += (a*Vector2.Angle(new Vector2(1,0), lookDir)-90+spread*(Random.value-0.5f))* Vector3.forward;
+            bullet.transform.eulerAngles = (a*Vector2.Angle(new Vector2(1,0), lookDir)-90+spread*(Random.value-0.5f))* Vector3.forward;
         }
         knockback = 6;
     }
@@ -168,7 +168,7 @@ public class MikuMechControl : MonoBehaviour
         bullet.GetComponent<IBullet>().SetValues ((int)(w4DMG*charge), 5+0.4f*charge, 1.7f, -5, velocity);
         var a = 1;
         if(lookDir.y<0) a = -1;
-        bullet.transform.eulerAngles += (a*Vector2.Angle(new Vector2(1,0), lookDir)-90)* Vector3.forward;
+        bullet.transform.eulerAngles = (a*Vector2.Angle(new Vector2(1,0), lookDir)-90)* Vector3.forward;
     }
     private IEnumerator FireMeteor(){
         var count = 0;
@@ -179,7 +179,7 @@ public class MikuMechControl : MonoBehaviour
             bullet.GetComponent<MeteorMissileScript>().SetValues (w5DMG, 3, 2, 9, 5, 100, gameObject);
             var a = 1;
             if(d.y<0) a = -1;
-            bullet.transform.eulerAngles += (a*Vector2.Angle(new Vector2(1,0), d)-140+10*i)* Vector3.forward;
+            bullet.transform.eulerAngles = (a*Vector2.Angle(new Vector2(1,0), d)-140+10*i)* Vector3.forward;
             yield return new WaitForSeconds(.1f);
         }
     }
@@ -205,6 +205,7 @@ public class MikuMechControl : MonoBehaviour
     }
 
     private void Death(){
+        Debug.Log("death");
         // game over / retry screen
     }
 
@@ -214,7 +215,7 @@ public class MikuMechControl : MonoBehaviour
             health -= dmg; moveSpeed = 6+2*((400-health)/400.0f);
         }
 
-        if(health<0) Death();
+        if(health<1) Death();
         shieldRegenTimer = 24;
         if (stun){stunTimer += 0.5f; stunned = true;}
     }
@@ -226,7 +227,7 @@ public class MikuMechControl : MonoBehaviour
             health -= dmg; moveSpeed = 6+2*((400-health)/400.0f);
         }
 
-        if(health<0) Death();
+        if(health<1) Death();
         shieldRegenTimer = 24;
         meleeTimer = 0.5f;
         if (stun){stunTimer += 0.5f; stunned = true;}
