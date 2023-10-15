@@ -14,5 +14,5 @@ public interface IBullet
 public interface IMissile
 {
     void SetSpeed (float initSpeed, float accel, float finalSpeed);
-    void SetValues (int dmg, float homingStrength, float timer, bool stun);
+    void SetValues (int dmg, float timer, float homingStrength, bool stun);
 }
