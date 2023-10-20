@@ -7,15 +7,15 @@ Shader "Unlit/VN/OutputTextbox"
         _HighlightInset ("Highlight Inset", Float) = 0.1
         _HighlightThickness ("Highlight Thickness", Float) = 0.1
 
-        _PHighlightInset ("Partial Highlight Inset", Float) = 0.3
-        _PHighlightThickness ("Partial Highlight Thickness", Float) = 0.08
-        _PHighlightVelocity ("Partial Highlight Velocity", Float) = 0.1
-        _PHighlightSize ("Partial Highlight Size", Float) = 0.4 // Angle kinda jank cuz wide rectangle whatever for now
+        _InnerHighlightInset ("Inner Highlight Inset", Float) = 0.3
+        _InnerHighlightThickness ("Inner Highlight Thickness", Float) = 0.08
 
-        _SimpleHighlightColor ("Highlight Color", Color) = (1., 1., 1., 1.)
-        _PartialHighlightColor ("Partial Highlight Color", Color) = (0.8, 0.8, 0.8, 1.)
+        _OuterHighlightColor ("Outer Highlight Color", Color) = (1., 1., 1., 1.)
+        _InnerHighlightColor ("Inner Highlight Color", Color) = (0.8, 0.8, 0.8, 1.)
         _NonHighlightColor1 ("Non-Highlight Color 1", Color) = (0., 0., 0., 0.7)
         _NonHighlightColor2 ("Non-Highlight Color 2", Color) = (0.15, 0.15, 0.15, 0.7)
+
+        _HighlightDimensions ("Highlight Dimensions", Vector) = (4., 2., 8., 4.)
     }
     SubShader
     {
@@ -61,13 +61,37 @@ Shader "Unlit/VN/OutputTextbox"
             float _HighlightInset;
             float _HighlightThickness;
 
-            float _PHighlightInset;
-            float _PHighlightThickness;
-            float _PHighlightVelocity;
-            float _PHighlightSize;
+            float _InnerHighlightInset;
+            float _InnerHighlightThickness;
 
-            float4 _HighlightColor;
-            float4 _NonHighlightColor;
+            float4 _OuterHighlightColor;
+            float4 _InnerHighlightColor;
+            float4 _NonHighlightColor1;
+            float4 _NonHighlightColor2;
+
+            float4 _HighlightDimensions;
+
+            float cover;
+
+            float sbHighlight(float2 p, float2 ps, float2 pe, float2 domainDim, float2 highDim, float t)
+            {
+
+                //
+                p -= ps;
+                float2 fo = normalize(pe - ps);
+                float2 up = perp(fo);
+                p = float2(dot(p, fo), dot(p, up));
+
+                p.x = amod(p.x - t, domainDim.x) - domainDim.x*.5;
+                p.y = abs(p.y);
+                float newCover = max(cover, step(p.y, (domainDim+highDim)*.5));
+
+                p = p - float2(0., domainDim.y*.5);
+                p = abs(p);
+
+                float b = step(p.x, highDim.x*.5) * step(p.y, highDim.y*.5) * (1.-cover);
+                cover = newCover; return b;
+            }
 
             fixed4 frag(vOut i) : SV_Target
             {
@@ -81,17 +105,33 @@ Shader "Unlit/VN/OutputTextbox"
                 float bSimpleHighlight = bOuter * (1.-bInner);
                 isHighlight += bSimpleHighlight;
 
-                // Partial Highlight
-                float bAngle = sb(sdAngledLines(p, _Time.y*_PHighlightVelocity, _PHighlightSize));
-                float bOuterBox = sb(sdBox(p, _Dimensions - _PHighlightInset*2.));
-                float bInnerBox = sb(sdBox(p, _Dimensions - (_PHighlightInset + _PHighlightThickness)*2.));
-                float bPartialHighlight = bAngle * bOuterBox * (1.-bInnerBox);
-                isHighlight += bPartialHighlight;
+                // Inner Highlight
+                float bOuterBox = sb(sdBox(p, _Dimensions - _InnerHighlightInset*2.));
+                float bInnerBox = sb(sdBox(p, _Dimensions - (_InnerHighlightInset + _InnerHighlightThickness)*2.));
+                float bInnerHighlight = bOuterBox * (1.-bInnerBox);
+                isHighlight += bInnerHighlight;
+
+                // Dotted Highlights - Only compatible with one Dimensions.. restrict in C# at least.. assume for dimension you already have for nowhn
+                // (980, 197), (490, 98.5)
+                float t = _Time.y*10.;
+                cover = 1.-bInnerBox;
+
+                float2 hDim = _HighlightDimensions.xy;
+                float2 dDim = _HighlightDimensions.zw;
+
+                isHighlight += sbHighlight(p, float2(-490, 35.), float2(-390.-10., 115.), dDim, hDim, t);
+                isHighlight += sbHighlight(p, float2(-500., -25.), float2(-420, -105.), dDim, hDim, -t);
+                //isHighlight += sbHighlight(p, float2(415., 115.), float2(475., 40.), dDim, hDim, t);
+                //isHighlight += sbHighlight(p, float2(490., -35.), float2(415., -95.), dDim, hDim, t);
+                isHighlight += sbHighlight(p, float2(490, 35.), float2(400., 115.), dDim, hDim, -t);
+                isHighlight += sbHighlight(p, float2(500., -25.), float2(420., -105.), dDim, hDim, t);
+
+                //meant to be imperfect highlight looking, but should i add more highlights for that, or keep a small amount and make it look like perfect symmetrical
 
                 isHighlight = saturate(isHighlight);
 
                 // Final Color
-                float4 finalCol = lerp(_NonHighlightColor, _HighlightColor, isHighlight);
+                float4 finalCol = lerp(_NonHighlightColor1, _InnerHighlightColor, isHighlight);
 
                 return finalCol;
 
