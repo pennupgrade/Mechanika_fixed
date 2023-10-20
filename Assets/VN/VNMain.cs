@@ -10,8 +10,6 @@ using UnityEngine.UI;
 
 using static Utils;
 
-//using PText as TMP_Texet
-
 // Called Main because it interacts directly with Unity
 //can split into pratial
 public partial class VNMain : MonoBehaviour

@@ -2,13 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using Unity.Mathematics;
+using UnityEngine;
 
-// Some overall helper methods we can add as we go
 public static class Utils
 {
     public static void ForeachIndex<T>(this List<T> l, Action<T, int> action)
     {
-        for(int i=0; i<l.Count; i++)
+        for (int i = 0; i < l.Count; i++)
             action(l[i], i);
     }
 
@@ -32,7 +33,7 @@ public static class Utils
     public static string PartialStringSpaceTrim(string si, int charCount)
     {
         string so = ""; int charsLeft = charCount;
-        for(int i=0; i<si.Length; i++)
+        for (int i = 0; i < si.Length; i++)
         {
             so += si[i]; if (si[i] != ' ') charsLeft--;
             if (charsLeft <= 0) break;
@@ -49,4 +50,9 @@ public static class Utils
     /// <returns></returns>
     public static string StringPercent(string s, float amount)
         => Stringlerp("", s, (int)(s.Length * amount));
+
+    public static float2 xy(this Vector3 v) => new (v.x, v.y);
+    public static float2 xy(this float3 v) => new(v.x, v.y);
+    public static Vector4 xyzw(this Vector3 v, float w = 0f) => new(v.x, v.y, v.z, w);
+    public static float4 xyzw(this float3 v, float w = 0f) => new(v.x, v.y, v.z, w);
 }
