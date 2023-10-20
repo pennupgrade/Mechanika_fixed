@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MeteorMissileScript : MonoBehaviour
 {
+    public GameObject explosionPrefab;
     private MikuMechControl player;
     private int damage, frameTimer;
     private float spd, duration, acc, max, homingStr, Cturn;
@@ -51,6 +52,14 @@ public class MeteorMissileScript : MonoBehaviour
     }
 
     private void Destruction(){
+        if(explosionPrefab!=null){
+            GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
+            Destroy(expl, 2);
+        }
+        /*
+        Destroy(transform.getChild(0).gameObject, 2);
+        transform.DetachChildren();
+        */
         Destroy(gameObject);
     }
 

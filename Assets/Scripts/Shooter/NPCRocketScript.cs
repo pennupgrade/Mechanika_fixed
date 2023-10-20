@@ -5,6 +5,7 @@ using UnityEngine;
 public class NPCRocketScript : MonoBehaviour, IMissile
 {
     private GameObject player;
+    public GameObject explosionPrefab;
     private int damage, frameTimer;
     private float spd, duration, acc, max, homingStr, Cturn;
     private bool stun;
@@ -37,9 +38,9 @@ public class NPCRocketScript : MonoBehaviour, IMissile
                 if (Vector3.Dot(transform.right, TargetDirection)>0){
                     Cturn = -homingStr;
                 } else Cturn = homingStr;
-                transform.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward;
             }
         }
+        transform.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward;
         rb.MovePosition(rb.position+(Vector2)(Time.fixedDeltaTime*spd*transform.up));
     }
 
@@ -54,6 +55,14 @@ public class NPCRocketScript : MonoBehaviour, IMissile
     }
 
     private void Destruction(){
+        if(explosionPrefab!=null){
+            GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
+            Destroy(expl, 2);
+        }
+        /*
+        Destroy(transform.getChild(0).gameObject, 2);
+        transform.DetachChildren();
+        */
         Destroy(gameObject);
     }
 

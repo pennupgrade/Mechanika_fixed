@@ -38,7 +38,7 @@ public class DISCBulletScript : MonoBehaviour, IBullet
 
     void OnCollisionEnter2D(Collision2D c){
         if (c.gameObject.tag=="Environment"){
-            bounces++; spd +=2;
+            bounces++; spd +=1.4f;
             Vector3 newDir;
             try{
                 newDir=Vector3.Reflect(transform.up, c.contacts[0].normal+c.contacts[1].normal);

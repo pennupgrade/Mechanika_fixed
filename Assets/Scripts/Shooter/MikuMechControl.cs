@@ -22,8 +22,8 @@ public class MikuMechControl : MonoBehaviour
     private float dashTimer, dashCDTimer; private float dashCD = 0.7f;
 
     private int w1DMG = 25, w1Energy = 3, cepheidMode = 1; private float w1CD = 0.2f;
-    private int w2DMG = 80, w2Energy = 18; private float w2CD = 0.7f;
-    private int w3DMG = 30, w3Energy = 24; private float w3CD = 0.4f;
+    private int w2DMG = 56, w2Energy = 22; private float w2CD = 0.7f;
+    private int w3DMG = 20, w3Energy = 24; private float w3CD = 0.4f;
     private int w4DMG = 200, w4Energy = 22; private float w4CD = 0.1f;
     private int w5DMG = 240, w5Energy = 30; private float w5CD = 6;
     [Header("Cam")]
@@ -135,7 +135,7 @@ public class MikuMechControl : MonoBehaviour
 
     private void FireCepheid(){
         GameObject bullet = Instantiate (CepheidPrefab, transform.position, Quaternion.identity);
-        bullet.GetComponent<IBullet>().SetValues (w1DMG+(int)(w1DMG*((100.0f - energy)/100)), 5+(4*(100.0f - energy)/100), 1.4f, -4, velocity);
+        bullet.GetComponent<IBullet>().SetValues (w1DMG+(int)(w1DMG*((100.0f - energy)/100)), 5+(4*(100.0f - energy)/100), 1.5f, -4, velocity);
         bullet.GetComponent<CepheidBulletScript>().SetMode(cepheidMode);
         cepheidMode++;
         if (cepheidMode == 5) cepheidMode = 1;
@@ -155,7 +155,7 @@ public class MikuMechControl : MonoBehaviour
         var range = 0.4f+0.3f*charge;
         for (int i = 0; i<15;i++){
             GameObject bullet = Instantiate (SenbonzakuraPrefab, transform.position, Quaternion.identity);
-            bullet.GetComponent<IBullet>().SetValues (w3DMG+(int)(charge*10), 10+6*charge+3*Random.value, range+0.2f*Random.value, 8-charge, 0.5f*velocity);
+            bullet.GetComponent<IBullet>().SetValues (w3DMG, 10+5*charge+3*Random.value, range+0.2f*Random.value, 8-charge, 0.5f*velocity);
             var a = 1;
             if(lookDir.y<0) a = -1;
             bullet.transform.eulerAngles = (a*Vector2.Angle(new Vector2(1,0), lookDir)-90+spread*(Random.value-0.5f))* Vector3.forward;
@@ -180,7 +180,7 @@ public class MikuMechControl : MonoBehaviour
             var a = 1;
             if(d.y<0) a = -1;
             bullet.transform.eulerAngles = (a*Vector2.Angle(new Vector2(1,0), d)-140+10*i)* Vector3.forward;
-            yield return new WaitForSeconds(.1f);
+            yield return new WaitForSeconds(.12f);
         }
     }
 

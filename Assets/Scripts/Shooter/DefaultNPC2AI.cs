@@ -6,14 +6,13 @@ using Pathfinding;
 public class DefaultNPC2AI : MonoBehaviour, IEnemy
 {
     [Header("Prefabs")]
-    public GameObject BulletPrefab;
-    public GameObject MissilePrefab;
+
+    public GameObject BulletPrefab, explosionPrefab, MissilePrefab;
     [Header("Enemy Values")]
     [SerializeField] private int health, bulletDMG, bulletsLeft, maxBullets, missileDMG;
     private float moveSpeed, mspeed, turnSpeed, nextWaypointDistance, bulletCD, bulletSpeed;
     Path path;
     Seeker seeker;
-    private bool reachedEndOfPath;
     private int currentWaypoint;
     private float bulletCDTimer, bulletReload=3, bulletReloadTimer, missileCD=10, missileCDTimer;
     private float Cturn, meleeTimer, stunTimer, searchTimer, aimTimer;
@@ -33,15 +32,15 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
         fp = gameObject.transform.GetChild(0);
         state = 0; frameTimer = 1;
         bulletDMG=80; maxBullets=10; missileDMG=160;
-        moveSpeed=6; mspeed=moveSpeed; turnSpeed=60;
-        bulletCD=0.7f; bulletSpeed = 10; bulletReload=3; missileCD=10;
-        health = 200; bulletsLeft = maxBullets;
+        moveSpeed=8; mspeed=moveSpeed; turnSpeed=60;
+        bulletCD=0.7f; bulletSpeed = 8.5f; bulletReload=3; missileCD=10;
+        health = 240; bulletsLeft = maxBullets;
         pfound=false; stunned=false;
         if(Random.value>0.4f) enemyType = 1; else enemyType = 2;
         StartCoroutine(FindPlayer());
         bulletCDTimer = 0; meleeTimer = 0; stunTimer = 0; bulletReloadTimer = 0; missileCDTimer = 25;
         searchTimer = 3; aimTimer = 0;
-        nextWaypointDistance = 2;
+        nextWaypointDistance = 1;
     }
 
     // Update is called once per frame
@@ -84,10 +83,8 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
         //pathfinding
         if(path!=null){
             if(currentWaypoint>=path.vectorPath.Count){
-                reachedEndOfPath = true;
                 MoveDir=Vector2.zero;
             }else{
-                reachedEndOfPath = false;
                 MoveDir = ((Vector2)path.vectorPath[currentWaypoint]-rb.position).normalized;
                 if(Vector2.Distance(rb.position,path.vectorPath[currentWaypoint])<nextWaypointDistance){
                     currentWaypoint++;
@@ -113,13 +110,14 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
         bulletsLeft--;
         if(bulletsLeft==0){bulletsLeft=maxBullets;bulletReloadTimer=bulletReload;}
         GameObject bullet = Instantiate (BulletPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 8*(Random.value-0.5f)));
-        bullet.GetComponent<IBullet>().SetValues (bulletDMG, bulletSpeed, 1.8f+0.4f*Random.value, 0, Vector2.zero);
+        bullet.GetComponent<IBullet>().SetValues (bulletDMG, bulletSpeed+3*Vector3.Dot((Vector3)MoveDir, fp.up),
+        1.8f, 0, Vector2.zero);
     }
     private void FireMissile(){
         if(enemyType==1||missileCDTimer>0.001) return;
         missileCDTimer = missileCD+10*(Random.value-0.5f);
         GameObject missile = Instantiate (MissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 8*(Random.value-0.5f)));
-        missile.GetComponent<IMissile>().SetSpeed(5,24,30);
+        missile.GetComponent<IMissile>().SetSpeed(5,24,24);
         missile.GetComponent<IMissile>().SetValues (missileDMG, 0.4f, 120, true, Player);
     }
     private void CheckRaycast(){
@@ -150,6 +148,9 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
     public void SetState(int s){
         state = s;
     }
+    public void SetType(int t){
+        enemyType = t;
+    }
 
     public void Damage (int dmg, bool stun){
         health-=dmg; if (health<1) Destruction();
@@ -166,14 +167,19 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
         int iter = 0;
         Vector2 point;
         do{
-        point = (Vector2)Player.transform.position + Random.insideUnitCircle*8;
+        point = (Vector2)Player.transform.position + Random.insideUnitCircle*12;
         iter++;
-        }while(iter<10&&Physics2D.Raycast(point, (Vector2)(Player.transform.position-(Vector3)point), Vector3.Distance(Player.transform.position,(Vector3)point), 1<<11));
-        if(iter>9) return (Vector2)Player.transform.position;
+        }while(iter<11&&Physics2D.Raycast(point, (Vector2)(Player.transform.position-(Vector3)point), Vector3.Distance(Player.transform.position,(Vector3)point), 1<<11)
+        &&Vector3.Distance(Player.transform.position,(Vector3)point)<3.5f);
+        if(iter>10) return (Vector2)Player.transform.position;
         else return point;
     }
 
     private void Destruction(){
+        if(explosionPrefab!=null){
+            GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
+            Destroy(expl, 2);
+        }
         Destroy(gameObject);
     }
 

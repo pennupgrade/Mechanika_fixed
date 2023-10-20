@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour, IBullet
 {
+    public GameObject explosionPrefab;
     private bool friendly;
     private int damage;
     private float spd, duration, acc;
@@ -46,6 +47,10 @@ public class Bullet : MonoBehaviour, IBullet
     }
 
     private void Destruction(){
+        if(explosionPrefab!=null){
+            GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
+            Destroy(expl, 2);
+        }
         Destroy(gameObject);
     }
 
