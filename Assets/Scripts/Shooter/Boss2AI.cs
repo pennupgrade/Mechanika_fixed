@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Pathfinding;
 
 public class Boss2AI : MonoBehaviour, IEnemy
 {
@@ -11,24 +10,21 @@ public class Boss2AI : MonoBehaviour, IEnemy
     [Header("Enemy Values")]
     [SerializeField] private int health, bulletDMG, bulletsLeft, maxBullets, missileDMG, shotgunDMG;
     private float moveSpeed, mspeed, turnSpeed, nextWaypointDistance, bulletCD, bulletSpeed;
-    Path path;
-    Seeker seeker;
-    private int currentWaypoint;
     private float bulletCDTimer, bulletReload=3, bulletReloadTimer, missileCD=10, missileCDTimer;
     private float shotgunCDTimer, shotgunCD=5, spawnTime=10;
-    private float Cturn, meleeTimer, searchTimer, aimTimer, spawnTimer;
+    private float Cturn, meleeTimer, searchTimer, aimTimer;
     private Vector2 TargetDir, MoveDir;
     private Rigidbody2D rb;
     private Transform fp;
     public GameObject Player; private bool pfound;
-    [SerializeField] private int attackNum, state, spawnCounter;
+    [SerializeField] private int attackNum, state, mode;
     private int frameTimer;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        seeker = GetComponent<Seeker>(); MoveDir=Vector2.zero;
+        MoveDir=Vector2.zero;
         fp = gameObject.transform.GetChild(0);
         state = 0; frameTimer = 1;
         bulletDMG=80; missileDMG=240; shotgunDMG = 40;
@@ -37,7 +33,6 @@ public class Boss2AI : MonoBehaviour, IEnemy
         health = 600;
         pfound=false;
         bulletCDTimer = 0; meleeTimer = 0; bulletReloadTimer = 0; missileCDTimer = 15;
-        nextWaypointDistance = 1;
     }
 
     // Update is called once per frame
@@ -55,18 +50,6 @@ public class Boss2AI : MonoBehaviour, IEnemy
                 } else Cturn = turnSpeed;
             }
         
-        //pathfinding
-        if(path!=null){
-            if(currentWaypoint>=path.vectorPath.Count){
-                MoveDir=Vector2.zero;
-                UpdatePath();
-            }else{
-                MoveDir = ((Vector2)path.vectorPath[currentWaypoint]-rb.position).normalized;
-                if(Vector2.Distance(rb.position,path.vectorPath[currentWaypoint])<nextWaypointDistance){
-                    currentWaypoint++;
-                }
-            }
-        }
 
         bulletCDTimer=TimerF(bulletCDTimer); meleeTimer=TimerF(meleeTimer);
         bulletReloadTimer=TimerF(bulletReloadTimer); missileCDTimer=TimerF(missileCDTimer);
@@ -100,7 +83,6 @@ public class Boss2AI : MonoBehaviour, IEnemy
     private void CheckRaycast(){
         if (Physics2D.Raycast((Vector2)transform.position, (Vector2)(Player.transform.position-transform.position), Vector3.Distance(Player.transform.position,transform.position), 1<<11)){
             state = 1;
-            if(currentWaypoint>6) UpdatePath();
         }
         else{
             state = 2;
@@ -110,17 +92,6 @@ public class Boss2AI : MonoBehaviour, IEnemy
         searchTimer=2;
         if(Vector3.Distance(Player.transform.position,transform.position)<18){
             state = 1;
-            UpdatePath();
-        }
-    }
-    private void UpdatePath(){
-        if(seeker.IsDone())
-            seeker.StartPath(rb.position, GetValidPoint(), OnPathComplete);
-    }
-    private void OnPathComplete(Path p){
-        if(!p.error){
-            path=p;
-            currentWaypoint=0;
         }
     }
     public void SetAttack(int a){

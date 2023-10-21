@@ -78,10 +78,6 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
             }
         }
 
-        if (stunned && stunTimer>0.001f){
-            moveSpeed = mspeed*0.5f;
-        } if (stunned && stunTimer<0.01f) {moveSpeed = mspeed; stunned = false;}
-
         if(bounce&&bounceTimer<0.01f){bounceVector=Vector2.zero; bounce = false;}
         
         //pathfinding
@@ -105,7 +101,16 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
 
     void FixedUpdate()
     {
-        rb.MovePosition(rb.position + Time.fixedDeltaTime*(moveSpeed*MoveDir+4*bounceVector));
+        //stunned
+        if (stunned){
+            moveSpeed = mspeed*0.5f;
+            if (stunTimer<0.001f) {moveSpeed = mspeed; stunned = false;}
+        }
+        if(!bounce){
+            rb.MovePosition(rb.position + Time.fixedDeltaTime*moveSpeed*MoveDir);
+        }else {
+            rb.MovePosition(rb.position - Time.fixedDeltaTime*moveSpeed*bounceVector);
+        }
         fp.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward; 
     }
 
@@ -157,6 +162,10 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
 
     void OnCollisionEnter2D(Collision2D c){
         if(c.gameObject.tag == "Player"){
+            bounce = true; bounceTimer = 0.5f;
+            bounceVector = (Vector2)(c.gameObject.transform.position-transform.position).normalized;
+        } else if (c.gameObject.tag == "Enemy")
+        {
             bounce = true; bounceTimer = 0.5f;
             bounceVector = (Vector2)(c.gameObject.transform.position-transform.position).normalized;
         }
@@ -215,7 +224,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
             Destroy(expl, 2);
         }
         Destroy(gameObject);
-        Instantiate (MedkitPrefab, rb.position-2*MoveDir, Quaternion.identity);
+        if(Random.value>0.5) Instantiate (MedkitPrefab, rb.position-2*MoveDir, Quaternion.identity);
     }
 
     private IEnumerator FindPlayer(){
