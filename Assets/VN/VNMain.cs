@@ -41,7 +41,12 @@ public partial class VNMain : MonoBehaviour
     }
     void DoChoices()
     {
+        toDisplay = "";
+        ResetTextbox();
+
         GameObject choiceObj; List<GameObject> choiceObjs = new();
+
+        float vertLen = ChoiceVerticalSeparation * (story.currentChoices.Count-1);
 
         story.currentChoices.ForeachIndex((c, i) =>
         {
@@ -50,7 +55,7 @@ public partial class VNMain : MonoBehaviour
             choiceObjs.Add(choiceObj = Instantiate(ChoicePrefab, ChoiceFolder.transform));
             buttonObj = choiceObj.GetComponentInChildren<Button>(); textObj = buttonObj.GetComponentInChildren<TMP_Text>(); 
 
-            choiceObj.transform.localPosition = ChoiceVerticalSeparation * i * Vector3.down;
+            choiceObj.transform.localPosition = (ChoiceVerticalSeparation * i - vertLen*.5f) * Vector3.down;
             textObj.text += c.text;
 
             buttonObj.onClick.AddListener(() => {
@@ -74,6 +79,8 @@ public partial class VNMain : MonoBehaviour
             Continue();
         else if (du)
             ForceFinishDisplay();
+        else if (!cc && !du)
+            DoChoices();
     }
     public void OnExit()
     {
@@ -82,8 +89,7 @@ public partial class VNMain : MonoBehaviour
 
     void OnDisplayFinish()
     {
-        if (!story.canContinue)
-            DoChoices();
+        
     }
 
 }

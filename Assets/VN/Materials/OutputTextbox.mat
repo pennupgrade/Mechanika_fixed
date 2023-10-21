@@ -84,13 +84,13 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Dimensions: {r: 980.58405, g: 197.64388, b: 1, a: 0}
+    - _Dimensions: {r: 980.5841, g: 197.64388, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
-    - _HighlightDimensions: {r: 8, g: 1.8, b: 16, a: 6.08}
-    - _InnerHighlightColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+    - _HighlightDimensions: {r: 0, g: 0, b: 0, a: 0}
+    - _InnerHighlightColor: {r: 1, g: 1, b: 1, a: 1}
     - _NonHighlightColor: {r: 0, g: 0, b: 0, a: 0.39607844}
-    - _NonHighlightColor1: {r: 0, g: 0, b: 0, a: 0.7}
+    - _NonHighlightColor1: {r: 0, g: 0, b: 0, a: 0.5176471}
     - _NonHighlightColor2: {r: 0.15, g: 0.15, b: 0.15, a: 0.7}
     - _OuterHighlightColor: {r: 1, g: 1, b: 1, a: 1}
     - _PartialHighlightColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
