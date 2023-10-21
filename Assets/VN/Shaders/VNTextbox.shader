@@ -93,6 +93,20 @@ Shader "Unlit/VN/OutputTextbox"
                 cover = newCover; return b;
             }
 
+            float sbLine(float2 p, float2 ps, float2 pe, float thickness)
+            {
+                //
+                p -= ps;
+                float2 fo = normalize(pe - ps);
+                float2 up = perp(fo);
+                p = float2(dot(p, fo), dot(p, up));
+
+                //
+                return step(abs(p.y - thickness*.5), thickness*.5);
+            }
+
+            float sdHighlightbox(float2 p, float )
+
             fixed4 frag(vOut i) : SV_Target
             {
                 float2 p = (i.uv - .5) * _Dimensions;
@@ -125,8 +139,6 @@ Shader "Unlit/VN/OutputTextbox"
                 //isHighlight += sbHighlight(p, float2(490., -35.), float2(415., -95.), dDim, hDim, t);
                 isHighlight += sbHighlight(p, float2(490, 35.), float2(400., 115.), dDim, hDim, -t);
                 isHighlight += sbHighlight(p, float2(500., -25.), float2(420., -105.), dDim, hDim, t);
-
-                //meant to be imperfect highlight looking, but should i add more highlights for that, or keep a small amount and make it look like perfect symmetrical
 
                 isHighlight = saturate(isHighlight);
 
