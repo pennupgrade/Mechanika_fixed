@@ -18,14 +18,15 @@ Also just a reminder to parse the color coding out of the incremental text displ
 hashtags need escape characters, escape characters probably need escape characters but don't have to worry abt that rn
 Who is this game about
 
-	* Hatsune Miku[] Good job! This is correct. 
+	*[Hatsune Miku] Good job! This is correct. 
 		-> Miku
-	* Netsuha Kumi[] You were close but you accidentally scrambled the letters 
+	*[Netsuha Kumi] You were close but you accidentally scrambled the letters 
 		-> Kumi
 
 === Kumi ===
 This is a followup to you picking Kumi on the quiz.
-It was incorrect. 
+It was incorrect.
+SECRET GOD
 -> END
 
 === Miku ===

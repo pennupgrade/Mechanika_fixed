@@ -30,7 +30,7 @@ public partial class VNMain : MonoBehaviour
         for (int i = 0; i < stateStatuses.Length; i++)
         {
             if (stateStatuses[i])
-                stateLoopActions[i]();
+                stateLoopActions[i]?.Invoke();
         }
     }
 
@@ -41,6 +41,8 @@ public partial class VNMain : MonoBehaviour
     }
     void DoChoices()
     {
+        SetState(State.CHOOSING, true);
+
         toDisplay = "";
         ResetTextbox();
 
@@ -67,19 +69,20 @@ public partial class VNMain : MonoBehaviour
     }
     void SelectChoice(int choiceIndex)
     {
+        SetState(State.CHOOSING, false);
         story.ChooseChoiceIndex(choiceIndex);
         Continue();
     }
 
     public void OnInteract()
     {
-        (bool cc, bool du) = (story.canContinue, RunningState(State.DISPUPDATING));
+        (bool cc, bool du, bool ch) = (story.canContinue, RunningState(State.DISPUPDATING), RunningState(State.CHOOSING));
 
         if (cc && !du)
             Continue();
         else if (du)
             ForceFinishDisplay();
-        else if (!cc && !du)
+        else if (!cc && !du && !ch)
             DoChoices();
     }
     public void OnExit()
