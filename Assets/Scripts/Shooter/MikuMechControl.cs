@@ -10,7 +10,7 @@ public class MikuMechControl : MonoBehaviour
     public GameObject SenbonzakuraPrefab;
     public GameObject NOVAPrefab;
     public GameObject MeteorPrefab;
-    private float moveSpeed=6, mspeed;
+    private float moveSpeed=7, mspeed;
     [Header("Player Values")]
     [SerializeField] private int health, maxShield, shield, energy, weaponNum;
     private float shieldRegenTimer, meleeTimer, weaponCDTimer, chargeTimer;
@@ -62,7 +62,7 @@ public class MikuMechControl : MonoBehaviour
 
         //dash
         if(Input.GetKeyDown(KeyCode.Space) && dashCDTimer<0.01f && energy-dashEnergy >= 0 &&(movement.x!=0||movement.y!=0)){
-            dashCDTimer=dashCD; dashing = true; dashTimer = 0.4f; energy-=dashEnergy;
+            dashCDTimer=dashCD; dashing = true; dashTimer = 0.25f; energy-=dashEnergy;
         }
         if (dashing&&dashTimer<0.001f) dashing = false;
 
@@ -129,7 +129,7 @@ public class MikuMechControl : MonoBehaviour
         if(!dashing){
             rb.MovePosition(rb.position + Time.fixedDeltaTime*velocity);
         }else{
-            rb.MovePosition(rb.position + 16*Time.fixedDeltaTime*movement.normalized);
+            rb.MovePosition(rb.position + 24*Time.fixedDeltaTime*movement.normalized);
         }
     }
 
@@ -225,7 +225,7 @@ public class MikuMechControl : MonoBehaviour
         if (meleeTimer>0.001) return;
         if (shield>0) {shield -= dmg; if (shield<0) shield = 0;}
         else {
-            health -= dmg; moveSpeed = 6+2*((400-health)/400.0f);
+            health -= dmg; moveSpeed = mspeed+3*((400-health)/400.0f);
         }
 
         if(health<1) Death();
