@@ -73,6 +73,99 @@ Shader "Unlit/VN/OutputTextbox"
 
             float cover;
 
+            float hasBG;
+
+            float sbPartition(float2 p, float2 ps, float2 pe)
+            {
+                return step(dot(p - ps, perp(-normalize(pe - ps))), 0.);
+            }
+
+            float2 sbLineDist(float2 p, float2 ps, float2 pe, float thickness)
+            {
+	            p -= ps;
+	            float2 fo = normalize(pe - ps);
+	            float2 up = perp(fo);
+	            p = float2(dot(p, fo), dot(p, up));
+
+	            float dist = length(pe-ps);
+	            float distAlong = p.x;
+	            float onSeg = step(distAlong, dist+thickness*.5) * step(0.-thickness*.5, distAlong);
+
+	            return float2(step(abs(p.y), thickness*.5) * onSeg, p.x * onSeg - (1.-onSeg));
+            }
+
+            float sbPolygonHighlight(float2 p, float thickness, float offset, float size, float xc, float yc, int repCount, float repOffset, bool cutBG)
+            {
+               
+                float lhasBG = 1.;
+
+	            float2 data;
+	            float cDist = -1.;
+
+                float xcc = 2.*xc; //float xc = 4.7; float xcc = 11.2;
+                float ycc = 2.*yc; //float yc = .9; float ycc = 1.8;
+                float cs = .3; //cool size
+                float sq = sqrt(2.);
+	            
+                float2 p1 = float2(-xc, -yc);
+                float2 p2 = float2(xc-cs, -yc);
+                float2 p3 = float2(xc, -yc+cs);
+                float2 p4 = float2(xc, yc);
+                float2 p5 = float2(-xc+cs, yc);
+                float2 p6 = float2(-xc, yc-cs);
+                
+                float d1 = 0.;
+                float d2 = xcc-cs;
+                float d3 = xcc-cs + sq*cs;
+                float d4 = xcc-cs + sq*cs + ycc-cs;
+                float d5 = 2.*(xcc-cs) + sq*cs + ycc-cs;
+                float d6 = 2.*(xcc-cs) + 2.*sq*cs + ycc-cs;
+                float d7 = 2.*(xcc-cs) + 2.*sq*cs + 2.*(ycc-cs);
+
+                data = sbLineDist(p, p1, p2, thickness); lhasBG *= sbPartition(p, p1, p2);
+                float s = step(1., data.x);
+                cDist = (d1 + data.y) * s + cDist * (1.-s);
+                //
+                data = sbLineDist(p, p2, p3, thickness); lhasBG *= sbPartition(p, p2, p3);
+                s = step(1., data.x);
+                cDist = (d2 + data.y) * s + cDist * (1.-s);
+                //
+                data = sbLineDist(p, p3, p4, thickness); lhasBG *= sbPartition(p, p3, p4);
+                s = step(1., data.x);
+                cDist = (d3 + data.y) * s + cDist * (1.-s);
+                //
+                data = sbLineDist(p, p4, p5, thickness); lhasBG *= sbPartition(p, p4, p5);
+                s = step(1., data.x);
+                cDist = (d4 + data.y) * s + cDist * (1.-s);
+                //
+                data = sbLineDist(p, p5, p6, thickness); lhasBG *= sbPartition(p, p5, p6);
+                s = step(1., data.x);
+                cDist = (d5 + data.y) * s + cDist * (1.-s);
+                //
+                data = sbLineDist(p, p6, p1, thickness); lhasBG *= sbPartition(p, p6, p1);
+                s = step(1., data.x);
+                cDist = (d6 + data.y) * s + cDist * (1.-s);
+
+                if(cutBG) hasBG *= lhasBG;
+
+	            if(cDist == -1.) return 0.;
+
+                float maxDist = d7; offset = amod(offset, maxDist); float rdist;
+                float exists = 0.;
+
+                for(int i=0; i<repCount; i++)
+                {
+                    
+	                rdist = abs(cDist - amod(offset + repOffset * i, maxDist));
+	                rdist = maxDist*.5 - abs(rdist - maxDist*.5);
+
+	                exists += step(rdist, size*.5);
+                }
+                
+                return saturate(exists);
+            }
+
+
             float sbHighlight(float2 p, float2 ps, float2 pe, float2 domainDim, float2 highDim, float t)
             {
 
@@ -105,10 +198,28 @@ Shader "Unlit/VN/OutputTextbox"
                 return step(abs(p.y - thickness*.5), thickness*.5);
             }
 
-            float sdHighlightbox(float2 p, float )
+            float sbHighlightBox(float2 p)
+            {
+                float inset1 = .1;
+                float inset2 = .22;
+                return saturate(
+                    sbPolygonHighlight(p, .04, -_Time.y*2., .3, 4.7-inset1, .9-inset1, 3., 0.5, false) + 
+                    sbPolygonHighlight(p, .04, -_Time.y*2.-.9*(.5/.9)+.64, .1, 4.7-inset1, .9-inset1, 42., 0.5, false) + 
+                    //sbPolygonHighlight(p, .02, -_Time.y*2.5, 19., 4.7-inset2, .9-inset2, 1., 0., false) + 
+                    sbPolygonHighlight(p, .04, -_Time.y*2., 100., 4.7, .9, 1., 0., true));
+            }
 
             fixed4 frag(vOut i) : SV_Target
             {
+                
+                hasBG = 1.;
+                float2 p = (i.uv*2.-1.) * float2(_Dimensions.x/_Dimensions.y, 1.);
+                float exists = sbHighlightBox(p);
+                
+                return exists * _InnerHighlightColor + hasBG * (1.-exists) * _NonHighlightColor1;
+
+                /*
+
                 float2 p = (i.uv - .5) * _Dimensions;
 
                 float isHighlight = 0.;
@@ -145,12 +256,7 @@ Shader "Unlit/VN/OutputTextbox"
                 // Final Color
                 float4 finalCol = lerp(_NonHighlightColor1, _InnerHighlightColor, isHighlight);
 
-                return finalCol;
-
-                //discard the idea of doing angled partial, change partial to inner, put highlight going through corners
-                //place for portrait or name, ontop of everything and overrides everything, probably a equilateral rhombus with highlights
-                //mabe can also use actual good partial, but also make it so it thickens the inner highlight in a linear to flat fashion so that inner highlight is consistent
-                // and the line highlights will always be able to come out of the inner highlights
+                return finalCol;*/
 
             }
             ENDCG

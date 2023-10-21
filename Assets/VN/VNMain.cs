@@ -30,7 +30,7 @@ public partial class VNMain : MonoBehaviour
         for (int i = 0; i < stateStatuses.Length; i++)
         {
             if (stateStatuses[i])
-                stateLoopActions[i]();
+                stateLoopActions[i]?.Invoke();
         }
     }
 
@@ -41,7 +41,14 @@ public partial class VNMain : MonoBehaviour
     }
     void DoChoices()
     {
+        SetState(State.CHOOSING, true);
+
+        toDisplay = "";
+        ResetTextbox();
+
         GameObject choiceObj; List<GameObject> choiceObjs = new();
+
+        float vertLen = ChoiceVerticalSeparation * (story.currentChoices.Count-1);
 
         story.currentChoices.ForeachIndex((c, i) =>
         {
@@ -50,7 +57,7 @@ public partial class VNMain : MonoBehaviour
             choiceObjs.Add(choiceObj = Instantiate(ChoicePrefab, ChoiceFolder.transform));
             buttonObj = choiceObj.GetComponentInChildren<Button>(); textObj = buttonObj.GetComponentInChildren<TMP_Text>(); 
 
-            choiceObj.transform.localPosition = ChoiceVerticalSeparation * i * Vector3.down;
+            choiceObj.transform.localPosition = (ChoiceVerticalSeparation * i - vertLen*.5f) * Vector3.down;
             textObj.text += c.text;
 
             buttonObj.onClick.AddListener(() => {
@@ -62,18 +69,21 @@ public partial class VNMain : MonoBehaviour
     }
     void SelectChoice(int choiceIndex)
     {
+        SetState(State.CHOOSING, false);
         story.ChooseChoiceIndex(choiceIndex);
         Continue();
     }
 
     public void OnInteract()
     {
-        (bool cc, bool du) = (story.canContinue, RunningState(State.DISPUPDATING));
+        (bool cc, bool du, bool ch) = (story.canContinue, RunningState(State.DISPUPDATING), RunningState(State.CHOOSING));
 
         if (cc && !du)
             Continue();
         else if (du)
             ForceFinishDisplay();
+        else if (!cc && !du && !ch)
+            DoChoices();
     }
     public void OnExit()
     {
@@ -82,8 +92,7 @@ public partial class VNMain : MonoBehaviour
 
     void OnDisplayFinish()
     {
-        if (!story.canContinue)
-            DoChoices();
+        
     }
 
 }
