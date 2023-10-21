@@ -7,7 +7,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
 {
     [Header("Prefabs")]
 
-    public GameObject BulletPrefab, explosionPrefab, MissilePrefab, ShotgunPrefab, DefaultNPCPrefab;
+    public GameObject BulletPrefab, explosionPrefab, MissilePrefab, ShotgunPrefab, DefaultNPCPrefab, MedkitPrefab;
     [Header("Enemy Values")]
     [SerializeField] private int health, bulletDMG, bulletsLeft, maxBullets, missileDMG, shotgunDMG;
     private float moveSpeed, mspeed, turnSpeed, nextWaypointDistance, bulletCD, bulletSpeed;
@@ -68,11 +68,13 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
         }else if(state==1){
             TargetDir = MoveDir;
         }
-        if(s>0.9994f) Cturn=0;
-        else{
-            if (Vector3.Dot(fp.right, TargetDir)>0){
-                Cturn = -turnSpeed;
-            } else Cturn = turnSpeed;
+        if(state!=0){
+            if(s>0.9994f) Cturn=0;
+            else{
+                if (Vector3.Dot(fp.right, TargetDir)>0){
+                    Cturn = -turnSpeed;
+                } else Cturn = turnSpeed;
+            }
         }
 
         if (stunned && stunTimer>0.001f){
@@ -203,6 +205,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
             Destroy(expl, 2);
         }
         Destroy(gameObject);
+        Instantiate (MedkitPrefab, rb.position-2*MoveDir, Quaternion.identity);
     }
 
     private IEnumerator FindPlayer(){

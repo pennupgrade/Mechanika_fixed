@@ -202,6 +202,7 @@ MonoBehaviour:
   MissilePrefab: {fileID: 5140916244085795428, guid: cb7ebeca0cc772f4e9b246217c32b3e4, type: 3}
   ShotgunPrefab: {fileID: 6232735871641564870, guid: d682688777065b441be740966b2d0eb7, type: 3}
   DefaultNPCPrefab: {fileID: 3788113830770608658, guid: e6067642df7588344a2b267599a8d126, type: 3}
+  MedkitPrefab: {fileID: 3926523850701580197, guid: ad4bd5a1dcb4a254e81a07d31fb737e4, type: 3}
   health: 0
   bulletDMG: 0
   bulletsLeft: 0

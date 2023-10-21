@@ -51,10 +51,10 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
         if(frameTimer==0){ frameTimer = 5;
             if(state!=0) CheckRaycast();
         }
+        var s = Vector3.Dot(fp.up, TargetDir);
         if(state==2||(state==1&&aimTimer>0.01)){
             if(state==2) {
                 aimTimer=5;
-                var s = Vector3.Dot(fp.up, TargetDir);
                 if(!stunned && s>0.9f){
                     FireBullet();
                     if (s>0.97f) FireMissile();
@@ -68,11 +68,13 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
         }else if(state==1){
             TargetDir = MoveDir;
         }
-        if(Vector3.Dot(fp.up, TargetDir)>0.9994f) Cturn=0;
-        else{
-            if (Vector3.Dot(fp.right, TargetDir)>0){
-                Cturn = -turnSpeed;
-            } else Cturn = turnSpeed;
+        if(state!=0){
+            if(s>0.9994f) Cturn=0;
+            else{
+                if (Vector3.Dot(fp.right, TargetDir)>0){
+                    Cturn = -turnSpeed;
+                } else Cturn = turnSpeed;
+            }
         }
 
         if (stunned && stunTimer>0.001f){
@@ -118,7 +120,7 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
         missileCDTimer = missileCD+10*(Random.value-0.5f);
         GameObject missile = Instantiate (MissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 8*(Random.value-0.5f)));
         missile.GetComponent<IMissile>().SetSpeed(5,24,24);
-        missile.GetComponent<IMissile>().SetValues (missileDMG, 0.4f, 120, true, Player);
+        missile.GetComponent<IMissile>().SetValues (missileDMG, 0.4f, 100, true, Player);
     }
     private void CheckRaycast(){
         if (Physics2D.Raycast((Vector2)transform.position, (Vector2)(Player.transform.position-transform.position), Vector3.Distance(Player.transform.position,transform.position), 1<<11)){
