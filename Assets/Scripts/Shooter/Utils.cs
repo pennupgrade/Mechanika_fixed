@@ -33,13 +33,31 @@ public static class Utils
     public static string PartialStringSpaceTrim(string si, int charCount)
     {
         string so = ""; int charsLeft = charCount;
+        string endSave = ""; int endEnclose = -1;
         for (int i = 0; i < si.Length; i++)
         {
+            if (si[i] == '<')
+            {
+                int ii = si[i..].IndexOf('>') + i + 1;
+                so += si[i..(ii)]; i = ii;
+
+                endEnclose = si[i..].IndexOf('<') + i;
+                endSave = si[endEnclose..(si[i..].IndexOf('>') + i + 1)];
+            }
+
+            if(i == endEnclose-1)
+            {
+                i = si[i..].IndexOf('>') + i + 1;
+                so += endSave;
+
+                endSave = ""; endEnclose = -1;
+            }
+
             so += si[i]; if (si[i] != ' ') charsLeft--;
             if (charsLeft <= 0) break;
         }
 
-        return so;
+        return so + endSave;
     }
 
     /// <summary>
