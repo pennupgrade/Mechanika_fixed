@@ -16,9 +16,9 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
     private int currentWaypoint;
     private float bulletCDTimer, bulletReload=3, bulletReloadTimer, missileCD=10, missileCDTimer;
     private float shotgunCDTimer, shotgunCD=5, spawnTime=10;
-    private float Cturn, meleeTimer, stunTimer, searchTimer, aimTimer, spawnTimer;
-    private bool stunned;
-    private Vector2 TargetDir, MoveDir;
+    private float Cturn, meleeTimer, stunTimer, searchTimer, aimTimer, spawnTimer, bounceTimer;
+    private bool stunned, bounce;
+    private Vector2 TargetDir, MoveDir, bounceVector;
     private Rigidbody2D rb;
     private Transform fp;
     public GameObject Player; private bool pfound;
@@ -41,6 +41,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
         StartCoroutine(FindPlayer());
         bulletCDTimer = 0; meleeTimer = 0; stunTimer = 0; bulletReloadTimer = 0; missileCDTimer = 15;
         searchTimer = 3; aimTimer = 0; spawnTimer=0; shotgunCDTimer = 0;
+        bounceTimer = 0; bounce = false; bounceVector = Vector2.zero;
         nextWaypointDistance = 1;
     }
 
@@ -79,8 +80,9 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
 
         if (stunned && stunTimer>0.001f){
             moveSpeed = mspeed*0.5f;
-            if (stunTimer<0.01f) {moveSpeed = mspeed; stunned = false;}
-        }
+        } if (stunned && stunTimer<0.01f) {moveSpeed = mspeed; stunned = false;}
+
+        if(bounce&&bounceTimer<0.01f){bounceVector=Vector2.zero; bounce = false;}
         
         //pathfinding
         if(path!=null){
@@ -98,11 +100,12 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
         bulletCDTimer=TimerF(bulletCDTimer); meleeTimer=TimerF(meleeTimer); stunTimer=TimerF(stunTimer);
         bulletReloadTimer=TimerF(bulletReloadTimer); missileCDTimer=TimerF(missileCDTimer); searchTimer=TimerF(searchTimer);
         aimTimer=TimerF(aimTimer); spawnTimer=TimerF(spawnTimer); shotgunCDTimer=TimerF(shotgunCDTimer);
+        bounceTimer=TimerF(bounceTimer);
     }
 
     void FixedUpdate()
     {
-        rb.MovePosition(rb.position + Time.fixedDeltaTime*moveSpeed*MoveDir);
+        rb.MovePosition(rb.position + Time.fixedDeltaTime*(moveSpeed*MoveDir+4*bounceVector));
         fp.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward; 
     }
 
@@ -149,6 +152,13 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
         }
         else{
             state = 2;
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D c){
+        if(c.gameObject.tag == "Player"){
+            bounce = true; bounceTimer = 0.5f;
+            bounceVector = (Vector2)(c.gameObject.transform.position-transform.position).normalized;
         }
     }
     private void PlayerSearch(){

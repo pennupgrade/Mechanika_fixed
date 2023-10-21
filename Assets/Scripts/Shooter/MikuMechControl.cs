@@ -57,11 +57,10 @@ public class MikuMechControl : MonoBehaviour
         //stunned
         if (stunned && stunTimer>0.001f){
             moveSpeed = mspeed*0.5f;
-            if (stunTimer<0.01f) {moveSpeed = mspeed; stunned = false;}
-        }
+        }if (stunned && stunTimer<0.01f) {moveSpeed = mspeed; stunned = false;}
 
         //dash
-        if(Input.GetKeyDown(KeyCode.Space) && dashCDTimer<0.01f && energy-dashEnergy >= 0 &&(movement.x!=0||movement.y!=0)){
+        if((Input.GetKeyDown(KeyCode.Space)||Input.GetKeyDown(KeyCode.LeftShift)) && dashCDTimer<0.01f && energy-dashEnergy >= 0 &&(movement.x!=0||movement.y!=0)){
             dashCDTimer=dashCD; dashing = true; dashTimer = 0.25f; energy-=dashEnergy;
         }
         if (dashing&&dashTimer<0.001f) dashing = false;
@@ -211,6 +210,7 @@ public class MikuMechControl : MonoBehaviour
     }
 
     public void Damage(int dmg, bool stun){
+        if(dashing) dmg = (int)(0.25f*dmg);
         if (shield>0) {shield -= dmg; if (shield<0) shield = 0;}
         else {
             health -= dmg; moveSpeed = 6+2*((400-health)/400.0f);
@@ -222,6 +222,7 @@ public class MikuMechControl : MonoBehaviour
     }
 
     public void MeleeDamage(int dmg, bool stun){
+        if(dashing) dmg = (int)(0.25f*dmg);
         if (meleeTimer>0.001) return;
         if (shield>0) {shield -= dmg; if (shield<0) shield = 0;}
         else {
