@@ -202,10 +202,12 @@ Shader "Unlit/VN/OutputTextbox"
             {
                 float inset1 = .1;
                 float inset2 = .22;
+                float outset = .1;
                 return saturate(
                     sbPolygonHighlight(p, .04, -_Time.y*2., .3, 4.7-inset1, .9-inset1, 3., 0.5, false) + 
                     sbPolygonHighlight(p, .04, -_Time.y*2.-.9*(.5/.9)+.64, .1, 4.7-inset1, .9-inset1, 42., 0.5, false) + 
                     //sbPolygonHighlight(p, .02, -_Time.y*2.5, 19., 4.7-inset2, .9-inset2, 1., 0., false) + 
+                    sbPolygonHighlight(p, .04, -_Time.y*1., .5, 4.7+outset, .9+outset, 1., 0., false) + 
                     sbPolygonHighlight(p, .04, -_Time.y*2., 100., 4.7, .9, 1., 0., true));
             }
 
@@ -213,7 +215,7 @@ Shader "Unlit/VN/OutputTextbox"
             {
                 
                 hasBG = 1.;
-                float2 p = (i.uv*2.-1.) * float2(_Dimensions.x/_Dimensions.y, 1.);
+                float2 p = (i.uv*2.-1.) * float2(_Dimensions.x/_Dimensions.y, 1.) * 1.03;
                 float exists = sbHighlightBox(p);
                 
                 return exists * _InnerHighlightColor + hasBG * (1.-exists) * _NonHighlightColor1;
