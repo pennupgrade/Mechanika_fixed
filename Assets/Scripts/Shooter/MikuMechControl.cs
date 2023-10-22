@@ -10,14 +10,14 @@ public class MikuMechControl : MonoBehaviour
     public GameObject SenbonzakuraPrefab;
     public GameObject NOVAPrefab;
     public GameObject MeteorPrefab;
-    private float moveSpeed=7, mspeed;
+    private float moveSpeed=7.5f, mspeed;
     [Header("Player Values")]
     [SerializeField] private int health, maxShield, shield, energy, weaponNum;
     private float shieldRegenTimer, meleeTimer, weaponCDTimer, chargeTimer;
-    private bool shieldRegen, stunned, W3Locked, W4Locked, W5Locked;
+    private bool shieldRegen, W3Locked, W4Locked, W5Locked;
     private float stunTimer;
 
-    private bool dashing;
+    [SerializeField] private bool stunned, dashing;
     private int knockback, dashDMG = 250, dashEnergy = 20; 
     private float dashTimer, dashCDTimer; private float dashCD = 0.7f;
 
@@ -54,14 +54,9 @@ public class MikuMechControl : MonoBehaviour
 
         //shield regeneration
         if (!shieldRegen && shield!=maxShield && shieldRegenTimer<0.001) StartCoroutine(Regenerator());
-        //stunned
-        if (stunned && stunTimer>0.001f){
-            moveSpeed = mspeed*0.5f;
-            if (stunTimer<0.01f) {moveSpeed = mspeed; stunned = false;}
-        }
 
         //dash
-        if(Input.GetKeyDown(KeyCode.Space) && dashCDTimer<0.01f && energy-dashEnergy >= 0 &&(movement.x!=0||movement.y!=0)){
+        if((Input.GetKeyDown(KeyCode.Space)||Input.GetKeyDown(KeyCode.LeftShift)) && dashCDTimer<0.01f && energy-dashEnergy >= 0 &&(movement.x!=0||movement.y!=0)){
             dashCDTimer=dashCD; dashing = true; dashTimer = 0.25f; energy-=dashEnergy;
         }
         if (dashing&&dashTimer<0.001f) dashing = false;
@@ -121,6 +116,11 @@ public class MikuMechControl : MonoBehaviour
 
     void FixedUpdate(){
         lookDir = mousePos - rb.position;
+        //stunned
+        if (stunned){
+            moveSpeed = mspeed*0.5f;
+            if (stunTimer<0.001f) {moveSpeed = mspeed+3*((400-health)/400.0f); stunned = false;}
+        }
         velocity = moveSpeed*movement.normalized;
         if(knockback>0){
             knockback--;
@@ -211,6 +211,7 @@ public class MikuMechControl : MonoBehaviour
     }
 
     public void Damage(int dmg, bool stun){
+        if (dashing) dmg = (int)(0.25f*dmg);
         if (shield>0) {shield -= dmg; if (shield<0) shield = 0;}
         else {
             health -= dmg; moveSpeed = 6+2*((400-health)/400.0f);
@@ -218,11 +219,12 @@ public class MikuMechControl : MonoBehaviour
 
         if(health<1) Death();
         shieldRegenTimer = 24;
-        if (stun){stunTimer += 0.5f; stunned = true;}
+        if (stun){stunTimer = 0.5f; stunned = true;}
     }
 
     public void MeleeDamage(int dmg, bool stun){
         if (meleeTimer>0.001) return;
+        if (dashing) dmg = (int)(0.25f*dmg);
         if (shield>0) {shield -= dmg; if (shield<0) shield = 0;}
         else {
             health -= dmg; moveSpeed = mspeed+3*((400-health)/400.0f);
@@ -231,7 +233,7 @@ public class MikuMechControl : MonoBehaviour
         if(health<1) Death();
         shieldRegenTimer = 24;
         meleeTimer = 0.5f;
-        if (stun){stunTimer += 0.5f; stunned = true;}
+        if (stun){stunTimer = 0.5f; stunned = true;}
     }
 
     public int UnlockWeapon(int weapon){
@@ -247,7 +249,7 @@ public class MikuMechControl : MonoBehaviour
 
     public void Heal(int hp){
         health+=hp;
-        if (health>390) {health = 390; moveSpeed=8;}
+        if (health>390) {health = 390; moveSpeed=10;}
     }
 
     private float TimerF( float val){
