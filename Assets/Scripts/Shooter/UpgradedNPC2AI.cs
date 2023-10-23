@@ -32,7 +32,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
         seeker = GetComponent<Seeker>(); MoveDir=Vector2.zero;
         fp = gameObject.transform.GetChild(0);
         state = 0; frameTimer = 1;
-        bulletDMG=80; maxBullets=25; missileDMG=240; shotgunDMG = 40;
+        bulletDMG=80; maxBullets=25; missileDMG=180; shotgunDMG = 40;
         moveSpeed=6; mspeed=moveSpeed; turnSpeed=80;
         bulletCD=0.4f; bulletSpeed = 8; bulletReload=2; missileCD=12;
         health = 600; bulletsLeft = maxBullets;
@@ -130,9 +130,9 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
     private IEnumerator MissileCor(){
         for(int i = 0; i<2; i++){
             GameObject missile = Instantiate (MissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 40-80*i));
-            missile.GetComponent<IMissile>().SetSpeed(5,5,10);
+            missile.GetComponent<IMissile>().SetSpeed(5,5,16);
             missile.GetComponent<IMissile>().SetValues (missileDMG, 6, 110, true, Player);
-            yield return new WaitForSeconds(.4f);
+            yield return new WaitForSeconds(.3f);
         }
     }
     private bool FireShotgun(){
@@ -166,7 +166,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
             bounceVector = (Vector2)(c.gameObject.transform.position-transform.position).normalized;
         } else if (c.gameObject.tag == "Enemy")
         {
-            bounce = true; bounceTimer = 0.5f;
+            bounce = true; bounceTimer = 0.4f+0.3f*Random.value;
             bounceVector = (Vector2)(c.gameObject.transform.position-transform.position).normalized;
         }
     }

@@ -37,7 +37,7 @@ public class MikuMechControl : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         mspeed = moveSpeed; weaponNum = 1; cepheidMode = 1;
-        energy = 100; health = 390; maxShield = 200; shield = 0;
+        energy = 100; health = 390; maxShield = 400; shield = 0;
         shieldRegen = false; dashing = false; knockback = 0;
         shieldRegenTimer = 0; weaponCDTimer = 0; dashCDTimer = 0;
         dashTimer = 0; chargeTimer = 0; meleeTimer = 0;
@@ -201,7 +201,7 @@ public class MikuMechControl : MonoBehaviour
                 energy += 5;
                 if (energy>100) energy = 100;
             }
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(.45f);
         }
     }
 
@@ -218,7 +218,7 @@ public class MikuMechControl : MonoBehaviour
         }
 
         if(health<1) Death();
-        shieldRegenTimer = 24;
+        shieldRegenTimer = 18;
         if (stun){stunTimer = 0.5f; stunned = true;}
     }
 
@@ -231,7 +231,7 @@ public class MikuMechControl : MonoBehaviour
         }
 
         if(health<1) Death();
-        shieldRegenTimer = 24;
+        shieldRegenTimer = 18;
         meleeTimer = 0.5f;
         if (stun){stunTimer = 0.5f; stunned = true;}
     }

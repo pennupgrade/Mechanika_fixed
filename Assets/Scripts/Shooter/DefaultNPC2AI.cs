@@ -125,8 +125,8 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
         if(enemyType==1||missileCDTimer>0.001) return;
         missileCDTimer = missileCD+10*(Random.value-0.5f);
         GameObject missile = Instantiate (MissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 8*(Random.value-0.5f)));
-        missile.GetComponent<IMissile>().SetSpeed(5,24,24);
-        missile.GetComponent<IMissile>().SetValues (missileDMG, 0.4f, 100, true, Player);
+        missile.GetComponent<IMissile>().SetSpeed(3,20,26);
+        missile.GetComponent<IMissile>().SetValues (missileDMG, 0.8f, 90, true, Player);
     }
     private void CheckRaycast(){
         if (Physics2D.Raycast((Vector2)transform.position, (Vector2)(Player.transform.position-transform.position), Vector3.Distance(Player.transform.position,transform.position), 1<<11)){
@@ -189,7 +189,7 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
             bounceVector = (Vector2)(c.gameObject.transform.position-transform.position).normalized;
         } else if (c.gameObject.tag == "Enemy")
         {
-            bounce = true; bounceTimer = 0.5f;
+            bounce = true; bounceTimer = 0.4f+0.3f*Random.value;
             bounceVector = (Vector2)(c.gameObject.transform.position-transform.position).normalized;
         }
     }
