@@ -9,7 +9,7 @@ public class MikuMechControl : MonoBehaviour
     public GameObject DISCPrefab;
     public GameObject SenbonzakuraPrefab;
     public GameObject NOVAPrefab;
-    public GameObject MeteorPrefab;
+    public GameObject MeteorPrefab, explosionPrefab;
     private float moveSpeed=7.5f, mspeed;
     [Header("Player Values")]
     [SerializeField] private int health, maxShield, shield, energy, weaponNum;
@@ -18,14 +18,14 @@ public class MikuMechControl : MonoBehaviour
     private float stunTimer;
 
     [SerializeField] private bool stunned, dashing;
-    private int knockback, dashDMG = 250, dashEnergy = 20; 
-    private float dashTimer, dashCDTimer; private float dashCD = 0.7f;
+    private int knockback, dashDMG = 220, dashEnergy = 18; 
+    private float dashTimer, dashCDTimer; private float dashCD = 0.75f;
 
     private int w1DMG = 25, w1Energy = 3, cepheidMode = 1; private float w1CD = 0.2f;
-    private int w2DMG = 56, w2Energy = 22; private float w2CD = 0.7f;
+    private int w2DMG = 65, w2Energy = 20; private float w2CD = 0.7f;
     private int w3DMG = 20, w3Energy = 24; private float w3CD = 0.4f;
-    private int w4DMG = 200, w4Energy = 22; private float w4CD = 0.1f;
-    private int w5DMG = 240, w5Energy = 30; private float w5CD = 6;
+    private int w4DMG = 200, w4Energy = 16; private float w4CD = 0.1f;
+    private int w5DMG = 180, w5Energy = 30; private float w5CD = 5;
     [Header("Cam")]
     public Camera cam;
     private Rigidbody2D rb;
@@ -119,7 +119,10 @@ public class MikuMechControl : MonoBehaviour
         //stunned
         if (stunned){
             moveSpeed = mspeed*0.5f;
-            if (stunTimer<0.001f) {moveSpeed = mspeed+3*((400-health)/400.0f); stunned = false;}
+            if (stunTimer<0.001f) {moveSpeed = mspeed+3*((400-health)/400.0f); stunned = false;
+                //delete
+                if(moveSpeed>15) moveSpeed=15;
+            }
         }
         velocity = moveSpeed*movement.normalized;
         if(knockback>0){
@@ -135,7 +138,7 @@ public class MikuMechControl : MonoBehaviour
 
     private void FireCepheid(){
         GameObject bullet = Instantiate (CepheidPrefab, transform.position, Quaternion.identity);
-        bullet.GetComponent<IBullet>().SetValues (w1DMG+(int)(w1DMG*((100.0f - energy)/100)), 5+(4*(100.0f - energy)/100), 1.5f, -4, velocity);
+        bullet.GetComponent<IBullet>().SetValues (w1DMG+(int)(w1DMG*((100.0f - energy)/100)), 8+(4*(100.0f - energy)/100), 1.4f, -3, velocity);
         bullet.GetComponent<CepheidBulletScript>().SetMode(cepheidMode);
         cepheidMode++;
         if (cepheidMode == 5) cepheidMode = 1;
@@ -189,7 +192,7 @@ public class MikuMechControl : MonoBehaviour
         while(shield<maxShield){
             if (shieldRegenTimer>0.01f) {shieldRegen=false; yield break;}
             shield += 10;
-            yield return new WaitForSeconds(.2f);
+            yield return new WaitForSeconds(.1f);
         }
         if (shield>maxShield) shield = maxShield;
         shieldRegen = false;
@@ -205,33 +208,38 @@ public class MikuMechControl : MonoBehaviour
         }
     }
 
-    private void Death(){
+    public void Death(){
         Debug.Log("death");
+        GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
+        Destroy(expl, 2);
         // game over / retry screen
     }
 
     public void Damage(int dmg, bool stun){
-        if (dashing) dmg = (int)(0.25f*dmg);
+        if (dashing) return;
         if (shield>0) {shield -= dmg; if (shield<0) shield = 0;}
         else {
-            health -= dmg; moveSpeed = 6+2*((400-health)/400.0f);
+            health -= dmg; moveSpeed = moveSpeed = mspeed+3*((400-health)/400.0f);
+            //delete
+            if(moveSpeed>15) moveSpeed=15;
         }
 
         if(health<1) Death();
-        shieldRegenTimer = 18;
+        shieldRegenTimer = 16;
         if (stun){stunTimer = 0.5f; stunned = true;}
     }
 
     public void MeleeDamage(int dmg, bool stun){
-        if (meleeTimer>0.001) return;
-        if (dashing) dmg = (int)(0.25f*dmg);
+        if (meleeTimer>0.001 || dashing) return;
         if (shield>0) {shield -= dmg; if (shield<0) shield = 0;}
         else {
             health -= dmg; moveSpeed = mspeed+3*((400-health)/400.0f);
+            //delete
+            if(moveSpeed>15) moveSpeed=15;
         }
 
         if(health<1) Death();
-        shieldRegenTimer = 18;
+        shieldRegenTimer = 16;
         meleeTimer = 0.5f;
         if (stun){stunTimer = 0.5f; stunned = true;}
     }
@@ -264,6 +272,8 @@ public class MikuMechControl : MonoBehaviour
         if(c.gameObject.tag == "Enemy" && dashing){
             if(c.gameObject.TryGetComponent<IEnemy>(out IEnemy enemy)){
                 enemy.Damage(dashDMG, true);
+                GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
+                Destroy(expl, 2);
             }
         }
     }

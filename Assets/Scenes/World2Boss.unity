@@ -195,6 +195,7 @@ GameObject:
   m_Component:
   - component: {fileID: 468720657}
   - component: {fileID: 468720658}
+  - component: {fileID: 468720659}
   m_Layer: 0
   m_Name: Boss2GM
   m_TagString: Untagged
@@ -235,6 +236,105 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8511cfd4fd7ad134a8896aaa22b89894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  heal: {fileID: 3926523850701580197, guid: ad4bd5a1dcb4a254e81a07d31fb737e4, type: 3}
+  Boss: {fileID: 617363152}
+  songPosInBeats: 0
+--- !u!82 &468720659
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 468720656}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: eeccce9825b3cf14b98c103bf4ec9279, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &516938008
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,7 +474,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &617363151
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -404,13 +504,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BulletPrefab: {fileID: 7445921012389969543, guid: bf0c8d3d36559304088cf591e7eaf8b0, type: 3}
-  explosionPrefab: {fileID: 0}
+  explosionPrefab: {fileID: 6467943039824451542, guid: 2c372c41f78c13c4eae1e48267863b52, type: 3}
   RocketRefab: {fileID: 3030750846122283698, guid: f3537746ceb530e4b881c8ea487473b1, type: 3}
   MissilePrefab: {fileID: 5140916244085795428, guid: cb7ebeca0cc772f4e9b246217c32b3e4, type: 3}
   Missile2Prefab: {fileID: 5140916244085795428, guid: cb7ebeca0cc772f4e9b246217c32b3e4, type: 3}
   ChargedShotPrefab: {fileID: 918835160843327792, guid: caed282ab3dcc174aad756cc59cec5ac, type: 3}
   BounceBulletPrefab: {fileID: 6496016192876550901, guid: 0882a9433aefbf943ba2ef77152f547f, type: 3}
   health: 0
+  attackNum: 0
   moveSpeed: 0
   moveSpeed2: 0
   turnSpeed: 0
@@ -590,7 +691,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: -2
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -28485,6 +28586,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wall: {fileID: 1643580204}
+  GM: {fileID: 468720658}
 --- !u!61 &1253284982
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -28647,7 +28749,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: -1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -29121,9 +29223,9 @@ GameObject:
   - component: {fileID: 1643580207}
   - component: {fileID: 1643580206}
   - component: {fileID: 1643580205}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Tilemap_Obstacle
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30130,7 +30232,7 @@ GameObject:
   - component: {fileID: 1999186254}
   m_Layer: 11
   m_Name: Tilemap_Walls
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30190,7 +30292,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: -2
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16

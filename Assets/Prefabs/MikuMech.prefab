@@ -151,9 +151,12 @@ MonoBehaviour:
   SenbonzakuraPrefab: {fileID: 2726456368141873244, guid: ff8e2330ba6ad734aafce4f81d9be713, type: 3}
   NOVAPrefab: {fileID: 6448651680206429512, guid: ad19cf18c4fd5e14fac5299109da54ac, type: 3}
   MeteorPrefab: {fileID: 2090303231269563340, guid: 14a657c434f45cb4db29e5d691750758, type: 3}
+  explosionPrefab: {fileID: 6467943039824451542, guid: 2c372c41f78c13c4eae1e48267863b52, type: 3}
   health: 0
   maxShield: 0
   shield: 0
   energy: 0
   weaponNum: 0
+  stunned: 0
+  dashing: 0
   cam: {fileID: 0}

@@ -7,7 +7,8 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
 {
     [Header("Prefabs")]
 
-    public GameObject BulletPrefab, explosionPrefab, MissilePrefab, ShotgunPrefab, DefaultNPCPrefab, MedkitPrefab;
+    public GameObject BulletPrefab, explosionPrefab, 
+    SpawnExplosionPrefab, MissilePrefab, ShotgunPrefab, DefaultNPCPrefab, MedkitPrefab;
     [Header("Enemy Values")]
     [SerializeField] private int health, bulletDMG, bulletsLeft, maxBullets, missileDMG, shotgunDMG;
     private float moveSpeed, mspeed, turnSpeed, nextWaypointDistance, bulletCD, bulletSpeed;
@@ -35,7 +36,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
         bulletDMG=80; maxBullets=25; missileDMG=180; shotgunDMG = 40;
         moveSpeed=6; mspeed=moveSpeed; turnSpeed=80;
         bulletCD=0.4f; bulletSpeed = 8; bulletReload=2; missileCD=12;
-        health = 600; bulletsLeft = maxBullets;
+        health = 700; bulletsLeft = maxBullets;
         pfound=false; stunned=false;
         if(Random.value>0.4f) enemyType = 1; else {enemyType = 2; health+=100;}
         StartCoroutine(FindPlayer());
@@ -131,7 +132,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
         for(int i = 0; i<2; i++){
             GameObject missile = Instantiate (MissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 40-80*i));
             missile.GetComponent<IMissile>().SetSpeed(5,5,16);
-            missile.GetComponent<IMissile>().SetValues (missileDMG, 6, 110, true, Player);
+            missile.GetComponent<IMissile>().SetValues (missileDMG, 6, 130, true, Player);
             yield return new WaitForSeconds(.3f);
         }
     }
@@ -147,6 +148,8 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
     private void SpawnNPC(){
         if(spawnTimer>0.01||spawnCounter>5) return;
         spawnTimer=spawnTime; spawnCounter++;
+        GameObject ptcl = Instantiate (SpawnExplosionPrefab, rb.position-4*MoveDir, Quaternion.Euler(new Vector3(0, 180, 0)));
+        Destroy(ptcl,5);
         GameObject npc = Instantiate (DefaultNPCPrefab, rb.position-4*MoveDir, fp.rotation);
         npc.GetComponent<DefaultNPC2AI>().SetType(2);
     }

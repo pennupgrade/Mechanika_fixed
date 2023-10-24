@@ -42,8 +42,8 @@ public class NPCMissileScript : MonoBehaviour, IMissile
                 turnTimer = 0.16f;
             }
         }
-        if (!disabled&& Vector3.Distance(player.transform.position,(Vector3)rb.position)<2) {
-            homingStr /= 5; disabled = true;
+        if (!disabled&& Vector3.Distance(player.transform.position,(Vector3)rb.position)<4) {
+            homingStr = 30; disabled = true;
         }
 
         transform.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward;
@@ -64,10 +64,10 @@ public class NPCMissileScript : MonoBehaviour, IMissile
             GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
             Destroy(expl, 2);
         }
-        /*
-        Destroy(transform.getChild(0).gameObject, 2);
+        
+        Destroy(transform.GetChild(0).gameObject, 2);
         transform.DetachChildren();
-        */
+        
         Destroy(gameObject);
     }
 

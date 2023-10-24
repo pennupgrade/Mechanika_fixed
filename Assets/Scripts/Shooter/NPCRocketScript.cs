@@ -8,7 +8,7 @@ public class NPCRocketScript : MonoBehaviour, IMissile
     public GameObject explosionPrefab;
     private int damage, frameTimer;
     private float spd, duration, acc, max, homingStr, Cturn;
-    private bool stun;
+    private bool stun, disabled;
     private Rigidbody2D rb;
     private Vector3 TargetDirection;
     // Start is called before the first frame update
@@ -26,6 +26,9 @@ public class NPCRocketScript : MonoBehaviour, IMissile
             if (spd>max) spd = max;
         }
         if (duration<-5) Destruction();
+        if (!disabled&& Vector3.Distance(player.transform.position,(Vector3)rb.position)<4) {
+            homingStr = 50; disabled = true;
+        }
     }
 
     void FixedUpdate()
@@ -59,10 +62,10 @@ public class NPCRocketScript : MonoBehaviour, IMissile
             GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
             Destroy(expl, 2);
         }
-        /*
-        Destroy(transform.getChild(0).gameObject, 2);
+        
+        Destroy(transform.GetChild(0).gameObject, 2);
         transform.DetachChildren();
-        */
+        
         Destroy(gameObject);
     }
 

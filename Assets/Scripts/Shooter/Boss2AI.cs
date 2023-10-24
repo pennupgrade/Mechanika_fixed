@@ -9,7 +9,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
     public GameObject BulletPrefab, explosionPrefab, RocketRefab, MissilePrefab, Missile2Prefab,
         ChargedShotPrefab, BounceBulletPrefab;
     [Header("Enemy Values")]
-    [SerializeField] private int health;
+    [SerializeField] private int health, attackNum;
     [SerializeField] private float moveSpeed, moveSpeed2, turnSpeed, turnSpeed2, mspeed, tspeed;
     private int bulletDMG, rocketDMG, missileDMG, cqDMG, laserDMG, chargedShotDMG, bounceBulletDMG;
     private float trackingBspd, bulletSpeed, chargedShotSpeed, bounceBulletSpeed, bulletCD;
@@ -17,7 +17,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
     private Vector2 Waypoint, TargetDir, MoveDir, DashDir;
     private Rigidbody2D rb;
     private Transform fp;
-    private bool dashing, tracking, laser;
+    private bool dashing, tracking, laser, warning;
     public GameObject Player;
     [SerializeField] private int moveState, mode;
     private int frameTimer;
@@ -29,15 +29,15 @@ public class Boss2AI : MonoBehaviour, IEnemy
         Player = GameObject.FindWithTag("Player");
         MoveDir=Vector2.zero;
         fp = gameObject.transform.GetChild(0);
-        health = 12000;
+        health = 9000;
         moveState = 0; mode = -1;
         frameTimer = 1;
-        bulletDMG=60; bulletCD=0.125f; bulletSpeed = 10; rocketDMG = 160; missileDMG = 180;
+        bulletDMG=60; bulletCD=0.24f; bulletSpeed = 10; rocketDMG = 160; missileDMG = 90;
         trackingBspd = bulletSpeed;
-        cqDMG = 80; laserDMG = 400; chargedShotDMG = 500; chargedShotSpeed = 14; bounceBulletDMG = 240; 
+        cqDMG = 60; laserDMG = 360; chargedShotDMG = 400; chargedShotSpeed = 20; bounceBulletDMG = 240; 
         bounceBulletSpeed = 8;
-        Cturn = 0; dashing = false; tracking = true; laser = false;
-        mspeed = 0; moveSpeed=5; moveSpeed2 = 9; turnSpeed=60; turnSpeed2 = 90; tspeed = turnSpeed;
+        Cturn = 0; dashing = false; tracking = true; laser = false; warning = false;
+        mspeed = 0; moveSpeed=5; moveSpeed2 = 9; turnSpeed=70; turnSpeed2 = 120; tspeed = turnSpeed;
         meleeTimer = 0; dashTimer = 0; CQTimer = 0;
     }
 
@@ -62,6 +62,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
             } else Cturn = tspeed;
         }
         if(laser) LaserDamage();
+        if(warning) Warning();
         if(dashing&&dashTimer<0.01f){
             dashing = false;
             if(moveState==0) mspeed=0;
@@ -79,104 +80,113 @@ public class Boss2AI : MonoBehaviour, IEnemy
     }
 
     private void FireBullet(){
-        GameObject bullet = Instantiate (BulletPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 3*(Random.value-0.5f)));
-        bullet.GetComponent<IBullet>().SetValues (bulletDMG, bulletSpeed, 3, -1, Vector2.zero);
+        GameObject bullet = Instantiate (BulletPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 12*(Random.value-0.5f)));
+        bullet.GetComponent<IBullet>().SetValues (bulletDMG, bulletSpeed, 4, -1, Vector2.zero);
     }
 
     private IEnumerator Attack0(bool m){
-        trackingBspd = bulletSpeed; tracking = true;
+        trackingBspd = bulletSpeed; tracking = true; attackNum = 0; laser = false; warning = false;
         yield return new WaitForSeconds(0.8f);
-        for (int i = 0; i<40; i++){
+        for (int i = 0; i<25; i++){
             FireBullet();
-            if (m && i==20) Attack0Missile();
+            if (m && i==15) Attack0Missile();
             yield return new WaitForSeconds(bulletCD);
         }
         AttackSelect();
     }
     private IEnumerator Attack1(){
-        tracking = false; laser = true; Cturn = 0;
-        yield return new WaitForSeconds(0.8f);
+        tracking = false; laser = false; Cturn = 0; attackNum = 1; 
+        warning = true;
+        yield return new WaitForSeconds(1.6f); laser = true; warning = false;
         if (Vector3.Dot(fp.right, (Player.transform.position-transform.position).normalized)>0){
-                Cturn = -moveSpeed;
-        } else Cturn = moveSpeed;
-        yield return new WaitForSeconds(1);
+                Cturn = -turnSpeed;
+        } else Cturn = turnSpeed;
+        yield return new WaitForSeconds(2);
         laser = false; tracking = true;
         AttackSelect();
     }
     private IEnumerator Attack2(int mType){ //1: r, 2: normal homing, 3: L
-        trackingBspd = chargedShotSpeed; tracking = true;
+        trackingBspd = chargedShotSpeed; tracking = true; attackNum = 2; laser = false; warning = false;
         if(mType == 1){
-            for(int i = 0; i<8; i++){
+            for(int i = 0; i<6; i++){
             GameObject missile = Instantiate (RocketRefab, fp.position+fp.right, fp.rotation);
             missile.GetComponent<IMissile>().SetSpeed(1,20,26);
-            missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.8f, 120, true, Player);
+            missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.8f, 130, true, Player);
             yield return new WaitForSeconds(.08f);
         }
         }else if (mType==2){
             for(int i = 0; i<8; i++){
             GameObject missile = Instantiate (MissilePrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -20));
             missile.GetComponent<IMissile>().SetSpeed(5,6,16);
-            missile.GetComponent<IMissile>().SetValues (missileDMG, 6, 110, true, Player);
+            missile.GetComponent<IMissile>().SetValues (missileDMG, 5, 110, true, Player);
             yield return new WaitForSeconds(.06f);
             GameObject missile2 = Instantiate (MissilePrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 20));
             missile2.GetComponent<IMissile>().SetSpeed(5,6,16);
-            missile2.GetComponent<IMissile>().SetValues (missileDMG, 6, 110, true, Player);
+            missile2.GetComponent<IMissile>().SetValues (missileDMG, 5, 110, true, Player);
             yield return new WaitForSeconds(.06f);
         }
         }else{
             for(int i = 0; i<8; i++){
-            GameObject missile = Instantiate (MissilePrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -5*i));
-            missile.GetComponent<IMissile>().SetSpeed(2,7,10);
-            missile.GetComponent<IMissile>().SetValues (missileDMG, 6, 130, true, Player);
+            GameObject missile = Instantiate (MissilePrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -8*i));
+            missile.GetComponent<IMissile>().SetSpeed(2,4,10);
+            missile.GetComponent<IMissile>().SetValues (missileDMG, 6, 90, true, Player);
             yield return new WaitForSeconds(.05f);
-            GameObject missile2 = Instantiate (MissilePrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 5*i));
-            missile2.GetComponent<IMissile>().SetSpeed(2,7,10);
-            missile2.GetComponent<IMissile>().SetValues (missileDMG, 6, 130, true, Player);
+            GameObject missile2 = Instantiate (MissilePrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 8*i));
+            missile2.GetComponent<IMissile>().SetSpeed(2,4,10);
+            missile2.GetComponent<IMissile>().SetValues (missileDMG, 6, 90, true, Player);
             yield return new WaitForSeconds(.05f);
             }
         }
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSeconds(1.6f);
         AttackSelect();
     }
     private IEnumerator Attack3(){
-        trackingBspd = chargedShotSpeed; tracking = true;
+        trackingBspd = chargedShotSpeed; tracking = true; attackNum = 3; laser = false;
         for (int i = 0; i<2; i++){
+            warning = true;
             yield return new WaitForSeconds(1.2f);
-            Attack0Missile();
             GameObject bullet = Instantiate (ChargedShotPrefab, fp.position, fp.rotation);
             bullet.GetComponent<IBullet>().SetValues (chargedShotDMG, chargedShotSpeed, 3, 0, Vector2.zero);
-        }
+        } Attack0Missile();
+        warning = false;
         yield return new WaitForSeconds(0.4f);
         AttackSelect();
     }
     private IEnumerator Attack4(){
-        trackingBspd = bounceBulletSpeed; tracking = true;
+        trackingBspd = bounceBulletSpeed; tracking = true; attackNum = 4; laser = false; warning = false;
         yield return new WaitForSeconds(0.8f);
         for (int i = 0; i<5; i++){
             GameObject bullet = Instantiate (BounceBulletPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 8*(Random.value-0.5f)));
-            bullet.GetComponent<IBullet>().SetValues (bounceBulletDMG, bounceBulletSpeed, 20, -1, Vector2.zero);
-            yield return new WaitForSeconds(0.8f);
+            bullet.GetComponent<IBullet>().SetValues (bounceBulletDMG, bounceBulletSpeed, 20, -0.1f, Vector2.zero);
+            yield return new WaitForSeconds(1.6f);
         }
         AttackSelect();
     }
     private void Dash(){
         dashing = true; dashTimer= 0.5f;
-        mspeed=1.5f*moveSpeed2;
+        mspeed=3*moveSpeed2;
         int iter = 0;
-        do{
-            iter++;//find center
-            MoveDir = (Vector2)(Quaternion.AngleAxis(120*(Random.value-0.5f), Vector3.forward)*(Vector3)((new Vector3(0,36,0))-(Vector3)rb.position).normalized);
-        }while(iter<10&&Vector2.Dot((Vector2)fp.up,MoveDir)>0.9f);
+        if (Vector3.Distance(new Vector3(0,36,0), transform.position)>10){
+            do{
+                iter++;//find center
+                MoveDir = (Vector2)(Quaternion.AngleAxis(120*(Random.value-0.5f),Vector3.forward)
+                *(Vector3)((new Vector3(0,36,0))-(Vector3)rb.position).normalized);
+            }while(iter<10&&Vector2.Dot((Vector2)fp.up,MoveDir)>0.85f);
+        } else{
+            Vector3 v;
+            if(Random.value>0.5f) v = fp.forward; else v = -fp.forward;
+            MoveDir = Vector3.Cross((Vector3)(Player.transform.position-(Vector3)rb.position).normalized, v);
+        }
     }
     private void Attack0Missile(){
         for(int i = 0; i<2; i++){
             GameObject missile = Instantiate (MissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 40-80*i));
-            missile.GetComponent<IMissile>().SetSpeed(4,5,14);
-            missile.GetComponent<IMissile>().SetValues (missileDMG, 6, 110, true, Player);
+            missile.GetComponent<IMissile>().SetSpeed(4,5,16);
+            missile.GetComponent<IMissile>().SetValues (missileDMG, 5, 130, true, Player);
         }
     }
     private void CQCheck(){
-        if(CQTimer>0.01f || Vector3.Distance(Player.transform.position, (Vector3)rb.position)>6) return;
+        if(CQTimer>0.01f || Vector3.Distance(Player.transform.position, (Vector3)rb.position)>5.5f) return;
         CQTimer=2;
         for (int i = 0; i<15;i++){
             GameObject bullet = Instantiate (BulletPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 120*(Random.value-0.5f)));
@@ -184,17 +194,21 @@ public class Boss2AI : MonoBehaviour, IEnemy
         }
     }
     private void LaserDamage(){
-        RaycastHit2D hit = Physics2D.Raycast((Vector2)fp.transform.position, (Vector2)fp.up, 40, 1<<11);
-        if (hit){
-            var endpt = (Vector2)fp.transform.position+hit.distance*(Vector2)fp.up;
-        }
-        if(Physics2D.Raycast((Vector2)transform.position, (Vector2)fp.up,
-        40, 1<<6)){
+        RaycastHit2D hit = Physics2D.Raycast((Vector2)fp.transform.position, (Vector2)fp.up, 70, 1<<11);
+        var endpt = fp.transform.position+hit.distance*fp.up;
+        Debug.DrawLine(fp.transform.position, endpt, Color.red, 2);
+        if(Physics2D.Raycast((Vector2)fp.transform.position, (Vector2)fp.up,
+        50, 1<<6)){
             if (Player.TryGetComponent<MikuMechControl>(out MikuMechControl miku)){
                 miku.MeleeDamage(laserDMG, false);
+                Debug.DrawLine(fp.transform.position, endpt, Color.red, 5);
             }
         }
     }
+    private void Warning(){
+        Debug.DrawLine(fp.transform.position, fp.transform.position+10*fp.up, Color.red, 0.3f);
+    }
+
 
     private void AttackSelect(){
         if(mode<0) return;
@@ -203,13 +217,14 @@ public class Boss2AI : MonoBehaviour, IEnemy
             StartCoroutine(Attack0(true));
         }
         else if (mode==2){
-            if(Random.value>0.6f) StartCoroutine(Attack1());
+            var r = Random.value;
+            if(r>0.5f) StartCoroutine(Attack1());
             else StartCoroutine(Attack0(true));
         }
         else if (mode==3){
             var r = Random.value;
             if(r>0.6f) StartCoroutine(Attack2(2));
-            else if (r>0.25f) StartCoroutine(Attack2(3));
+            else if (r>0.3f) StartCoroutine(Attack2(3));
             else StartCoroutine(Attack0(true));
         }
         else if (mode==4){
@@ -223,7 +238,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
             var r  = Random.value;
             if(r<0.1f) StartCoroutine(Attack0(true));
             else if (r<0.3f) StartCoroutine(Attack1());
-            else if (r<0.4f) {StartCoroutine(Attack2(1)); Dash();}
+            else if (r<0.5f) {StartCoroutine(Attack2(1)); Dash();}
             else if (r<0.6f) StartCoroutine(Attack2(2));
             else if (r<0.7f) StartCoroutine(Attack2(3));
             else if (r<0.85f) StartCoroutine(Attack3());
@@ -232,6 +247,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
     }
     public void SetMode(int m){
         mode = m;
+        if (mode==-10) {mode = 0; health=9000;}
         if (mode==-1||mode==0) moveState = 0;
         else if (mode==4) moveState = 3;
         else if (mode==3||mode==6) moveState = 2;
@@ -243,6 +259,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
 
     }
     public void SetAttack(int a){
+        if(a!=5) StopAllCoroutines();
         if (a==0) StartCoroutine(Attack0(false));
         else if (a==10) StartCoroutine(Attack0(true));
         else if (a==1) StartCoroutine(Attack1());
@@ -255,16 +272,17 @@ public class Boss2AI : MonoBehaviour, IEnemy
     }
     private void SetWaypoint(){
         if (moveState==0) return;
-        if (Waypoint==null||Vector2.Distance(Waypoint, rb.position)<1){
-            if(moveState==3) Waypoint = GetValidPoint(14);
-            else Waypoint = GetValidPoint(5);
+        if ((Waypoint.x==0&&Waypoint.y==0)||Vector2.Distance(Waypoint, rb.position)<1){
+            if(moveState==3) {Waypoint = GetValidPoint(14);}
+            else {Waypoint = GetValidPoint(5);}
         }
         if(!dashing) MoveDir = (Waypoint-rb.position).normalized;
     }
     public bool CheckDefeated(){
-        if (health == 0) {Destruction(); return true;}
+        if (health == 0) {StartCoroutine(Destruction()); return true;}
         else{
             //shoot laser at miku
+            Player.GetComponent<MikuMechControl>().Death();
             return false;
         }
     }
@@ -277,7 +295,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
     public void MeleeDamage (int dmg, bool stun){
         if (meleeTimer>0.001) return;
         if(mode==0) dmg /=2;
-        health-=dmg;
+        health-=50;
         if (health<0) health = 0;
         meleeTimer = 0.5f;
     }
@@ -286,21 +304,31 @@ public class Boss2AI : MonoBehaviour, IEnemy
         int iter = 0;
         Vector2 point;
         do{
-            point = new Vector2(Random.Range(-25, 25),20+Random.Range(0, 52));
-        iter++;
-        }while(iter<11 && Vector3.Distance(Player.transform.position,(Vector3)point)<d
-            && Vector2.Distance(Waypoint, rb.position)<4);
+            point = new Vector2(Random.Range(-25.0f, 25.0f),20+Random.Range(0.0f, 31.0f));
+            iter++;
+        }while(iter<11 && Vector3.Distance(Player.transform.position,(Vector3)point)<d);
         if(iter>10) return (Vector2)Player.transform.position;
         else return point;
     }
 
-    private void Destruction(){
-        if(explosionPrefab!=null){
-            GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
-            Destroy(expl, 2);
+    private IEnumerator Destruction(){
+        for (int i = 0; i<8; i++){
+            var a = Random.value*3-1.5f;
+            var b = Random.value*3-1.5f;
+            Instantiate(explosionPrefab, transform.position+transform.up*a+transform.right*b, Quaternion.Euler(new Vector3(0, 180, 0)));
+            if(i==3){
+                var temp = gameObject.GetComponent<SpriteRenderer>().color;
+                temp.a = 0.7f;
+                gameObject.GetComponent<SpriteRenderer>().color = temp;
+            }
+            if(i==6){
+                var temp = gameObject.GetComponent<SpriteRenderer>().color;
+                temp.a = 0.4f;
+                gameObject.GetComponent<SpriteRenderer>().color = temp;
+            }
+            yield return new WaitForSeconds(0.1f);
         }
         Destroy(gameObject);
-        //end level
     }
 
     private float TimerF( float val){

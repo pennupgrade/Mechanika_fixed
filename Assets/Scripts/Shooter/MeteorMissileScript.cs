@@ -56,10 +56,9 @@ public class MeteorMissileScript : MonoBehaviour
             GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
             Destroy(expl, 2);
         }
-        /*
-        Destroy(transform.getChild(0).gameObject, 2);
+        Destroy(transform.GetChild(0).gameObject, 2);
         transform.DetachChildren();
-        */
+        
         Destroy(gameObject);
     }
 

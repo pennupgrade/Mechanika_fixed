@@ -139,6 +139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BulletPrefab: {fileID: 7445921012389969543, guid: bf0c8d3d36559304088cf591e7eaf8b0, type: 3}
+  explosionPrefab: {fileID: 1111096597883011677, guid: 752a5e831b60a3a4e8f6865c5cb7c7a5, type: 3}
   MissilePrefab: {fileID: 3030750846122283698, guid: f3537746ceb530e4b881c8ea487473b1, type: 3}
   health: 0
   bulletDMG: 0
