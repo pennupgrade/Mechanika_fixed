@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MikuMechControl : MonoBehaviour
 {
+    public GameObject GM;
     [Header("Prefabs")]
     public GameObject CepheidPrefab;
     public GameObject DISCPrefab;
@@ -21,11 +22,11 @@ public class MikuMechControl : MonoBehaviour
     private int knockback, dashDMG = 220, dashEnergy = 18; 
     private float dashTimer, dashCDTimer; private float dashCD = 0.75f;
 
-    private int w1DMG = 25, w1Energy = 3, cepheidMode = 1; private float w1CD = 0.2f;
+    private int w1DMG = 20, w1Energy = 2, cepheidMode = 1; private float w1CD = 0.16f;
     private int w2DMG = 65, w2Energy = 20; private float w2CD = 0.7f;
     private int w3DMG = 20, w3Energy = 24; private float w3CD = 0.4f;
     private int w4DMG = 200, w4Energy = 16; private float w4CD = 0.1f;
-    private int w5DMG = 180, w5Energy = 30; private float w5CD = 5;
+    private int w5DMG = 250, w5Energy = 30; private float w5CD = 5;
     [Header("Cam")]
     public Camera cam;
     private Rigidbody2D rb;
@@ -56,7 +57,7 @@ public class MikuMechControl : MonoBehaviour
         if (!shieldRegen && shield!=maxShield && shieldRegenTimer<0.001) StartCoroutine(Regenerator());
 
         //dash
-        if((Input.GetKeyDown(KeyCode.Space)||Input.GetKeyDown(KeyCode.LeftShift)) && dashCDTimer<0.01f && energy-dashEnergy >= 0 &&(movement.x!=0||movement.y!=0)){
+        if((Input.GetKeyDown(KeyCode.Space)||Input.GetKeyDown(KeyCode.LeftShift)) && dashCDTimer<0.01f && energy-dashEnergy >= 0){
             dashCDTimer=dashCD; dashing = true; dashTimer = 0.25f; energy-=dashEnergy;
         }
         if (dashing&&dashTimer<0.001f) dashing = false;
@@ -138,7 +139,7 @@ public class MikuMechControl : MonoBehaviour
 
     private void FireCepheid(){
         GameObject bullet = Instantiate (CepheidPrefab, transform.position, Quaternion.identity);
-        bullet.GetComponent<IBullet>().SetValues (w1DMG+(int)(w1DMG*((100.0f - energy)/100)), 8+(4*(100.0f - energy)/100), 1.4f, -3, velocity);
+        bullet.GetComponent<IBullet>().SetValues (w1DMG+(int)(w1DMG*((100.0f - energy)/100)), 8+(4*(100.0f - energy)/100), 1.5f, -3, velocity);
         bullet.GetComponent<CepheidBulletScript>().SetMode(cepheidMode);
         cepheidMode++;
         if (cepheidMode == 5) cepheidMode = 1;
@@ -168,7 +169,7 @@ public class MikuMechControl : MonoBehaviour
     private void FireNOVA(float charge){
         if (charge<0.3f) return;
         GameObject bullet = Instantiate (NOVAPrefab, transform.position, Quaternion.identity);
-        bullet.GetComponent<IBullet>().SetValues ((int)(w4DMG*charge), 5+0.4f*charge, 1.7f, -5, velocity);
+        bullet.GetComponent<IBullet>().SetValues ((int)(w4DMG*charge), 6+0.4f*charge, 2.2f, -5, 0.2f*velocity);
         var a = 1;
         if(lookDir.y<0) a = -1;
         bullet.transform.eulerAngles = (a*Vector2.Angle(new Vector2(1,0), lookDir)-90)* Vector3.forward;
@@ -212,7 +213,8 @@ public class MikuMechControl : MonoBehaviour
         Debug.Log("death");
         GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
         Destroy(expl, 2);
-        // game over / retry screen
+        GM.GetComponent<IGameManager>().Restart();
+        Destroy(gameObject);
     }
 
     public void Damage(int dmg, bool stun){
@@ -244,15 +246,16 @@ public class MikuMechControl : MonoBehaviour
         if (stun){stunTimer = 0.5f; stunned = true;}
     }
 
-    public int UnlockWeapon(int weapon){
+    public bool[] UnlockWeapon(int weapon){
         if (weapon==3) W3Locked = false;
         else if (weapon==4) W4Locked = false;
         else if (weapon==5) W5Locked = false;
 
-        if(W4Locked&&!W3Locked) return 3;
-        else if(!W4Locked&&W3Locked) return 4;
-        else if(!W4Locked&&!W3Locked) return 5;
-        else return 2;
+        bool[] array = new bool[3];
+        if(W3Locked) array[0]=false; else array[0]=true;
+        if(W4Locked) array[1]=false; else array[1]=true;
+        if(W5Locked) array[2]=false; else array[2]=true;
+        return array;
     }
 
     public void Heal(int hp){

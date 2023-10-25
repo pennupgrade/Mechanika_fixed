@@ -34,11 +34,12 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
         fp = gameObject.transform.GetChild(0);
         state = 0; frameTimer = 1;
         bulletDMG=80; maxBullets=25; missileDMG=180; shotgunDMG = 40;
-        moveSpeed=6; mspeed=moveSpeed; turnSpeed=80;
+        moveSpeed=6; turnSpeed=80;
         bulletCD=0.4f; bulletSpeed = 8; bulletReload=2; missileCD=12;
         health = 700; bulletsLeft = maxBullets;
         pfound=false; stunned=false;
-        if(Random.value>0.4f) enemyType = 1; else {enemyType = 2; health+=100;}
+        if(Random.value>0.4f) enemyType = 1; else {enemyType = 2; moveSpeed=8;}
+        mspeed=moveSpeed;
         StartCoroutine(FindPlayer());
         bulletCDTimer = 0; meleeTimer = 0; stunTimer = 0; bulletReloadTimer = 0; missileCDTimer = 15;
         searchTimer = 3; aimTimer = 0; spawnTimer=0; shotgunCDTimer = 0;
@@ -49,6 +50,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
     // Update is called once per frame
     void Update()
     {
+        if(pfound&&Player==null) return;
         if(pfound&&state==0&&searchTimer<0.001) PlayerSearch();
         frameTimer--;
         if(frameTimer==0){ frameTimer = 5;
@@ -148,9 +150,9 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
     private void SpawnNPC(){
         if(spawnTimer>0.01||spawnCounter>5) return;
         spawnTimer=spawnTime; spawnCounter++;
-        GameObject ptcl = Instantiate (SpawnExplosionPrefab, rb.position-4*MoveDir, Quaternion.Euler(new Vector3(0, 180, 0)));
+        GameObject ptcl = Instantiate (SpawnExplosionPrefab, rb.position-2*MoveDir, Quaternion.Euler(new Vector3(0, 180, 0)));
         Destroy(ptcl,5);
-        GameObject npc = Instantiate (DefaultNPCPrefab, rb.position-4*MoveDir, fp.rotation);
+        GameObject npc = Instantiate (DefaultNPCPrefab, rb.position-2*MoveDir, fp.rotation);
         npc.GetComponent<DefaultNPC2AI>().SetType(2);
     }
     private void CheckRaycast(){
@@ -199,6 +201,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
     }
 
     public void Damage (int dmg, bool stun){
+        if(enemyType==2) dmg -= 10;
         health-=dmg; if (health<1) Destruction();
         if (stun){stunTimer += 1; stunned = true;}
     }

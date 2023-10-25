@@ -1,9 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class Boss2GMScript : MonoBehaviour
+public class Boss2GMScript : MonoBehaviour, IGameManager
 {
+    public GameObject DefaultSong;
+    public GameObject BlackPanel;
+    public GameObject Player;
     public GameObject heal;
     private float songPosition;
     public Boss2AI Boss;
@@ -16,6 +21,8 @@ public class Boss2GMScript : MonoBehaviour
     private AudioSource AS;
 
     void Start(){
+        Player = GameObject.FindWithTag("Player");
+        StartCoroutine(SetPanelFalse());
         started = false;
         bpm = 150;
         secPerBeat = 60f / bpm;
@@ -40,13 +47,17 @@ public class Boss2GMScript : MonoBehaviour
             nextIndex++;
         }
 
-        if (Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.M)){
             AS.mute = !AS.mute;
+            DefaultSong.GetComponent<AudioSource>().Pause();
+        }
+
     }
 
     public void StartFight(){
         started = true;
         dsptimesong = (float) AudioSettings.dspTime;
+        DefaultSong.GetComponent<AudioSource>().Play();
         AS.Play();
         AS.mute = true;
     }
@@ -63,7 +74,7 @@ public class Boss2GMScript : MonoBehaviour
             Boss.SetAttack(0); Boss.SetMode(-10);
         } else if (!commands[1]&&songPosition>34){ commands[1] = true;
             Boss.SetMode(-2);
-        } else if (!commands[2]&&songPosition>39){ commands[2] = true;
+        } else if (!commands[2]&&songPosition>41){ commands[2] = true;
             Boss.SetAttack(1); Boss.SetMode(2);
         } else if (!commands[3]&&songPosition>50){ commands[3] = true;
             Boss.SetMode(-2);
@@ -105,7 +116,37 @@ public class Boss2GMScript : MonoBehaviour
             Boss.SetAttack(10); Boss.SetMode(2);
         }  else if (!commands[22]&&songPosition>298){ commands[22] = true;
             bool a = Boss.CheckDefeated();
-            //end game
+            if(a){
+                //win
+            }
         }
+    }
+
+    private IEnumerator SetPanelFalse(){
+        Image img = BlackPanel.GetComponent<Image>();
+        while (img.color.a>0){
+            var temp = img.color.a;
+            img.color = new Color(img.color.r, img.color.g, img.color.b, temp-Time.deltaTime);
+            yield return null;
+        }
+        BlackPanel.SetActive(false);
+
+        if(SaveData.Weapons[0]) Player.GetComponent<MikuMechControl>().UnlockWeapon(3);
+        if(SaveData.Weapons[1]) Player.GetComponent<MikuMechControl>().UnlockWeapon(4);
+        if(SaveData.Weapons[2]) Player.GetComponent<MikuMechControl>().UnlockWeapon(5);
+    }
+    public void Restart(){
+        StartCoroutine(RestartCor());
+    }
+    private IEnumerator RestartCor(){
+        yield return new WaitForSeconds(2);
+        Image img = BlackPanel.GetComponent<Image>();
+        BlackPanel.SetActive(true);
+        while (img.color.a<1){
+            var temp = img.color.a;
+            img.color = new Color(img.color.r, img.color.g, img.color.b, temp+Time.deltaTime);
+            yield return null;
+        }
+        SceneManager.LoadSceneAsync("World2Boss");
     }
 }

@@ -35,15 +35,16 @@ public class Boss2AI : MonoBehaviour, IEnemy
         bulletDMG=60; bulletCD=0.24f; bulletSpeed = 10; rocketDMG = 160; missileDMG = 90;
         trackingBspd = bulletSpeed;
         cqDMG = 60; laserDMG = 360; chargedShotDMG = 400; chargedShotSpeed = 20; bounceBulletDMG = 240; 
-        bounceBulletSpeed = 8;
+        bounceBulletSpeed = 9;
         Cturn = 0; dashing = false; tracking = true; laser = false; warning = false;
-        mspeed = 0; moveSpeed=5; moveSpeed2 = 9; turnSpeed=70; turnSpeed2 = 120; tspeed = turnSpeed;
+        mspeed = 0; moveSpeed=5; moveSpeed2 = 8; turnSpeed=70; turnSpeed2 = 120; tspeed = turnSpeed;
         meleeTimer = 0; dashTimer = 0; CQTimer = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(Player==null) {StopAllCoroutines(); SetMode(-1);}
         frameTimer--;
         if(frameTimer==0){ frameTimer = 4;
             if (MyMath.InterceptDirection(Player.transform.position, transform.position, Player.GetComponent<MikuMechControl>().Velocity, trackingBspd, out Vector3 result)){
@@ -118,22 +119,22 @@ public class Boss2AI : MonoBehaviour, IEnemy
             for(int i = 0; i<8; i++){
             GameObject missile = Instantiate (MissilePrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -20));
             missile.GetComponent<IMissile>().SetSpeed(5,6,16);
-            missile.GetComponent<IMissile>().SetValues (missileDMG, 5, 110, true, Player);
+            missile.GetComponent<IMissile>().SetValues (missileDMG, 3.6f, 110, true, Player);
             yield return new WaitForSeconds(.06f);
             GameObject missile2 = Instantiate (MissilePrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 20));
             missile2.GetComponent<IMissile>().SetSpeed(5,6,16);
-            missile2.GetComponent<IMissile>().SetValues (missileDMG, 5, 110, true, Player);
+            missile2.GetComponent<IMissile>().SetValues (missileDMG, 3.6f, 110, true, Player);
             yield return new WaitForSeconds(.06f);
         }
         }else{
             for(int i = 0; i<8; i++){
             GameObject missile = Instantiate (MissilePrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -8*i));
             missile.GetComponent<IMissile>().SetSpeed(2,4,10);
-            missile.GetComponent<IMissile>().SetValues (missileDMG, 6, 90, true, Player);
+            missile.GetComponent<IMissile>().SetValues (missileDMG, 4.8f, 90, true, Player);
             yield return new WaitForSeconds(.05f);
             GameObject missile2 = Instantiate (MissilePrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 8*i));
             missile2.GetComponent<IMissile>().SetSpeed(2,4,10);
-            missile2.GetComponent<IMissile>().SetValues (missileDMG, 6, 90, true, Player);
+            missile2.GetComponent<IMissile>().SetValues (missileDMG, 4.8f, 90, true, Player);
             yield return new WaitForSeconds(.05f);
             }
         }
@@ -169,7 +170,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
         if (Vector3.Distance(new Vector3(0,36,0), transform.position)>10){
             do{
                 iter++;//find center
-                MoveDir = (Vector2)(Quaternion.AngleAxis(120*(Random.value-0.5f),Vector3.forward)
+                MoveDir = (Vector2)(Quaternion.AngleAxis(90*(Random.value-0.5f),Vector3.forward)
                 *(Vector3)((new Vector3(0,36,0))-(Vector3)rb.position).normalized);
             }while(iter<10&&Vector2.Dot((Vector2)fp.up,MoveDir)>0.85f);
         } else{
@@ -247,7 +248,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
     }
     public void SetMode(int m){
         mode = m;
-        if (mode==-10) {mode = 0; health=9000;}
+        if (mode==-10) {mode = 0 ; health=9000; Waypoint=new Vector2(0,36);}
         if (mode==-1||mode==0) moveState = 0;
         else if (mode==4) moveState = 3;
         else if (mode==3||mode==6) moveState = 2;
@@ -282,19 +283,19 @@ public class Boss2AI : MonoBehaviour, IEnemy
         if (health == 0) {StartCoroutine(Destruction()); return true;}
         else{
             //shoot laser at miku
+            Debug.DrawLine(fp.transform.position, Player.transform.position, Color.red, 5);
             Player.GetComponent<MikuMechControl>().Death();
             return false;
         }
     }
 
     public void Damage (int dmg, bool stun){
-        if(mode==0) dmg /=2;
+        if(mode==0) dmg -=10;
         health-=dmg;
         if (health<0) health = 0;
     }
     public void MeleeDamage (int dmg, bool stun){
         if (meleeTimer>0.001) return;
-        if(mode==0) dmg /=2;
         health-=50;
         if (health<0) health = 0;
         meleeTimer = 0.5f;

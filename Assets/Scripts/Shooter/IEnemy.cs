@@ -16,3 +16,8 @@ public interface IMissile
     void SetSpeed (float initSpeed, float accel, float finalSpeed);
     void SetValues (int dmg, float timer, float homingStrength, bool stun, GameObject player);
 }
+
+public interface IGameManager
+{
+    void Restart();
+}

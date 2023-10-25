@@ -32,11 +32,12 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
         fp = gameObject.transform.GetChild(0);
         state = 0; frameTimer = 1;
         bulletDMG=80; maxBullets=10; missileDMG=160;
-        moveSpeed=8; mspeed=moveSpeed; turnSpeed=60;
+        moveSpeed=8; turnSpeed=60;
         bulletCD=0.7f; bulletSpeed = 8.5f; bulletReload=3; missileCD=10;
-        health = 240; bulletsLeft = maxBullets;
+        health = 250; bulletsLeft = maxBullets;
         pfound=false; stunned=false;
-        if(Random.value>0.4f) enemyType = 1; else enemyType = 2;
+        if(Random.value>0.4f) enemyType = 1; else {enemyType = 2; moveSpeed=9.5f;}
+        mspeed=moveSpeed;
         StartCoroutine(FindPlayer());
         bulletCDTimer = 0; meleeTimer = 0; stunTimer = 0; bulletReloadTimer = 0; missileCDTimer = 25;
         searchTimer = 3; aimTimer = 0; bounceTimer = 0; bounce = false; bounceVector = Vector2.zero;
@@ -46,6 +47,7 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
     // Update is called once per frame
     void Update()
     {
+        if(pfound&&Player==null) return;
         if(pfound&&state==0&&searchTimer<0.001) PlayerSearch();
         frameTimer--;
         if(frameTimer==0){ frameTimer = 5;
@@ -161,6 +163,7 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
     }
 
     public void Damage (int dmg, bool stun){
+        if(enemyType==2)dmg-=5;
         health-=dmg; if (health<1) Destruction();
         if (stun){stunTimer += 1; stunned = true;}
     }
