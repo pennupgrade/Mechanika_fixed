@@ -182,7 +182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: 7e45a5cb7fb7ccc4c92333d1b4e10104, type: 2}
+  m_Material: {fileID: 2100000, guid: 5cd814ae2d6260f44b9a3ecb1b1acff5, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -500,7 +500,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06b66bbce2662c6488d4463170a266f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OutputTextboxMaterial: {fileID: 2100000, guid: 7e45a5cb7fb7ccc4c92333d1b4e10104, type: 2}
+  OutputTextboxMaterial: {fileID: 2100000, guid: 5cd814ae2d6260f44b9a3ecb1b1acff5, type: 2}
   TextboxSpriteTransform: {fileID: 815334764}
 --- !u!1 &1664583664
 GameObject:
