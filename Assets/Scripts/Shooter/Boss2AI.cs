@@ -1,15 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class Boss2AI : MonoBehaviour, IEnemy
 {
+    public GameObject cam;
+    public Slider Bar;
+    public TextMeshProUGUI BossName;
     [Header("Prefabs")]
 
     public GameObject BulletPrefab, explosionPrefab, RocketRefab, MissilePrefab, Missile2Prefab,
         ChargedShotPrefab, BounceBulletPrefab;
     [Header("Enemy Values")]
-    [SerializeField] private int health, attackNum;
+    [SerializeField] private int health, maxHealth, attackNum;
     [SerializeField] private float moveSpeed, moveSpeed2, turnSpeed, turnSpeed2, mspeed, tspeed;
     private int bulletDMG, rocketDMG, missileDMG, cqDMG, laserDMG, chargedShotDMG, bounceBulletDMG;
     private float trackingBspd, bulletSpeed, chargedShotSpeed, bounceBulletSpeed, bulletCD;
@@ -23,20 +28,23 @@ public class Boss2AI : MonoBehaviour, IEnemy
     private int frameTimer;
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Awake(){
         rb = GetComponent<Rigidbody2D>();
         Player = GameObject.FindWithTag("Player");
+        dashing = false; tracking = true; laser = false; warning = false;
+    }
+    void Start()
+    {
         MoveDir=Vector2.zero;
         fp = gameObject.transform.GetChild(0);
-        health = 9000;
+        maxHealth = 12500; health=maxHealth;
         moveState = 0; mode = -1;
         frameTimer = 1;
-        bulletDMG=60; bulletCD=0.24f; bulletSpeed = 10; rocketDMG = 160; missileDMG = 90;
+        bulletDMG=60; bulletCD=0.24f; bulletSpeed = 10; rocketDMG = 160; missileDMG = 120;
         trackingBspd = bulletSpeed;
         cqDMG = 60; laserDMG = 360; chargedShotDMG = 400; chargedShotSpeed = 20; bounceBulletDMG = 240; 
         bounceBulletSpeed = 9;
-        Cturn = 0; dashing = false; tracking = true; laser = false; warning = false;
+        Cturn = 0;
         mspeed = 0; moveSpeed=5; moveSpeed2 = 8; turnSpeed=70; turnSpeed2 = 120; tspeed = turnSpeed;
         meleeTimer = 0; dashTimer = 0; CQTimer = 0;
     }
@@ -44,7 +52,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
     // Update is called once per frame
     void Update()
     {
-        if(Player==null) {StopAllCoroutines(); SetMode(-1);}
+        if(Player==null) {StopAllCoroutines(); return;}
         frameTimer--;
         if(frameTimer==0){ frameTimer = 4;
             if (MyMath.InterceptDirection(Player.transform.position, transform.position, Player.GetComponent<MikuMechControl>().Velocity, trackingBspd, out Vector3 result)){
@@ -96,6 +104,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
         AttackSelect();
     }
     private IEnumerator Attack1(){
+        if(Player==null) {StopAllCoroutines(); yield break;}
         tracking = false; laser = false; Cturn = 0; attackNum = 1; 
         warning = true;
         yield return new WaitForSeconds(1.6f); laser = true; warning = false;
@@ -112,30 +121,30 @@ public class Boss2AI : MonoBehaviour, IEnemy
             for(int i = 0; i<6; i++){
             GameObject missile = Instantiate (RocketRefab, fp.position+fp.right, fp.rotation);
             missile.GetComponent<IMissile>().SetSpeed(1,20,26);
-            missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.8f, 130, true, Player);
+            missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.8f, 120, true, Player);
             yield return new WaitForSeconds(.08f);
         }
         }else if (mType==2){
             for(int i = 0; i<8; i++){
-            GameObject missile = Instantiate (MissilePrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -20));
-            missile.GetComponent<IMissile>().SetSpeed(5,6,16);
-            missile.GetComponent<IMissile>().SetValues (missileDMG, 3.6f, 110, true, Player);
+            GameObject missile = Instantiate (MissilePrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -10*i));
+            missile.GetComponent<IMissile>().SetSpeed(4,8,18);
+            missile.GetComponent<IMissile>().SetValues (missileDMG, 4, 110, true, Player);
             yield return new WaitForSeconds(.06f);
-            GameObject missile2 = Instantiate (MissilePrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 20));
-            missile2.GetComponent<IMissile>().SetSpeed(5,6,16);
-            missile2.GetComponent<IMissile>().SetValues (missileDMG, 3.6f, 110, true, Player);
+            GameObject missile2 = Instantiate (MissilePrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 10*i));
+            missile2.GetComponent<IMissile>().SetSpeed(4,8,18);
+            missile2.GetComponent<IMissile>().SetValues (missileDMG, 4, 110, true, Player);
             yield return new WaitForSeconds(.06f);
         }
         }else{
-            for(int i = 0; i<8; i++){
-            GameObject missile = Instantiate (MissilePrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -8*i));
-            missile.GetComponent<IMissile>().SetSpeed(2,4,10);
-            missile.GetComponent<IMissile>().SetValues (missileDMG, 4.8f, 90, true, Player);
-            yield return new WaitForSeconds(.05f);
-            GameObject missile2 = Instantiate (MissilePrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 8*i));
-            missile2.GetComponent<IMissile>().SetSpeed(2,4,10);
-            missile2.GetComponent<IMissile>().SetValues (missileDMG, 4.8f, 90, true, Player);
-            yield return new WaitForSeconds(.05f);
+            for(int i = 0; i<6; i++){
+            GameObject missile = Instantiate (MissilePrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -24*i));
+            missile.GetComponent<IMissile>().SetSpeed(4,4,11);
+            missile.GetComponent<IMissile>().SetValues (missileDMG, 6.4f, 75, true, Player);
+            yield return new WaitForSeconds(.08f);
+            GameObject missile2 = Instantiate (MissilePrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 24*i));
+            missile2.GetComponent<IMissile>().SetSpeed(4,4,11);
+            missile2.GetComponent<IMissile>().SetValues (missileDMG, 6.4f, 75, true, Player);
+            yield return new WaitForSeconds(.08f);
             }
         }
         yield return new WaitForSeconds(1.6f);
@@ -180,6 +189,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
         }
     }
     private void Attack0Missile(){
+        if(Player==null) {StopAllCoroutines(); return;}
         for(int i = 0; i<2; i++){
             GameObject missile = Instantiate (MissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 40-80*i));
             missile.GetComponent<IMissile>().SetSpeed(4,5,16);
@@ -187,6 +197,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
         }
     }
     private void CQCheck(){
+        if(Player==null) {StopAllCoroutines(); return;}
         if(CQTimer>0.01f || Vector3.Distance(Player.transform.position, (Vector3)rb.position)>5.5f) return;
         CQTimer=2;
         for (int i = 0; i<15;i++){
@@ -224,7 +235,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
         }
         else if (mode==3){
             var r = Random.value;
-            if(r>0.6f) StartCoroutine(Attack2(2));
+            if(r>0.65f) StartCoroutine(Attack2(2));
             else if (r>0.3f) StartCoroutine(Attack2(3));
             else StartCoroutine(Attack0(true));
         }
@@ -248,7 +259,10 @@ public class Boss2AI : MonoBehaviour, IEnemy
     }
     public void SetMode(int m){
         mode = m;
-        if (mode==-10) {mode = 0 ; health=9000; Waypoint=new Vector2(0,36);}
+        if (mode==-10) {
+            mode = 0 ; health=maxHealth; Waypoint=new Vector2(0,36);
+            StartCoroutine(BarAnimation());
+        }
         if (mode==-1||mode==0) moveState = 0;
         else if (mode==4) moveState = 3;
         else if (mode==3||mode==6) moveState = 2;
@@ -272,6 +286,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
         else Dash();
     }
     private void SetWaypoint(){
+        if(Player==null) {StopAllCoroutines(); return;}
         if (moveState==0) return;
         if ((Waypoint.x==0&&Waypoint.y==0)||Vector2.Distance(Waypoint, rb.position)<1){
             if(moveState==3) {Waypoint = GetValidPoint(14);}
@@ -290,15 +305,23 @@ public class Boss2AI : MonoBehaviour, IEnemy
     }
 
     public void Damage (int dmg, bool stun){
-        if(mode==0) dmg -=10;
+        if(mode==0) dmg -= 10;
         health-=dmg;
         if (health<0) health = 0;
+        Bar.value = health;
+        if(health==0){
+            Bar.gameObject.SetActive(false);
+        }
     }
     public void MeleeDamage (int dmg, bool stun){
         if (meleeTimer>0.001) return;
         health-=50;
         if (health<0) health = 0;
         meleeTimer = 0.5f;
+        Bar.value = health;
+        if(health==0){
+            Bar.gameObject.SetActive(false);
+        }
     }
 
     private Vector2 GetValidPoint(float d){
@@ -313,6 +336,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
     }
 
     private IEnumerator Destruction(){
+        cam.GetComponent<CamShake>().Shake();
         for (int i = 0; i<8; i++){
             var a = Random.value*3-1.5f;
             var b = Random.value*3-1.5f;
@@ -329,7 +353,19 @@ public class Boss2AI : MonoBehaviour, IEnemy
             }
             yield return new WaitForSeconds(0.1f);
         }
+        BossName.gameObject.SetActive(false);
         Destroy(gameObject);
+    }
+    private IEnumerator BarAnimation(){
+        yield return new WaitForSeconds(0.4f);
+        BossName.gameObject.SetActive(true);
+        StartCoroutine(FadeInGUI(Bar.gameObject.transform.GetChild(0).gameObject.GetComponent<Image>(), Bar.gameObject));
+        Bar.maxValue = maxHealth;
+        while(Bar.value<maxHealth){
+            Bar.value+=(int)(5000*Time.deltaTime);
+            if(Bar.value>maxHealth) Bar.value=maxHealth;
+            yield return null;
+        }
     }
 
     private float TimerF( float val){
@@ -338,6 +374,15 @@ public class Boss2AI : MonoBehaviour, IEnemy
             if (val<0) val = 0;
         }
         return val;
+    }
+
+    private IEnumerator FadeInGUI(Image img, GameObject g){
+        g.SetActive(true);
+        while (img.color.a<1){
+            var temp = img.color.a;
+            img.color = new Color(img.color.r, img.color.g, img.color.b, temp+Time.deltaTime);
+            yield return null;
+        }
     }
 }
 

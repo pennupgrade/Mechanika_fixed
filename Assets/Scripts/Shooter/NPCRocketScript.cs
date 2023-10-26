@@ -21,11 +21,12 @@ public class NPCRocketScript : MonoBehaviour, IMissile
     // Update is called once per frame
     void Update()
     {
+        if(player==null) return;
         duration -=Time.deltaTime;
         if(duration<0){ spd += acc*Time.deltaTime;
             if (spd>max) spd = max;
         }
-        if (duration<-5) Destruction();
+        if (duration<-4) Destruction();
         if (!disabled&& Vector3.Distance(player.transform.position,(Vector3)rb.position)<4) {
             homingStr = 50; disabled = true;
         }
@@ -33,6 +34,9 @@ public class NPCRocketScript : MonoBehaviour, IMissile
 
     void FixedUpdate()
     {   
+        transform.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward;
+        rb.MovePosition(rb.position+(Vector2)(Time.fixedDeltaTime*spd*transform.up));
+        if(player==null) return;
         frameTimer--;
         if(frameTimer==0){ frameTimer = 3;
             TargetDirection = (player.transform.position-(Vector3)rb.position).normalized;
@@ -43,8 +47,6 @@ public class NPCRocketScript : MonoBehaviour, IMissile
                 } else Cturn = homingStr;
             }
         }
-        transform.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward;
-        rb.MovePosition(rb.position+(Vector2)(Time.fixedDeltaTime*spd*transform.up));
     }
 
     void OnCollisionEnter2D(Collision2D c){

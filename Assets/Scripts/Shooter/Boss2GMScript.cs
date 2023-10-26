@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using UnityEngine.SceneManagement;
 
 public class Boss2GMScript : MonoBehaviour, IGameManager
 {
+    public TextMeshProUGUI CountDown;
     public GameObject DefaultSong;
     public GameObject BlackPanel;
     public GameObject Player;
@@ -17,7 +19,7 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
     private bool started;
     private bool[] commands;
     private float[] beats ={343, 351, 359, 367, 415, 423, 431, 439};
-    private int nextIndex;
+    private int nextIndex, minLeft, secLeft;
     private AudioSource AS;
 
     void Start(){
@@ -27,8 +29,8 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
         bpm = 150;
         secPerBeat = 60f / bpm;
         AS = GetComponent<AudioSource>();
-        commands= new bool[23];
-        for(int i =0;i<23;i++){
+        commands= new bool[24];
+        for(int i =0;i<24;i++){
             commands[i] = false;
         }
         nextIndex = 0;
@@ -40,6 +42,9 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
         if(!started) return;
         songPosition = (float) (AudioSettings.dspTime - dsptimesong);
         songPosInBeats = songPosition / secPerBeat;
+        minLeft = (298-(int)songPosition)/60; if(minLeft<0)minLeft=0;
+        secLeft = (298-(int)songPosition)%60; if(secLeft<0)secLeft=0;
+        CountDown.text="Time Remaining:\n" + minLeft.ToString().PadLeft(1,'0')+":"+secLeft.ToString().PadLeft(2,'0');
 
         Commander();
         if (nextIndex < beats.Length && beats[nextIndex] < songPosInBeats){
@@ -47,7 +52,7 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
             nextIndex++;
         }
 
-        if (Input.GetKeyDown(KeyCode.M)){
+        if (Input.GetKeyUp(KeyCode.M)){
             AS.mute = !AS.mute;
             DefaultSong.GetComponent<AudioSource>().Pause();
         }
@@ -60,10 +65,11 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
         DefaultSong.GetComponent<AudioSource>().Play();
         AS.Play();
         AS.mute = true;
+        CountDown.gameObject.SetActive(true);
     }
 
     private void SpawnHeal(){
-        for(int i=0;i<3;i++){
+        for(int i=0;i<1;i++){
             int v = Random.Range(0,6);
             Instantiate(heal, transform.GetChild(v).position, Quaternion.identity);
         }
@@ -71,7 +77,9 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
 
     private void Commander(){
         if(!commands[0]&&songPosition>0){ commands[0] = true;
-            Boss.SetAttack(0); Boss.SetMode(-10);
+            Boss.SetMode(-10);
+        } else if (!commands[23]&&songPosition>3){ commands[23] = true;
+            Boss.SetAttack(0);
         } else if (!commands[1]&&songPosition>34){ commands[1] = true;
             Boss.SetMode(-2);
         } else if (!commands[2]&&songPosition>41){ commands[2] = true;
@@ -97,7 +105,7 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
         } else if (!commands[12]&&songPosition>148){ commands[12] = true;
             Boss.SetAttack(22); Boss.SetMode(3);
         } else if (!commands[13]&&songPosition>158){ commands[13] = true;
-            Boss.SetAttack(0); Boss.SetMode(0); SpawnHeal();
+            Boss.SetAttack(4); Boss.SetMode(0); SpawnHeal();
         }  else if (!commands[14]&&songPosition>166){ commands[14] = true;
             Boss.SetMode(-2);
         }  else if (!commands[15]&&songPosition>177){ commands[15] = true;
@@ -116,10 +124,13 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
             Boss.SetAttack(10); Boss.SetMode(2);
         }  else if (!commands[22]&&songPosition>298){ commands[22] = true;
             bool a = Boss.CheckDefeated();
-            if(a){
-                //win
-            }
+            if(a) StartCoroutine(Win());
         }
+    }
+
+    private IEnumerator Win(){
+        yield return new WaitForSeconds(2);
+        //go to VN
     }
 
     private IEnumerator SetPanelFalse(){
@@ -147,6 +158,9 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
             img.color = new Color(img.color.r, img.color.g, img.color.b, temp+Time.deltaTime);
             yield return null;
         }
+
+        SaveData.SceneNum = SceneManager.GetActiveScene().buildIndex;
+        //replace with restart screen
         SceneManager.LoadSceneAsync("World2Boss");
     }
 }

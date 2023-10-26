@@ -31,6 +31,9 @@ public class NPCMissileScript : MonoBehaviour, IMissile
 
     void FixedUpdate()
     {   
+        transform.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward;
+        rb.MovePosition(rb.position+(Vector2)(Time.fixedDeltaTime*spd*transform.up));
+        if(player==null) return;
         frameTimer--;
         if(frameTimer==0){
             frameTimer = 2;
@@ -45,9 +48,6 @@ public class NPCMissileScript : MonoBehaviour, IMissile
         if (!disabled&& Vector3.Distance(player.transform.position,(Vector3)rb.position)<4) {
             homingStr = 30; disabled = true;
         }
-
-        transform.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward;
-        rb.MovePosition(rb.position+(Vector2)(Time.fixedDeltaTime*spd*transform.up));
     }
 
     void OnCollisionEnter2D(Collision2D c){

@@ -35,6 +35,9 @@ public class GM2Script : MonoBehaviour, IGameManager
             img.color = new Color(img.color.r, img.color.g, img.color.b, temp+Time.deltaTime);
             yield return null;
         }
+
+        SaveData.SceneNum = SceneManager.GetActiveScene().buildIndex;
+        //replace with restart screen
         SceneManager.LoadSceneAsync("World2");
     }
 

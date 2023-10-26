@@ -22,8 +22,8 @@ public class MikuMechControl : MonoBehaviour
     private int knockback, dashDMG = 220, dashEnergy = 18; 
     private float dashTimer, dashCDTimer; private float dashCD = 0.75f;
 
-    private int w1DMG = 20, w1Energy = 2, cepheidMode = 1; private float w1CD = 0.16f;
-    private int w2DMG = 65, w2Energy = 20; private float w2CD = 0.7f;
+    private int w1DMG = 20, w1Energy = 3, cepheidMode = 1; private float w1CD = 0.18f;
+    private int w2DMG = 80, w2Energy = 20; private float w2CD = 0.7f;
     private int w3DMG = 20, w3Energy = 24; private float w3CD = 0.4f;
     private int w4DMG = 200, w4Energy = 16; private float w4CD = 0.1f;
     private int w5DMG = 250, w5Energy = 30; private float w5CD = 5;
@@ -63,16 +63,17 @@ public class MikuMechControl : MonoBehaviour
         if (dashing&&dashTimer<0.001f) dashing = false;
 
         //weapon select
-        if (Input.GetKeyDown(KeyCode.Alpha1)) {weaponNum = 1; chargeTimer=0;}
-        if (Input.GetKeyDown(KeyCode.Alpha2)) {weaponNum = 2; chargeTimer=0;}
-        if (Input.GetKeyDown(KeyCode.Alpha3)&&!W3Locked) {weaponNum = 3; chargeTimer=0;}
-        if (Input.GetKeyDown(KeyCode.Alpha4)&&!W4Locked) {weaponNum = 4; chargeTimer=0;}
-        if (Input.GetKeyDown(KeyCode.Alpha5)&&!W5Locked) {weaponNum = 5; chargeTimer=0;}
+        if (Input.GetKeyDown(KeyCode.Alpha1)) {WeaponUpdate(1);}
+        if (Input.GetKeyDown(KeyCode.Alpha2)) {WeaponUpdate(2);}
+        if (Input.GetKeyDown(KeyCode.Alpha3)&&!W3Locked) {WeaponUpdate(3);}
+        if (Input.GetKeyDown(KeyCode.Alpha4)&&!W4Locked) {WeaponUpdate(4);}
+        if (Input.GetKeyDown(KeyCode.Alpha5)&&!W5Locked) {WeaponUpdate(5);}
 
         //weapon fire
         if (weaponNum==1){
             if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001 && energy-w1Energy >= 0){
                 weaponCDTimer=w1CD; energy-=w1Energy;
+                if(energy<50) energy+=1;
                 FireCepheid();
             }
         }else if (weaponNum==2){
@@ -91,18 +92,18 @@ public class MikuMechControl : MonoBehaviour
             else chargeTimer = 0;
         }else if (weaponNum==4){
             if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001){
-                moveSpeed = mspeed/2;
+                moveSpeed = mspeed/1.5f;
                 chargeTimer+=Time.deltaTime;
                 if (chargeTimer>4) chargeTimer=4;
                 if(w4Energy*chargeTimer>energy){
                     weaponCDTimer=1; energy=0;
-                    FireNOVA(chargeTimer); chargeTimer = 0; moveSpeed=mspeed;
+                    FireNOVA(chargeTimer); chargeTimer = 0; moveSpeed = mspeed+3*((400-health)/400.0f);
                 }
             } else if (Input.GetKeyUp(KeyCode.Mouse0) && weaponCDTimer<0.001){
                 weaponCDTimer=w4CD; energy-=(int)(w4Energy*chargeTimer);
-                FireNOVA(chargeTimer); chargeTimer = 0; moveSpeed=mspeed;
+                FireNOVA(chargeTimer); chargeTimer = 0; moveSpeed = mspeed+3*((400-health)/400.0f);
             }
-            else {chargeTimer = 0; moveSpeed=mspeed;}
+            else {chargeTimer = 0; moveSpeed = mspeed+3*((400-health)/400.0f);}
         }else if(weaponNum==5){
             if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001 && energy-w5Energy >= 0){
                 weaponCDTimer=w5CD;
@@ -120,10 +121,7 @@ public class MikuMechControl : MonoBehaviour
         //stunned
         if (stunned){
             moveSpeed = mspeed*0.5f;
-            if (stunTimer<0.001f) {moveSpeed = mspeed+3*((400-health)/400.0f); stunned = false;
-                //delete
-                if(moveSpeed>15) moveSpeed=15;
-            }
+            if (stunTimer<0.001f) {moveSpeed = mspeed+3*((400-health)/400.0f); stunned = false;}
         }
         velocity = moveSpeed*movement.normalized;
         if(knockback>0){
@@ -187,6 +185,11 @@ public class MikuMechControl : MonoBehaviour
             yield return new WaitForSeconds(.12f);
         }
     }
+    private void WeaponUpdate(int w){
+        weaponNum=w;
+        moveSpeed = mspeed+3*((400-health)/400.0f);
+        chargeTimer=0;
+    }
 
     private IEnumerator Regenerator(){
         shieldRegen = true;
@@ -221,9 +224,7 @@ public class MikuMechControl : MonoBehaviour
         if (dashing) return;
         if (shield>0) {shield -= dmg; if (shield<0) shield = 0;}
         else {
-            health -= dmg; moveSpeed = moveSpeed = mspeed+3*((400-health)/400.0f);
-            //delete
-            if(moveSpeed>15) moveSpeed=15;
+            health -= dmg; moveSpeed = mspeed+3*((400-health)/400.0f);
         }
 
         if(health<1) Death();
@@ -236,8 +237,6 @@ public class MikuMechControl : MonoBehaviour
         if (shield>0) {shield -= dmg; if (shield<0) shield = 0;}
         else {
             health -= dmg; moveSpeed = mspeed+3*((400-health)/400.0f);
-            //delete
-            if(moveSpeed>15) moveSpeed=15;
         }
 
         if(health<1) Death();

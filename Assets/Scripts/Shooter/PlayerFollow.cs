@@ -14,7 +14,8 @@ public class PlayerFollow : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        float interpolation = Time.fixedDeltaTime*10;
+        if (Player==null) return;
+        float interpolation = Time.fixedDeltaTime*8;
         
         Vector3 position = this.transform.position;
         position.y = Mathf.Lerp(this.transform.position.y, Player.transform.position.y, interpolation);

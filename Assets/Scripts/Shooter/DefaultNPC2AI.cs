@@ -5,11 +5,11 @@ using Pathfinding;
 
 public class DefaultNPC2AI : MonoBehaviour, IEnemy
 {
+    public Healthbar Hbar;
     [Header("Prefabs")]
-
     public GameObject BulletPrefab, explosionPrefab, MissilePrefab;
     [Header("Enemy Values")]
-    [SerializeField] private int health, bulletDMG, bulletsLeft, maxBullets, missileDMG;
+    [SerializeField] private int health, maxHealth, bulletDMG, bulletsLeft, maxBullets, missileDMG;
     private float moveSpeed, mspeed, turnSpeed, nextWaypointDistance, bulletCD, bulletSpeed;
     Path path;
     Seeker seeker;
@@ -33,8 +33,8 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
         state = 0; frameTimer = 1;
         bulletDMG=80; maxBullets=10; missileDMG=160;
         moveSpeed=8; turnSpeed=60;
-        bulletCD=0.7f; bulletSpeed = 8.5f; bulletReload=3; missileCD=10;
-        health = 250; bulletsLeft = maxBullets;
+        bulletCD=0.7f; bulletSpeed = 9.5f; bulletReload=3; missileCD=10;
+        maxHealth = 250; health=maxHealth; bulletsLeft = maxBullets;
         pfound=false; stunned=false;
         if(Random.value>0.4f) enemyType = 1; else {enemyType = 2; moveSpeed=9.5f;}
         mspeed=moveSpeed;
@@ -42,19 +42,20 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
         bulletCDTimer = 0; meleeTimer = 0; stunTimer = 0; bulletReloadTimer = 0; missileCDTimer = 25;
         searchTimer = 3; aimTimer = 0; bounceTimer = 0; bounce = false; bounceVector = Vector2.zero;
         nextWaypointDistance = 1;
+        Hbar.SetHealth(health, maxHealth);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(pfound&&Player==null) return;
-        if(pfound&&state==0&&searchTimer<0.001) PlayerSearch();
+        if(pfound && Player==null) return;
+        if(pfound && state==0 && searchTimer<0.001) PlayerSearch();
         frameTimer--;
         if(frameTimer==0){ frameTimer = 5;
             if(state!=0) CheckRaycast();
         }
         var s = Vector3.Dot(fp.up, TargetDir);
-        if(state==2||(state==1&&aimTimer>0.01)){
+        if(state==2||(state==1 && aimTimer>0.01)){
             if(state==2) {
                 aimTimer=5;
                 if(!stunned && s>0.9f){
@@ -166,15 +167,18 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
         if(enemyType==2)dmg-=5;
         health-=dmg; if (health<1) Destruction();
         if (stun){stunTimer += 1; stunned = true;}
+        Hbar.SetHealth(health,maxHealth);
     }
     public void MeleeDamage (int dmg, bool stun){
         if (meleeTimer>0.001) return;
         health-=dmg; if (health<1) Destruction();
         meleeTimer = 0.5f;
         if (stun){stunTimer += 1; stunned = true;}
+        Hbar.SetHealth(health,maxHealth);
     }
 
     private Vector2 GetValidPoint(){
+        if(Player==null) return (Vector2)transform.position;
         int iter = 0;
         Vector2 point;
         do{
