@@ -879,7 +879,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &480311110
 RectTransform:
   m_ObjectHideFlags: 0
@@ -43627,10 +43627,6 @@ PrefabInstance:
       propertyPath: sBar
       value: 
       objectReference: {fileID: 1740912470}
-    - target: {fileID: 1091831780773708906, guid: 2a9d8fe35c3e29949abd76f93b2dc563, type: 3}
-      propertyPath: WeaponUI.Array.size
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 1091831780773708906, guid: 2a9d8fe35c3e29949abd76f93b2dc563, type: 3}
       propertyPath: WeaponUI.Array.data[0]
       value: 

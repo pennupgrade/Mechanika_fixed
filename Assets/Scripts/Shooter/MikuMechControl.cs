@@ -14,6 +14,7 @@ public class MikuMechControl : MonoBehaviour
     public GameObject SenbonzakuraPrefab;
     public GameObject NOVAPrefab;
     public GameObject MeteorPrefab, explosionPrefab;
+    private TrailRenderer tr;
     private float moveSpeed=7.5f, mspeed;
     private bool lerpingHealth, lerpingShield, lerpingEnergy;
     [Header("Player Values")]
@@ -40,7 +41,7 @@ public class MikuMechControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>(); tr = GetComponent<TrailRenderer>();
         mspeed = moveSpeed; weaponNum = 1; cepheidMode = 1;
         energy = 100; health = 390; maxShield = 400; shield = 0;
         shieldRegen = false; dashing = false; knockback = 0;
@@ -64,9 +65,9 @@ public class MikuMechControl : MonoBehaviour
 
         //dash
         if((Input.GetKeyDown(KeyCode.Space)||Input.GetKeyDown(KeyCode.LeftShift)) && dashCDTimer<0.01f && energy-dashEnergy >= 0){
-            dashCDTimer=dashCD; dashing = true; dashTimer = 0.25f; energy-=dashEnergy;
+            dashCDTimer=dashCD; dashing = true; dashTimer = 0.25f; energy-=dashEnergy; tr.emitting = true;
         }
-        if (dashing&&dashTimer<0.001f) dashing = false;
+        if (dashing&&dashTimer<0.001f) {dashing = false; tr.emitting = false;}
 
         //weapon select
         if (Input.GetKeyDown(KeyCode.Alpha1)) {WeaponUpdate(1);}

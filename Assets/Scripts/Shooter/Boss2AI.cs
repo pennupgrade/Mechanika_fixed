@@ -209,12 +209,11 @@ public class Boss2AI : MonoBehaviour, IEnemy
     private void LaserDamage(){
         RaycastHit2D hit = Physics2D.Raycast((Vector2)fp.transform.position, (Vector2)fp.up, 70, 1<<11);
         var endpt = fp.transform.position+hit.distance*fp.up;
-        Debug.DrawLine(fp.transform.position, endpt, Color.red, 2);
+        Debug.DrawLine(fp.transform.position, endpt, Color.red, 0.3f);
         if(Physics2D.Raycast((Vector2)fp.transform.position, (Vector2)fp.up,
         50, 1<<6)){
             if (Player.TryGetComponent<MikuMechControl>(out MikuMechControl miku)){
                 miku.MeleeDamage(laserDMG, false);
-                Debug.DrawLine(fp.transform.position, endpt, Color.red, 5);
             }
         }
     }
