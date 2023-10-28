@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class MikuMechControl : MonoBehaviour
 {
+    public GameObject[] WeaponUI;
     public Slider hBar, sBar, eBar, cBar;
     public GameObject GM;
     [Header("Prefabs")]
@@ -22,14 +23,14 @@ public class MikuMechControl : MonoBehaviour
     private float stunTimer;
 
     [SerializeField] private bool stunned, dashing;
-    private int knockback, dashDMG = 220, dashEnergy = 18; 
+    private int knockback, dashDMG = 200, dashEnergy = 20; 
     private float dashTimer, dashCDTimer; private float dashCD = 0.75f;
 
-    private int w1DMG = 20, w1Energy = 3, cepheidMode = 1; private float w1CD = 0.18f;
-    private int w2DMG = 80, w2Energy = 20; private float w2CD = 0.7f;
-    private int w3DMG = 20, w3Energy = 24; private float w3CD = 0.4f;
-    private int w4DMG = 200, w4Energy = 16; private float w4CD = 0.1f;
-    private int w5DMG = 250, w5Energy = 30; private float w5CD = 5;
+    private int w1DMG = 15, w1Energy = 3, cepheidMode = 1; private float w1CD = 0.18f;
+    private int w2DMG = 72, w2Energy = 20; private float w2CD = 0.7f;
+    private int w3DMG = 24, w3Energy = 22; private float w3CD = 0.4f;
+    private int w4DMG = 200, w4Energy = 20; private float w4CD = 0.1f;
+    private int w5DMG = 250, w5Energy = 26; private float w5CD = 5;
     [Header("Cam")]
     public Camera cam;
     private Rigidbody2D rb;
@@ -47,6 +48,7 @@ public class MikuMechControl : MonoBehaviour
         dashTimer = 0; chargeTimer = 0; meleeTimer = 0;
         stunTimer = 0; stunned = false; W3Locked = true; W4Locked = true; W5Locked = true;
         lerpingEnergy = false; lerpingHealth=false; lerpingShield=false;
+        WeaponUpdate(1);
         StartCoroutine(EnergyRegen());
     }
 
@@ -160,11 +162,11 @@ public class MikuMechControl : MonoBehaviour
         bullet.transform.eulerAngles = (a*Vector2.Angle(new Vector2(1,0), lookDir)-90+6*(Random.value-0.5f))* Vector3.forward;
     }
     private void FireSenbonzakura(float charge){
-        var spread = 45-(30*charge);
+        var spread = 45-(20*charge);
         var range = 0.4f+0.3f*charge;
         for (int i = 0; i<15;i++){
             GameObject bullet = Instantiate (SenbonzakuraPrefab, transform.position, Quaternion.identity);
-            bullet.GetComponent<IBullet>().SetValues (w3DMG, 10+5*charge+3*Random.value, range+0.2f*Random.value, 8-charge, 0.5f*velocity);
+            bullet.GetComponent<IBullet>().SetValues (w3DMG, 10+5*charge+3*Random.value, range+0.2f*Random.value, 8-4*charge, 0.5f*velocity);
             var a = 1;
             if(lookDir.y<0) a = -1;
             bullet.transform.eulerAngles = (a*Vector2.Angle(new Vector2(1,0), lookDir)-90+spread*(Random.value-0.5f))* Vector3.forward;
@@ -203,6 +205,14 @@ public class MikuMechControl : MonoBehaviour
             cBar.gameObject.SetActive(true);
             cBar.maxValue = 4;
         } else cBar.gameObject.SetActive(false);
+        for (int i =0; i<5; i++){
+            Image img = WeaponUI[i].GetComponent<Image>();
+            if(i+1==weaponNum) img.color = new Color(img.color.r, img.color.g, img.color.b, 1);
+            else img.color = new Color(img.color.r, img.color.g, img.color.b, 0.4f);
+        }
+        WeaponUI[2].gameObject.SetActive(!W3Locked);
+        WeaponUI[3].gameObject.SetActive(!W4Locked);
+        WeaponUI[4].gameObject.SetActive(!W5Locked);
     }private void HealthUpdate(int h){
         health+=h;
         if (health>390) {health = 390; moveSpeed=10;}
@@ -274,6 +284,7 @@ public class MikuMechControl : MonoBehaviour
         if (weapon==3) W3Locked = false;
         else if (weapon==4) W4Locked = false;
         else if (weapon==5) W5Locked = false;
+        WeaponUpdate(weaponNum);
 
         bool[] array = new bool[3];
         if(W3Locked) array[0]=false; else array[0]=true;
@@ -297,7 +308,7 @@ public class MikuMechControl : MonoBehaviour
     void OnCollisionEnter2D(Collision2D c){
         if(c.gameObject.tag == "Enemy" && dashing){
             if(c.gameObject.TryGetComponent<IEnemy>(out IEnemy enemy)){
-                enemy.Damage(dashDMG, true);
+                enemy.MeleeDamage(dashDMG, true);
                 GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
                 Destroy(expl, 2);
             }

@@ -182,6 +182,10 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
             state = 1;
             UpdatePath();
             if(enemyType==2) {spawnCounter=0; spawnTimer=16;}
+            Collider2D c = Physics2D.OverlapCircle(transform.position, 10, 1<<9);
+            if(c!=null && c.gameObject.TryGetComponent<IEnemy>(out IEnemy enemy)){
+                enemy.SetState(1);
+            }
         }
     }
     private void UpdatePath(){
@@ -196,12 +200,16 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
     }
     public void SetState(int s){
         state = s;
-    }
-    public void SetType(int t){
-        enemyType = t;
+        UpdatePath();
+        if(enemyType==2) {spawnCounter=0; spawnTimer=16;}
+        Collider2D c = Physics2D.OverlapCircle(transform.position, 10, 1<<9);
+        if(c!=null && c.gameObject!=this.gameObject && c.gameObject.TryGetComponent<IEnemy>(out IEnemy enemy)){
+            enemy.SetState(1);
+        }
     }
 
     public void Damage (int dmg, bool stun){
+        if(state==0) SetState(1);
         if(enemyType==2) dmg -= 10;
         health-=dmg; if (health<1) Destruction();
         if (stun){stunTimer += 1; stunned = true;}
@@ -209,7 +217,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
     }
     public void MeleeDamage (int dmg, bool stun){
         if (meleeTimer>0.001) return;
-        health-=dmg/2; if (health<1) Destruction();
+        health-=dmg/3; if (health<1) Destruction();
         meleeTimer = 0.5f;
         if (stun){stunTimer += 1; stunned = true;}
         Hbar.SetHealth(health, maxHealth);

@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class Boss2GMScript : MonoBehaviour, IGameManager
 {
+    public TextMeshProUGUI DialogueName, DialogueText;
     public TextMeshProUGUI CountDown;
     public GameObject DefaultSong;
     public GameObject BlackPanel;
@@ -16,23 +17,20 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
     public Boss2AI Boss;
     public float songPosInBeats;
     private float secPerBeat, dsptimesong, bpm;
-    private bool started;
+    private bool started, hpDialogue;
     private bool[] commands;
     private float[] beats ={343, 351, 359, 367, 415, 423, 431, 439};
-    private int nextIndex, minLeft, secLeft;
+    private int nextIndex, minLeft, secLeft, flickerCounter;
     private AudioSource AS;
 
     void Start(){
         Player = GameObject.FindWithTag("Player");
         StartCoroutine(SetPanelFalse());
-        started = false;
+        started = false; hpDialogue = false;
         bpm = 150;
         secPerBeat = 60f / bpm;
         AS = GetComponent<AudioSource>();
-        commands= new bool[24];
-        for(int i =0;i<24;i++){
-            commands[i] = false;
-        }
+        commands = new bool[24];
         nextIndex = 0;
     }
 
@@ -56,7 +54,11 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
             AS.mute = !AS.mute;
             DefaultSong.GetComponent<AudioSource>().Pause();
         }
-
+        if(Boss.health==0&&!hpDialogue){
+            Dialogue("Charis", "Core compromised? I've miscalculated...But no matter. I'm not letting you win.");
+            flickerCounter++;
+            if(flickerCounter>100) hpDialogue=true;
+        }
     }
 
     public void StartFight(){
@@ -81,7 +83,7 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
         } else if (!commands[23]&&songPosition>3){ commands[23] = true;
             Boss.SetAttack(0);
         } else if (!commands[1]&&songPosition>34){ commands[1] = true;
-            Boss.SetMode(-2);
+            Boss.SetMode(-2); Dialogue("Charis", "Redirecting energy from shielding to offensive capabilities. Let's see what you're made of.");
         } else if (!commands[2]&&songPosition>41){ commands[2] = true;
             Boss.SetAttack(1); Boss.SetMode(2);
         } else if (!commands[3]&&songPosition>50){ commands[3] = true;
@@ -99,7 +101,7 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
         } else if (!commands[9]&&songPosition>123){ commands[9] = true;
             Boss.SetAttack(1); Boss.SetMode(-1);
         } else if (!commands[10]&&songPosition>130){ commands[10] = true;
-            Boss.SetAttack(22);
+            Boss.SetAttack(22); Dialogue("Charis", "Interesting. Disengaging autopilot. Assuming direct control.");
         } else if (!commands[11]&&songPosition>137){ commands[11] = true;
             Boss.SetMode(-2);
         } else if (!commands[12]&&songPosition>148){ commands[12] = true;
@@ -112,6 +114,7 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
             Boss.SetAttack(22); Boss.SetMode(3);
         }  else if (!commands[16]&&songPosition>189){ commands[16] = true;
             Boss.SetAttack(10); Boss.SetMode(2);
+            if(Boss.health>500) Dialogue("Charis", "Impressive. But your journey ends here.");
         }  else if (!commands[17]&&songPosition>217){ commands[17] = true;
             Boss.SetAttack(4); Boss.SetMode(5);
         }  else if (!commands[18]&&songPosition>230){ commands[18] = true;
@@ -122,9 +125,14 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
             Boss.SetAttack(3); Boss.SetMode(6);
         }  else if (!commands[21]&&songPosition>285){ commands[21] = true;
             Boss.SetAttack(10); Boss.SetMode(2);
+            if(Boss.health>500) Dialogue("Charis", "Glassing beam charged at 95%. Your fate is sealed.");
         }  else if (!commands[22]&&songPosition>298){ commands[22] = true;
             bool a = Boss.CheckDefeated();
-            if(a) StartCoroutine(Win());
+            if(a) {
+                StartCoroutine(Win());
+                Dialogue("Charis","Impossib-");
+            }
+            else Dialogue("Charis","Your damage output is pitiful.");
         }
     }
 
@@ -134,6 +142,10 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
     }
 
     private IEnumerator SetPanelFalse(){
+        if(SaveData.Weapons[0]) Player.GetComponent<MikuMechControl>().UnlockWeapon(3);
+        if(SaveData.Weapons[1]) Player.GetComponent<MikuMechControl>().UnlockWeapon(4);
+        if(SaveData.Weapons[2]) Player.GetComponent<MikuMechControl>().UnlockWeapon(5);
+
         Image img = BlackPanel.GetComponent<Image>();
         while (img.color.a>0){
             var temp = img.color.a;
@@ -141,10 +153,6 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
             yield return null;
         }
         BlackPanel.SetActive(false);
-
-        if(SaveData.Weapons[0]) Player.GetComponent<MikuMechControl>().UnlockWeapon(3);
-        if(SaveData.Weapons[1]) Player.GetComponent<MikuMechControl>().UnlockWeapon(4);
-        if(SaveData.Weapons[2]) Player.GetComponent<MikuMechControl>().UnlockWeapon(5);
     }
     public void Restart(){
         StartCoroutine(RestartCor());
@@ -163,4 +171,60 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
         //replace with restart screen
         SceneManager.LoadSceneAsync("World2Boss");
     }
+
+    public void Dialogue(string n, string s){
+        StartCoroutine(DialogueCor(n, s));
+    }
+    private IEnumerator DialogueCor(string n, string s){
+        DialogueName.gameObject.SetActive(true);
+        DialogueText.gameObject.SetActive(true);
+        DialogueName.text = n; 
+        StartCoroutine(Typewriter(s));
+        StartCoroutine(FadeInText(DialogueText));
+        yield return FadeInText(DialogueName);
+        yield return new WaitForSeconds(6.5f);
+        StartCoroutine(FadeOutText(DialogueText));
+        yield return FadeOutText(DialogueName);
+        DialogueName.gameObject.SetActive(false);
+        DialogueText.gameObject.SetActive(false);
+    }
+
+    private IEnumerator FadeInText(TextMeshProUGUI t){
+        t.color = new Color(t.color.r, t.color.g, t.color.b, 0);
+        while (t.color.a<1){
+            t.color = new Color(t.color.r, t.color.g, t.color.b, t.color.a+2*Time.deltaTime);
+            yield return null;
+        }
+    }
+    private IEnumerator FadeOutText(TextMeshProUGUI t){
+        t.color = new Color(t.color.r, t.color.g, t.color.b, 1);
+        while (t.color.a>0){
+            t.color = new Color(t.color.r, t.color.g, t.color.b, t.color.a-2*Time.deltaTime);
+            yield return null;
+        }
+    }
+    private IEnumerator Typewriter(string s){
+        for(int i = 0; i<s.Length; i++){
+            DialogueText.text = s.Substring(0,i+1);
+            yield return new WaitForSeconds(0.02f);
+        }
+    }/* 
+    private IEnumerator FadeInGUI(Image img, GameObject g){
+        g.SetActive(true);
+        while (img.color.a<1){
+            var temp = img.color.a;
+            img.color = new Color(img.color.r, img.color.g, img.color.b, temp+2*Time.deltaTime);
+            yield return null;
+        }
+    }
+
+    private IEnumerator FadeOutGUI(Image img, GameObject g){
+        while (img.color.a>0){
+            var temp = img.color.a;
+            img.color = new Color(img.color.r, img.color.g, img.color.b, temp-2*Time.deltaTime);
+            yield return null;
+        }
+        g.SetActive(false);
+    } */
+
 }

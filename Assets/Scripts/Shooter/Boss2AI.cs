@@ -14,7 +14,8 @@ public class Boss2AI : MonoBehaviour, IEnemy
     public GameObject BulletPrefab, explosionPrefab, RocketRefab, MissilePrefab, Missile2Prefab,
         ChargedShotPrefab, BounceBulletPrefab;
     [Header("Enemy Values")]
-    [SerializeField] private int health, maxHealth, attackNum;
+    public int health;
+    [SerializeField] private int maxHealth, attackNum;
     [SerializeField] private float moveSpeed, moveSpeed2, turnSpeed, turnSpeed2, mspeed, tspeed;
     private int bulletDMG, rocketDMG, missileDMG, cqDMG, laserDMG, chargedShotDMG, bounceBulletDMG;
     private float trackingBspd, bulletSpeed, chargedShotSpeed, bounceBulletSpeed, bulletCD;
@@ -182,7 +183,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
                 MoveDir = (Vector2)(Quaternion.AngleAxis(90*(Random.value-0.5f),Vector3.forward)
                 *(Vector3)((new Vector3(0,36,0))-(Vector3)rb.position).normalized);
             }while(iter<10&&Vector2.Dot((Vector2)fp.up,MoveDir)>0.85f);
-        } else{
+        } else if(Player!=null){
             Vector3 v;
             if(Random.value>0.5f) v = fp.forward; else v = -fp.forward;
             MoveDir = Vector3.Cross((Vector3)(Player.transform.position-(Vector3)rb.position).normalized, v);
@@ -249,17 +250,17 @@ public class Boss2AI : MonoBehaviour, IEnemy
         else if (mode==6){
             var r  = Random.value;
             if(r<0.1f) StartCoroutine(Attack0(true));
-            else if (r<0.3f) StartCoroutine(Attack1());
+            else if (r<0.25f) StartCoroutine(Attack1());
             else if (r<0.5f) {StartCoroutine(Attack2(1)); Dash();}
-            else if (r<0.6f) StartCoroutine(Attack2(2));
-            else if (r<0.7f) StartCoroutine(Attack2(3));
+            else if (r<0.65f) StartCoroutine(Attack2(2));
+            else if (r<0.75f) StartCoroutine(Attack2(3));
             else if (r<0.85f) StartCoroutine(Attack3());
             else StartCoroutine(Attack4());
         }
     }
     public void SetMode(int m){
         mode = m;
-        if (mode==-10) {
+        if (mode==-10){
             mode = 0 ; health=maxHealth; Waypoint=new Vector2(0,36);
             StartCoroutine(BarAnimation());
         }
@@ -273,6 +274,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
         else {mspeed = moveSpeed2; tspeed = turnSpeed2;}
 
     }
+    public void SetState(int s){}
     public void SetAttack(int a){
         if(a!=5) StopAllCoroutines();
         if (a==0) StartCoroutine(Attack0(false));

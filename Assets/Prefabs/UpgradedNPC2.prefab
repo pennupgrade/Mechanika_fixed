@@ -229,7 +229,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 60, y: 10}
+  m_SizeDelta: {x: 90, y: 12}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2124701108221214518
 MonoBehaviour:
@@ -469,7 +469,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

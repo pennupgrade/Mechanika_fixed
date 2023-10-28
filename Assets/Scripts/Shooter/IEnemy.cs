@@ -4,6 +4,7 @@ public interface IEnemy
 {
     void Damage (int dmg, bool stun);
     void MeleeDamage (int dmg, bool stun);
+    void SetState (int s);
 }
 
 public interface IBullet
@@ -19,5 +20,6 @@ public interface IMissile
 
 public interface IGameManager
 {
+    void Dialogue(string n, string s);
     void Restart();
 }

@@ -26,7 +26,7 @@ public class NPCRocketScript : MonoBehaviour, IMissile
         if(duration<0){ spd += acc*Time.deltaTime;
             if (spd>max) spd = max;
         }
-        if (duration<-4) Destruction();
+        if (duration<-3.2f) Destruction();
         if (!disabled&& Vector3.Distance(player.transform.position,(Vector3)rb.position)<4) {
             homingStr = 50; disabled = true;
         }

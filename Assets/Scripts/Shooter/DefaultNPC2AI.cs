@@ -143,7 +143,7 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
         searchTimer=2;
         if(Vector3.Distance(Player.transform.position,transform.position)<18){
             state = 1;
-            InvokeRepeating("UpdatePath",0,2);
+            InvokeRepeating("UpdatePath",0,(enemyType==1) ? 2 : 1.5f);
         }
     }
     private void UpdatePath(){
@@ -158,13 +158,16 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
     }
     public void SetState(int s){
         state = s;
+        InvokeRepeating("UpdatePath", 0, (enemyType==1) ? 2 : 1.5f);
     }
     public void SetType(int t){
         enemyType = t;
+        moveSpeed=9.5f;
     }
 
     public void Damage (int dmg, bool stun){
-        if(enemyType==2)dmg-=5;
+        if(state==0) SetState(1);
+        if(enemyType==2)dmg-=10;
         health-=dmg; if (health<1) Destruction();
         if (stun){stunTimer += 1; stunned = true;}
         Hbar.SetHealth(health,maxHealth);
