@@ -203,7 +203,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
         CQTimer=2;
         for (int i = 0; i<15;i++){
             GameObject bullet = Instantiate (BulletPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 120*(Random.value-0.5f)));
-            bullet.GetComponent<IBullet>().SetValues (cqDMG, 12+3*Random.value, 0.6f+0.2f*Random.value, 5, Vector2.zero);
+            bullet.GetComponent<IBullet>().SetValues (cqDMG, 10+3*Random.value, 0.6f+0.2f*Random.value, 6, Vector2.zero);
         }
     }
     private void LaserDamage(){
@@ -230,13 +230,13 @@ public class Boss2AI : MonoBehaviour, IEnemy
         }
         else if (mode==2){
             var r = Random.value;
-            if(r>0.5f) StartCoroutine(Attack1());
+            if(r>0.4f) StartCoroutine(Attack1());
             else StartCoroutine(Attack0(true));
         }
         else if (mode==3){
             var r = Random.value;
-            if(r>0.65f) StartCoroutine(Attack2(2));
-            else if (r>0.3f) StartCoroutine(Attack2(3));
+            if(r>0.55f) StartCoroutine(Attack2(2));
+            else if (r>0.25f) StartCoroutine(Attack2(3));
             else StartCoroutine(Attack0(true));
         }
         else if (mode==4){

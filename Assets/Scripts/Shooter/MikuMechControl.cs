@@ -47,7 +47,7 @@ public class MikuMechControl : MonoBehaviour
         shieldRegen = false; dashing = false; knockback = 0;
         shieldRegenTimer = 0; weaponCDTimer = 0; dashCDTimer = 0;
         dashTimer = 0; chargeTimer = 0; meleeTimer = 0;
-        stunTimer = 0; stunned = false; W3Locked = true; W4Locked = true; W5Locked = true;
+        stunTimer = 0; stunned = false; W3Locked = true; W4Locked = false; W5Locked = true;
         lerpingEnergy = false; lerpingHealth=false; lerpingShield=false;
         WeaponUpdate(1);
         StartCoroutine(EnergyRegen());
@@ -147,7 +147,7 @@ public class MikuMechControl : MonoBehaviour
 
     private void FireCepheid(){
         GameObject bullet = Instantiate (CepheidPrefab, transform.position, Quaternion.identity);
-        bullet.GetComponent<IBullet>().SetValues (w1DMG+(int)(w1DMG*((100.0f - energy)/100)), 8+(4*(100.0f - energy)/100), 1.5f, -3, velocity);
+        bullet.GetComponent<IBullet>().SetValues (w1DMG+(int)(w1DMG*((100.0f - energy)/100)), 8+(4*(100.0f - energy)/100), 1.5f, -3, 0.6f*velocity);
         bullet.GetComponent<CepheidBulletScript>().SetMode(cepheidMode);
         cepheidMode++;
         if (cepheidMode == 5) cepheidMode = 1;
