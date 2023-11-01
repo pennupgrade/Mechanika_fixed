@@ -10,23 +10,24 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
     public TextMeshProUGUI DialogueName, DialogueText;
     public TextMeshProUGUI CountDown;
     public GameObject DefaultSong;
-    public GameObject BlackPanel;
+    public GameObject BlackPanel, PausePanel;
     public GameObject Player;
     public GameObject heal;
     private float songPosition;
     public Boss2AI Boss;
     public float songPosInBeats;
     private float secPerBeat, dsptimesong, bpm;
-    private bool started, hpDialogue;
+    private bool started, hpDialogue, mikuSong;
     private bool[] commands;
     private float[] beats ={343, 351, 359, 367, 415, 423, 431, 439};
     private int nextIndex, minLeft, secLeft, flickerCounter;
     private AudioSource AS;
 
     void Start(){
+        SaveData.SceneNum = SceneManager.GetActiveScene().buildIndex;
         Player = GameObject.FindWithTag("Player");
         StartCoroutine(SetPanelFalse());
-        started = false; hpDialogue = false;
+        started = false; hpDialogue = false; mikuSong = false;
         bpm = 150;
         secPerBeat = 60f / bpm;
         AS = GetComponent<AudioSource>();
@@ -50,12 +51,13 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
             nextIndex++;
         }
 
-        if (Input.GetKeyUp(KeyCode.M)){
+        if (Input.GetKeyUp(KeyCode.M) && !mikuSong && Time.timeScale > 0.9f){
+            mikuSong = true;
             AS.mute = !AS.mute;
             DefaultSong.GetComponent<AudioSource>().Pause();
         }
         if(Boss.health==0&&!hpDialogue){
-            Dialogue("Charis", "Core compromised? I've miscalculated...But no matter. I'm not letting you win.");
+            Dialogue("Charis", "Core compromised? I've miscalculated...But no matter. I might go down, but I'm not letting you win.");
             flickerCounter++;
             if(flickerCounter>100) hpDialogue=true;
         }
@@ -79,11 +81,14 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
 
     private void Commander(){
         if(!commands[0]&&songPosition>0){ commands[0] = true;
-            Boss.SetMode(-10);
+            Boss.SetMode(-10); Dialogue("Objectives:", "1. Deplete ER07's shield.\n2. Survive until its core overloads.");
         } else if (!commands[23]&&songPosition>3){ commands[23] = true;
             Boss.SetAttack(0);
         } else if (!commands[1]&&songPosition>34){ commands[1] = true;
-            Boss.SetMode(-2); Dialogue("Charis", "Redirecting energy from shielding to offensive capabilities. Let's see what you're made of.");
+            Boss.SetMode(-2);
+            if(SaveData.Deaths[SceneManager.GetActiveScene().buildIndex]<3)
+                Dialogue("Charis", "Redirecting energy from shielding to offensive capabilities. Let's see what you're made of.");
+            else Dialogue("Charis", "You should know by now, but I don't go down easy.");
         } else if (!commands[2]&&songPosition>41){ commands[2] = true;
             Boss.SetAttack(1); Boss.SetMode(2);
         } else if (!commands[3]&&songPosition>50){ commands[3] = true;
@@ -114,7 +119,11 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
             Boss.SetAttack(22); Boss.SetMode(3);
         }  else if (!commands[16]&&songPosition>189){ commands[16] = true;
             Boss.SetAttack(10); Boss.SetMode(2);
-            if(Boss.health>500) Dialogue("Charis", "Impressive. But your journey ends here.");
+            if(Boss.health>800){ 
+                if(SaveData.Deaths[SceneManager.GetActiveScene().buildIndex]<4)
+                    Dialogue("Charis", "Impressive. But your journey ends here.");
+                else Dialogue("Charis", "Impressive. But I shall prove your efforts futile.");
+            }
         }  else if (!commands[17]&&songPosition>217){ commands[17] = true;
             Boss.SetAttack(4); Boss.SetMode(5);
         }  else if (!commands[18]&&songPosition>230){ commands[18] = true;
@@ -125,7 +134,7 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
             Boss.SetAttack(3); Boss.SetMode(6);
         }  else if (!commands[21]&&songPosition>285){ commands[21] = true;
             Boss.SetAttack(10); Boss.SetMode(2);
-            if(Boss.health>500) Dialogue("Charis", "Glassing beam charged at 95%. Your fate is sealed.");
+            if(Boss.health>800) Dialogue("Charis", "Glassing beam charged at 95%. Your fate is sealed.");
         }  else if (!commands[22]&&songPosition>298){ commands[22] = true;
             bool a = Boss.CheckDefeated();
             if(a) {
@@ -154,8 +163,11 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
         }
         BlackPanel.SetActive(false);
     }
-    public void Restart(){
+    public void Restart(bool death){
+        if(death){
+        SaveData.Deaths[SceneManager.GetActiveScene().buildIndex] += 1;
         StartCoroutine(RestartCor());
+        } else SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
     }
     private IEnumerator RestartCor(){
         yield return new WaitForSeconds(2);
@@ -167,9 +179,28 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
             yield return null;
         }
 
-        SaveData.SceneNum = SceneManager.GetActiveScene().buildIndex;
-        //replace with restart screen
-        SceneManager.LoadSceneAsync("World2Boss");
+        SceneManager.LoadSceneAsync("Restart");
+    }
+    public void PauseButton(){
+        if(Time.timeScale > 0.9f){
+            PausePanel.SetActive(true);
+            Time.timeScale = 0;
+            if (mikuSong) AudioListener.pause = true;
+        } else {
+            PausePanel.SetActive(false);
+            Time.timeScale = 1;
+            if (mikuSong) AudioListener.pause = false;
+        }
+    }
+    public void RestartButton(){
+        Time.timeScale = 1;
+        PausePanel.SetActive(false);
+        Restart(false);
+    }
+
+    public void MainMenu(){
+        Time.timeScale = 1;
+        SceneManager.LoadSceneAsync("MainMenu");
     }
 
     public void Dialogue(string n, string s){

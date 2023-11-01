@@ -47,7 +47,7 @@ public class MikuMechControl : MonoBehaviour
         shieldRegen = false; dashing = false; knockback = 0;
         shieldRegenTimer = 0; weaponCDTimer = 0; dashCDTimer = 0;
         dashTimer = 0; chargeTimer = 0; meleeTimer = 0;
-        stunTimer = 0; stunned = false; W3Locked = true; W4Locked = false; W5Locked = true;
+        stunTimer = 0; stunned = false; W3Locked = true; W4Locked = true; W5Locked = true;
         lerpingEnergy = false; lerpingHealth=false; lerpingShield=false;
         WeaponUpdate(1);
         StartCoroutine(EnergyRegen());
@@ -75,6 +75,22 @@ public class MikuMechControl : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha3)&&!W3Locked) {WeaponUpdate(3);}
         if (Input.GetKeyDown(KeyCode.Alpha4)&&!W4Locked) {WeaponUpdate(4);}
         if (Input.GetKeyDown(KeyCode.Alpha5)&&!W5Locked) {WeaponUpdate(5);}
+        if(Input.mouseScrollDelta.y>0){
+            weaponNum++;
+            if (weaponNum==3 && W3Locked) weaponNum++;
+            if (weaponNum==4 && W4Locked) weaponNum++;
+            if (weaponNum==5 && W5Locked) weaponNum++;
+            if(weaponNum>5) weaponNum = 1;
+            WeaponUpdate(weaponNum);
+        }
+        if(Input.mouseScrollDelta.y<0){
+            weaponNum--;
+            if(weaponNum<1) weaponNum = 5;
+            if (weaponNum==5 && W5Locked) weaponNum--;
+            if (weaponNum==4 && W4Locked) weaponNum--;
+            if (weaponNum==3 && W3Locked) weaponNum--;
+            WeaponUpdate(weaponNum);
+        }
 
         //weapon fire
         if (weaponNum==1){
@@ -181,6 +197,7 @@ public class MikuMechControl : MonoBehaviour
         var a = 1;
         if(lookDir.y<0) a = -1;
         bullet.transform.eulerAngles = (a*Vector2.Angle(new Vector2(1,0), lookDir)-90)* Vector3.forward;
+        knockback = 8;
     }
     private IEnumerator FireMeteor(){
         var count = 0;
@@ -252,9 +269,10 @@ public class MikuMechControl : MonoBehaviour
 
     public void Death(){
         Debug.Log("death");
+
         GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
         Destroy(expl, 2);
-        GM.GetComponent<IGameManager>().Restart();
+        GM.GetComponent<IGameManager>().Restart(true);
         Destroy(gameObject);
     }
 

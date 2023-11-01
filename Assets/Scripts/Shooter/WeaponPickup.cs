@@ -13,11 +13,11 @@ public class WeaponPickup : MonoBehaviour
         if(c.gameObject.tag == "Player"){
             c.gameObject.GetComponent<MikuMechControl>().UnlockWeapon(weapon);
             if(weapon==3){
-                GM.Dialogue("Unlocked: Senbonzakura", "Bullet damage, range, and dispersion improve when charged.");
+                GM.Dialogue("Unlocked: Senbonzakura", "Shotgun. Damage, range, and dispersion improve when charged.");
             } else if (weapon==4){
-                GM.Dialogue("Unlocked: Nova", "Lengthy charge and movement penalty compensated by very high damage.");
+                GM.Dialogue("Unlocked: Nova", "Long charge and movement penalty compensated by high damage. Energy and damage linear to charge.");
             } else{
-                GM.Dialogue("Unlocked: Meteor", "Missiles home in on cursor, homing stops within certain distance.");
+                GM.Dialogue("Unlocked: Meteor", "Missiles home in on cursor, homing stops within certain distance. High damage, high energy usage.");
             }
             Destroy(gameObject);
         }

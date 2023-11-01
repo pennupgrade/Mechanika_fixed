@@ -8,12 +8,15 @@ using UnityEngine.SceneManagement;
 public class GM2Script : MonoBehaviour, IGameManager
 {
     public TextMeshProUGUI DialogueName, DialogueText;
-    public GameObject BlackPanel, DialogueBox;
+    public GameObject BlackPanel, DialogueBox, PausePanel;
+    private bool dialogueCo;
 
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(SetPanelFalse());
+        SaveData.SceneNum = SceneManager.GetActiveScene().buildIndex;
+        dialogueCo = false;
     }
     private IEnumerator SetPanelFalse(){
         Image img = BlackPanel.GetComponent<Image>();
@@ -25,8 +28,11 @@ public class GM2Script : MonoBehaviour, IGameManager
         BlackPanel.SetActive(false);
     }
 
-    public void Restart(){
+    public void Restart(bool death){
+        if(death){
+        SaveData.Deaths[SceneManager.GetActiveScene().buildIndex] += 1;
         StartCoroutine(RestartCor());
+        } else SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
     }
     private IEnumerator RestartCor(){
         yield return new WaitForSeconds(2);
@@ -38,15 +44,32 @@ public class GM2Script : MonoBehaviour, IGameManager
             yield return null;
         }
 
-        SaveData.SceneNum = SceneManager.GetActiveScene().buildIndex;
-        //replace with restart screen
-        SceneManager.LoadSceneAsync("World2");
+        SceneManager.LoadSceneAsync("Restart");
+    }
+    public void PauseButton(){
+        if(Time.timeScale > 0.9f){
+            PausePanel.SetActive(true);
+            Time.timeScale = 0;
+        } else {
+            PausePanel.SetActive(false);
+            Time.timeScale = 1;
+        }
+    }
+    public void RestartButton(){
+        Time.timeScale = 1;
+        PausePanel.SetActive(false);
+        Restart(false);
+    }
+    public void MainMenu(){
+        Time.timeScale = 1;
+        SceneManager.LoadSceneAsync("MainMenu");
     }
 
     public void Dialogue(string n, string s){
-        StartCoroutine(DialogueCor(n, s));
+        if(!dialogueCo) StartCoroutine(DialogueCor(n, s));
     }
     private IEnumerator DialogueCor(string n, string s){
+        dialogueCo = true;
         StartCoroutine(FadeInGUI(DialogueBox.GetComponent<Image>(), DialogueBox));
         DialogueName.text = n; 
         DialogueText.text = s;

@@ -21,5 +21,8 @@ public interface IMissile
 public interface IGameManager
 {
     void Dialogue(string n, string s);
-    void Restart();
+    void Restart(bool death);
+    void RestartButton();
+    void PauseButton();
+    void MainMenu();
 }
