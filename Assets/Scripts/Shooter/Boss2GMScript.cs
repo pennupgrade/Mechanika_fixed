@@ -106,17 +106,17 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
         } else if (!commands[9]&&songPosition>123){ commands[9] = true;
             Boss.SetAttack(1); Boss.SetMode(-1);
         } else if (!commands[10]&&songPosition>130){ commands[10] = true;
-            Boss.SetAttack(22); Dialogue("Charis", "Interesting. Disengaging autopilot. Assuming direct control.");
+            Boss.SetAttack(2222); Dialogue("Charis", "Interesting. Disengaging autopilot. Assuming direct control.");
         } else if (!commands[11]&&songPosition>137){ commands[11] = true;
             Boss.SetMode(-2);
         } else if (!commands[12]&&songPosition>148){ commands[12] = true;
-            Boss.SetAttack(22); Boss.SetMode(3);
+            Boss.SetAttack(22222); Boss.SetMode(3);
         } else if (!commands[13]&&songPosition>158){ commands[13] = true;
             Boss.SetAttack(4); Boss.SetMode(0); SpawnHeal();
         }  else if (!commands[14]&&songPosition>166){ commands[14] = true;
             Boss.SetMode(-2);
         }  else if (!commands[15]&&songPosition>177){ commands[15] = true;
-            Boss.SetAttack(22); Boss.SetMode(3);
+            Boss.SetAttack(2222); Boss.SetMode(3);
         }  else if (!commands[16]&&songPosition>189){ commands[16] = true;
             Boss.SetAttack(10); Boss.SetMode(2);
             if(Boss.health>800){ 
