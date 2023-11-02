@@ -64,6 +64,9 @@ public class GM2Script : MonoBehaviour, IGameManager
         Time.timeScale = 1;
         SceneManager.LoadSceneAsync("MainMenu");
     }
+    public void WeaponDescription(int num){
+        Dialogue("Description: " + SaveData.WeaponName[num], SaveData.WeaponDialogue[num]);
+    }
 
     public void Dialogue(string n, string s){
         if(!dialogueCo) StartCoroutine(DialogueCor(n, s));
@@ -79,6 +82,7 @@ public class GM2Script : MonoBehaviour, IGameManager
         StartCoroutine(FadeOutText(DialogueText));
         StartCoroutine(FadeOutGUI(DialogueBox.GetComponent<Image>(), DialogueBox));
         yield return FadeOutText(DialogueName);
+        dialogueCo = false;
     }
 
     private IEnumerator FadeInText(TextMeshProUGUI t){
