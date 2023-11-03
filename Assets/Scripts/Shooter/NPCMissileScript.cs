@@ -24,7 +24,11 @@ public class NPCMissileScript : MonoBehaviour, IMissile
     {
         duration -= Time.deltaTime;
         spd += acc*Time.deltaTime;
-        if (spd>max) spd = max;
+        if(acc>0){
+            if (spd>max) spd = max;
+        } else {
+            if (spd<max) spd = max;
+        }
         if (duration<0) Destruction();
         turnTimer=TimerF(turnTimer);
     }
