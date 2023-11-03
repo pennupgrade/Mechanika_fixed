@@ -20,7 +20,7 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
     private bool started, hpDialogue, mikuSong;
     private bool[] commands;
     private float[] beats ={343, 351, 359, 367, 415, 423, 431, 439};
-    private int nextIndex, minLeft, secLeft, flickerCounter;
+    private int nextIndex, minLeft, secLeft;
     private AudioSource AS;
 
     void Start(){
@@ -58,8 +58,7 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
         }
         if(Boss.health==0&&!hpDialogue){
             Dialogue("Charis", "Core compromised? I've miscalculated...But no matter. I might go down, but I'm not letting you win.");
-            flickerCounter++;
-            if(flickerCounter>100) hpDialogue=true;
+            hpDialogue=true;
         }
     }
 
@@ -106,7 +105,10 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
         } else if (!commands[9]&&songPosition>123){ commands[9] = true;
             Boss.SetAttack(1); Boss.SetMode(-1);
         } else if (!commands[10]&&songPosition>130){ commands[10] = true;
-            Boss.SetAttack(2222); Dialogue("Charis", "Interesting. Disengaging autopilot. Assuming direct control.");
+            Boss.SetAttack(2222); 
+            if(SaveData.Deaths[SceneManager.GetActiveScene().buildIndex]>3)
+                    Dialogue("Charis", "Let's dance.");
+            else Dialogue("Charis", "Interesting. Disengaging autopilot. Assuming direct control.");
         } else if (!commands[11]&&songPosition>137){ commands[11] = true;
             Boss.SetMode(-2);
         } else if (!commands[12]&&songPosition>148){ commands[12] = true;
@@ -119,7 +121,7 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
             Boss.SetAttack(2222); Boss.SetMode(3);
         }  else if (!commands[16]&&songPosition>189){ commands[16] = true;
             Boss.SetAttack(10); Boss.SetMode(2);
-            if(Boss.health>800){ 
+            if(Boss.health>1000){ 
                 if(SaveData.Deaths[SceneManager.GetActiveScene().buildIndex]<4)
                     Dialogue("Charis", "Impressive. But your journey ends here.");
                 else Dialogue("Charis", "Impressive. But I shall prove your efforts futile.");
@@ -134,12 +136,12 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
             Boss.SetAttack(3); Boss.SetMode(6);
         }  else if (!commands[21]&&songPosition>285){ commands[21] = true;
             Boss.SetAttack(10); Boss.SetMode(2);
-            if(Boss.health>800) Dialogue("Charis", "Glassing beam charged at 95%. Your fate is sealed.");
+            if(Boss.health>1000) Dialogue("Charis", "Glassing beam charged at 95%. Your fate is sealed.");
         }  else if (!commands[22]&&songPosition>298){ commands[22] = true;
             bool a = Boss.CheckDefeated();
             if(a) {
                 StartCoroutine(Win());
-                Dialogue("Charis","Impossib-");
+                Dialogue("Charis","Impossi-");
             }
             else Dialogue("Charis","Your damage output is pitiful.");
         }

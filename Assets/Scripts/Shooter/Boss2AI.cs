@@ -41,7 +41,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
         maxHealth = 12500; health=maxHealth;
         moveState = 0; mode = -1;
         frameTimer = 1;
-        bulletDMG=60; bulletCD=0.24f; bulletSpeed = 10; rocketDMG = 160; missileDMG = 120;
+        bulletDMG=60; bulletCD=0.3f; bulletSpeed = 10; rocketDMG = 160; missileDMG = 120;
         trackingBspd = bulletSpeed;
         cqDMG = 60; laserDMG = 360; chargedShotDMG = 400; chargedShotSpeed = 20; bounceBulletDMG = 240; 
         bounceBulletSpeed = 9;
@@ -97,7 +97,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
     private IEnumerator Attack0(bool m){
         trackingBspd = bulletSpeed; tracking = true; attackNum = 0; laser = false; warning = false;
         yield return new WaitForSeconds(0.8f);
-        for (int i = 0; i<25; i++){
+        for (int i = 0; i<20; i++){
             FireBullet();
             if (m && i==15) Attack0Missile();
             yield return new WaitForSeconds(bulletCD);
@@ -129,11 +129,11 @@ public class Boss2AI : MonoBehaviour, IEnemy
             for(int i = 0; i<8; i++){
             GameObject missile = Instantiate (MissilePrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -10*i));
             missile.GetComponent<IMissile>().SetSpeed(4,8,18);
-            missile.GetComponent<IMissile>().SetValues (missileDMG, 4, 110, false, Player);
+            missile.GetComponent<IMissile>().SetValues (missileDMG, 3.2f, 110, false, Player);
             yield return new WaitForSeconds(.06f);
             GameObject missile2 = Instantiate (MissilePrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 10*i));
             missile2.GetComponent<IMissile>().SetSpeed(4,8,18);
-            missile2.GetComponent<IMissile>().SetValues (missileDMG, 4, 110, false, Player);
+            missile2.GetComponent<IMissile>().SetValues (missileDMG, 3.2f, 110, false, Player);
             yield return new WaitForSeconds(.06f);
             }
         }else if (mType==3){
@@ -152,10 +152,10 @@ public class Boss2AI : MonoBehaviour, IEnemy
             for(int i = 0; i<3; i++){
             GameObject missile = Instantiate (MissilePrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -100-20*i));
             missile.GetComponent<IMissile>().SetSpeed(16,2,18);
-            missile.GetComponent<IMissile>().SetValues (missileDMG, 3.2f, 110, true, Player);
+            missile.GetComponent<IMissile>().SetValues (missileDMG, 4, 110, true, Player);
             GameObject missile2 = Instantiate (MissilePrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 100+20*i));
             missile2.GetComponent<IMissile>().SetSpeed(16,2,18);
-            missile2.GetComponent<IMissile>().SetValues (missileDMG, 3.2f, 110, true, Player);
+            missile2.GetComponent<IMissile>().SetValues (missileDMG, 4, 110, true, Player);
             yield return new WaitForSeconds(.32f);
             }
         }else if (mType==5){
@@ -187,7 +187,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
     private IEnumerator Attack4(){
         trackingBspd = bounceBulletSpeed; tracking = true; attackNum = 4; laser = false; warning = false;
         for (int i = 0; i<5; i++){
-            GameObject bullet = Instantiate (BounceBulletPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 8*(Random.value-0.5f)));
+            GameObject bullet = Instantiate (BounceBulletPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 30*(Random.value-0.5f)));
             bullet.GetComponent<IBullet>().SetValues (bounceBulletDMG, bounceBulletSpeed, 20, -0.1f, Vector2.zero);
             yield return new WaitForSeconds(1.6f);
         }
@@ -229,7 +229,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
     private void LaserDamage(){
         RaycastHit2D hit = Physics2D.Raycast((Vector2)fp.transform.position, (Vector2)fp.up, 70, 1<<11);
         var endpt = fp.transform.position+hit.distance*fp.up;
-        Debug.DrawLine(fp.transform.position, endpt, Color.red, 0.2f);
+        Debug.DrawLine(fp.transform.position, endpt, Color.red, 0.1f);
         if(Physics2D.Raycast((Vector2)fp.transform.position, (Vector2)fp.up,
         50, 1<<6)){
             if (Player.TryGetComponent<MikuMechControl>(out MikuMechControl miku)){
@@ -257,7 +257,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
             var r = Random.value;
             if(r>0.75f) StartCoroutine(Attack2(2));
             else if (r>0.55f) StartCoroutine(Attack2(3));
-            else if (r>0.35f) StartCoroutine(Attack2(4));
+            else if (r>0.38f) StartCoroutine(Attack2(4));
             else if (r>0.1f) StartCoroutine(Attack2(5));
             else StartCoroutine(Attack0(true));
         }
@@ -270,16 +270,16 @@ public class Boss2AI : MonoBehaviour, IEnemy
         }
         else if (mode==6){
             var r  = Random.value;
-            if (r<0.14f) StartCoroutine(Attack1());
-            else if (r<0.4f) {StartCoroutine(Attack2(1)); Dash();}
+            if (r<0.1f) StartCoroutine(Attack1());
+            else if (r<0.35f) {StartCoroutine(Attack2(1)); Dash();}
             else if (r<0.75f) {
                 var s = Random.value;
                 if(s>0.7f) StartCoroutine(Attack2(2));
                 else if (s>0.5f) StartCoroutine(Attack2(3));
-                else if (s>0.25f) StartCoroutine(Attack2(4));
+                else if (s>0.3f) StartCoroutine(Attack2(4));
                 else StartCoroutine(Attack2(5));
             }
-            else if (r<0.87f) StartCoroutine(Attack3());
+            else if (r<0.9f) StartCoroutine(Attack3());
             else StartCoroutine(Attack4());
         }
     }
@@ -356,11 +356,13 @@ public class Boss2AI : MonoBehaviour, IEnemy
     private Vector2 GetValidPoint(float d){
         int iter = 0;
         Vector2 point;
+        float dist;
         do{
             point = new Vector2(Random.Range(-25.0f, 25.0f),20+Random.Range(0.0f, 31.0f));
             iter++;
-        }while(iter<11 && Vector3.Distance(Player.transform.position,(Vector3)point)<d);
-        if(iter>10) return (Vector2)Player.transform.position;
+            dist = Vector3.Distance(Player.transform.position,(Vector3)point);
+        }while(iter < 11 && !(dist > d && ((d>12)?(true):(dist<18)) ));
+        if (iter > 10) return (Vector2) Player.transform.position;
         else return point;
     }
 
