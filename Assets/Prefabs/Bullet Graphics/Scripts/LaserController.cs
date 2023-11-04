@@ -8,7 +8,7 @@ public class LaserController : MonoBehaviour
 {
 
     static LaserController ins;
-    void Awake() { ins = this; LaserParticleSystem = Instantiate(LaserParticleSystem); }
+    void Awake() { ins = this; LaserParticleSystem = Instantiate(LaserParticleSystem); ins.LaserParticleSystem.gameObject.SetActive(false);}
 
     [SerializeField] Material LaserMaterial;
     [SerializeField] ParticleSystem LaserParticleSystem;

@@ -43,7 +43,7 @@ public class MikuMechControl : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>(); tr = GetComponent<TrailRenderer>();
         mspeed = moveSpeed; weaponNum = 1; cepheidMode = 1;
-        energy = 100; health = 390; maxShield = 400; shield = 0;
+        energy = 100; health = 390; maxShield = 410; shield = 0;
         shieldRegen = false; dashing = false; knockback = 0;
         shieldRegenTimer = 0; weaponCDTimer = 0; dashCDTimer = 0;
         dashTimer = 0; chargeTimer = 0; meleeTimer = 0;
@@ -64,7 +64,7 @@ public class MikuMechControl : MonoBehaviour
         if (!shieldRegen && shield!=maxShield && shieldRegenTimer<0.001) StartCoroutine(Regenerator());
 
         //dash
-        if((Input.GetKeyDown(KeyCode.Space)||Input.GetKeyDown(KeyCode.LeftShift)) && dashCDTimer<0.01f && energy-dashEnergy >= 0){
+        if((Input.GetKeyDown(KeyCode.Space)||Input.GetKeyDown(KeyCode.LeftShift)||Input.GetKeyDown(KeyCode.Mouse1)) && dashCDTimer<0.01f && energy-dashEnergy >= 0){
             dashCDTimer=dashCD; dashing = true; dashTimer = 0.25f; energy-=dashEnergy; tr.emitting = true;
         }
         if (dashing&&dashTimer<0.001f) {dashing = false; tr.emitting = false;}
