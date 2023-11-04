@@ -146,6 +146,8 @@ float div(float2 v)
 	return v.x / v.y;
 }
 
+float fsin(float t) { return sin(t)*.5+.5;}
+
 float2 stepv(float2 v, float2 edge)
 {
 	return float2(step(v.x, edge.x), step(v.y, edge.y));

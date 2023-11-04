@@ -77,6 +77,8 @@ public static class Utils
 
     public static float2 xy(this Vector3 v) => new (v.x, v.y);
     public static float2 xy(this float3 v) => new(v.x, v.y);
+    public static float3 xyz(this Vector2 v, float z = 0f) => new float3(v.x, v.y, z);
+    public static float3 xyz(this float2 v, float z = 0f) => new float3(v.x, v.y, z);
     public static Vector4 xyzw(this Vector3 v, float w = 0f) => new(v.x, v.y, v.z, w);
     public static float4 xyzw(this float3 v, float w = 0f) => new(v.x, v.y, v.z, w);
 }
