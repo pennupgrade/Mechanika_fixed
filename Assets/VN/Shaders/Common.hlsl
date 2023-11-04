@@ -227,6 +227,11 @@ float sdCircle(float2 p, float radius)
 	return length(p) - radius;
 }
 
+float sdHyperCircle(float2 p, float r, float k)
+{
+	return pow(pow(p.x, k) + pow(p.y, k), 1./k) - r;
+}
+
 float sdLine(float2 p, float4 points, float thickness)
 {
 

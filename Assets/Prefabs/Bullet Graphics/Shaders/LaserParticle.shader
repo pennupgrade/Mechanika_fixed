@@ -42,11 +42,6 @@ Shader "Unlit/Bullet/BossLaserParticle"
                 return o;
             }
 
-            float sdHyperCircle(float2 p, float r, float k)
-            {
-                return pow(pow(p.x, k) + pow(p.y, k), 1./k) - r;
-            }
-
             float getGlow(float dist)
             {
                 return smoothstep(0.2, 0.1, dist)/(max(1., pow((dist+.11+.04)*10., 2.)));
