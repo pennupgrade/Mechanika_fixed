@@ -136,7 +136,7 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
             Boss.SetAttack(3); Boss.SetMode(6);
         }  else if (!commands[21]&&songPosition>285){ commands[21] = true;
             Boss.SetAttack(10); Boss.SetMode(2);
-            if(Boss.health>1000) Dialogue("Charis", "Glassing beam charged at 95%. Your fate is sealed.");
+            if(Boss.health>1000) Dialogue("Charis", "Laser guidance system nearing 95%. Your fate is sealed.");
         }  else if (!commands[22]&&songPosition>298){ commands[22] = true;
             bool a = Boss.CheckDefeated();
             if(a) {

@@ -42,7 +42,7 @@ public class NPCMissileScript : MonoBehaviour, IMissile
         if(frameTimer==0){
             frameTimer = 2;
             TargetDirection = (player.transform.position-(Vector3)rb.position).normalized;
-            if(homingStr!=0&&turnTimer<0.001f){
+            if(homingStr!=0 && turnTimer<0.001f){
                 if (Vector3.Dot(transform.right, TargetDirection)>0){
                     Cturn = -homingStr;
                 } else Cturn = homingStr;

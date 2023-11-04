@@ -31,7 +31,7 @@ public class MikuMechControl : MonoBehaviour
     private int w2DMG = 72, w2Energy = 20; private float w2CD = 0.7f;
     private int w3DMG = 24, w3Energy = 22; private float w3CD = 0.4f;
     private int w4DMG = 200, w4Energy = 20; private float w4CD = 0.1f;
-    private int w5DMG = 250, w5Energy = 26; private float w5CD = 5;
+    private int w5DMG = 250, w5Energy = 26; private float w5CD = 4;
     [Header("Cam")]
     public Camera cam;
     private Rigidbody2D rb;
@@ -202,10 +202,13 @@ public class MikuMechControl : MonoBehaviour
     private IEnumerator FireMeteor(){
         var count = 0;
         var d = lookDir;
-        while (energy>=w5Energy) {EnergyUpdate(-w5Energy); count++;}
+        if(energy > 90) {count = 3;}
+        else if (energy > 60) {count = 2;}
+        else count = 1;
+        EnergyUpdate(-100);
         for(int i = 0; i<count; i++){
             GameObject bullet = Instantiate (MeteorPrefab, transform.position, Quaternion.identity);
-            bullet.GetComponent<MeteorMissileScript>().SetValues (w5DMG, 3, 2, 9, 5, 100, gameObject);
+            bullet.GetComponent<MeteorMissileScript>().SetValues (w5DMG, 4, 3, 10, 5, 95, gameObject);
             var a = 1;
             if(d.y<0) a = -1;
             bullet.transform.eulerAngles = (a*Vector2.Angle(new Vector2(1,0), d)-140+10*i)* Vector3.forward;
