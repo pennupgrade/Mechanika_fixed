@@ -38,10 +38,12 @@ public class MikuMechControl : MonoBehaviour
     private Vector2 movement, mousePos, lookDir;
     private Vector2 velocity;
 
+    private Animator animator;
+
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>(); tr = GetComponent<TrailRenderer>();
+        rb = GetComponent<Rigidbody2D>(); tr = GetComponent<TrailRenderer>(); animator = GetComponent<Animator>();
         mspeed = moveSpeed; weaponNum = 1; cepheidMode = 1;
         energy = 100; health = 390; maxShield = 410; shield = 0;
         shieldRegen = false; dashing = false; knockback = 0;
@@ -58,6 +60,11 @@ public class MikuMechControl : MonoBehaviour
     {
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
+
+        //update animator
+        animator.SetInteger("Horizontal", (int) Mathf.Round(movement.x));
+        animator.SetInteger("Vertical", (int) Mathf.Round(movement.y));
+
         mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
 
         //shield regeneration

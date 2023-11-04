@@ -4,6 +4,9 @@ Shader "Unlit/Bullet/NovaBullet"
     {
         _LowColor ("Low Color", Color) = (0., .8, 1., 1.)
         _HighColor ("High Color", Color) = (0., .3, 1., 1.)
+
+        _StepSize ("Step Size", Float) = .15
+        _StepCount ("Step Count", Float) = 3.
     }
     SubShader
     {
@@ -46,6 +49,9 @@ Shader "Unlit/Bullet/NovaBullet"
 
             float4 _LowColor;
             float4 _HighColor;
+
+            float _StepSize;
+            float _StepCount;
 
             fixed4 frag (vOut i) : SV_Target
             {
@@ -95,9 +101,10 @@ Shader "Unlit/Bullet/NovaBullet"
                 // Final Composite
                 float3 lowCol = lerp(_LowColor, _HighColor, 1.-op) * lowIntensity;
                 float3 highCol = _HighColor * highIntensity;
-                float3 col = lerp(_HighColor, _LowColor, saturate((polar.x - amod(polar.x, .15))/(.15*3.)));//, highIntensity);
+                float stepSize = _StepSize; float stepCount = _StepCount;
+                float3 col = lerp(_HighColor, _LowColor, saturate((polar.x - amod(polar.x, stepSize))/(stepSize*stepCount)));//, highIntensity);
 
-                return float4(col, pow(max(lowIntensity, highIntensity), 3.));
+                return float4(col, pow(max(lowIntensity, highIntensity), 1.));
             }
             ENDCG
         }

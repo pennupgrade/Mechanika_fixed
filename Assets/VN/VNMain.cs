@@ -34,9 +34,38 @@ public partial class VNMain : MonoBehaviour
         }
     }
 
+    void DoTags()
+    {
+        foreach(var tag in story.currentTags)
+        {
+            string s = tag.Trim();
+
+            var splitPnt = s.IndexOf(' '); //don't wanna use array cuz only two
+            string command = s.Substring(splitPnt);
+            string param = s.Substring(splitPnt);
+
+            //Boss and Miku expressions can be changed since they may be on screen at same time later.
+            switch(command)
+            {
+                case "setMainSpeaker":
+
+                    break;
+
+                case "setBossExpression":
+
+                    break;
+
+                case "setMikuExpression":
+
+                    break;
+            }
+        }
+    }
+
     void Continue()
     {
         toDisplay = story.Continue();
+        DoTags();
         ResetTextbox();
     }
     void DoChoices()
