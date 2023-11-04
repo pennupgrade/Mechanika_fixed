@@ -31,7 +31,7 @@ public class MikuMechControl : MonoBehaviour
     private int w2DMG = 72, w2Energy = 20; private float w2CD = 0.7f;
     private int w3DMG = 24, w3Energy = 22; private float w3CD = 0.4f;
     private int w4DMG = 200, w4Energy = 20; private float w4CD = 0.1f;
-    private int w5DMG = 250, w5Energy = 26; private float w5CD = 4;
+    private int w5DMG = 240, w5Energy = 26; private float w5CD = 4;
     [Header("Cam")]
     public Camera cam;
     private Rigidbody2D rb;
@@ -47,7 +47,7 @@ public class MikuMechControl : MonoBehaviour
         shieldRegen = false; dashing = false; knockback = 0;
         shieldRegenTimer = 0; weaponCDTimer = 0; dashCDTimer = 0;
         dashTimer = 0; chargeTimer = 0; meleeTimer = 0;
-        stunTimer = 0; stunned = false; W3Locked = true; W4Locked = true; W5Locked = true;
+        stunTimer = 0; stunned = false; W3Locked = false; W4Locked = false; W5Locked = false;
         lerpingEnergy = false; lerpingHealth=false; lerpingShield=false;
         WeaponUpdate(1);
         StartCoroutine(EnergyRegen());
@@ -191,9 +191,9 @@ public class MikuMechControl : MonoBehaviour
         knockback = 6;
     }
     private void FireNOVA(float charge){
-        if (charge<0.3f) return;
+        if (charge<0.4f) return;
         GameObject bullet = Instantiate (NOVAPrefab, transform.position, Quaternion.identity);
-        bullet.GetComponent<IBullet>().SetValues ((int)(w4DMG*charge), 6+0.4f*charge, 2.2f, -5, 0.2f*velocity);
+        bullet.GetComponent<IBullet>().SetValues ((int)(w4DMG*(charge)*(charge/4)), 6+0.4f*charge, 2.2f, -5, 0.2f*velocity);
         var a = 1;
         if(lookDir.y<0) a = -1;
         bullet.transform.eulerAngles = (a*Vector2.Angle(new Vector2(1,0), lookDir)-90)* Vector3.forward;
@@ -208,7 +208,7 @@ public class MikuMechControl : MonoBehaviour
         EnergyUpdate(-100);
         for(int i = 0; i<count; i++){
             GameObject bullet = Instantiate (MeteorPrefab, transform.position, Quaternion.identity);
-            bullet.GetComponent<MeteorMissileScript>().SetValues (w5DMG, 4, 3, 10, 5, 95, gameObject);
+            bullet.GetComponent<MeteorMissileScript>().SetValues (w5DMG-20+20*count, 4, 3, 10, 5, 95, gameObject);
             var a = 1;
             if(d.y<0) a = -1;
             bullet.transform.eulerAngles = (a*Vector2.Angle(new Vector2(1,0), d)-140+10*i)* Vector3.forward;

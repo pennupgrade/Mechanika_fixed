@@ -10,9 +10,9 @@ public static class SaveData
     public static string[] WeaponDialogue = {"", 
         "Low damage. High energy efficiency and rate of fire. Lower energy leads to higher damage.",
         "Moderate damage. Phases through enemies and bounces off walls. Useful against large numbers.",
-        "High damage at close range. Charging weapon increases range, spread, and damage.",
-        "Very high damage, but high energy usage and movement penalty. Damage, and energy use linear to charge.",
-        "Very high damage. Missiles track cursor and stop homing when close. High energy usage and long cooldown."
+        "Higher damage at close range. Charging weapon increases range, spread, and damage.",
+        "High damage, but high energy usage and movement penalty. Damage nonlinear to charge time; energy use is linear.",
+        "High damage. Missiles track cursor. Missile count and damage depend on energy. High energy cost and long cooldown."
     };
 
 
