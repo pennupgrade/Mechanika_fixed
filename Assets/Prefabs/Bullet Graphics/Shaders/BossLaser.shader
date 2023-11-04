@@ -58,7 +58,7 @@ Shader "Unlit/Bullet/BossLaser"
 
             float getGlow(float dist)
             {
-                return 1./(max(1., pow((dist+.11)*10., 2.)));
+                return smoothstep(0.25, 0.1, dist)/(max(1., pow((dist+.11+.04)*10., 2.)));
             }
 
             float sampleDistort(float x, float t)
@@ -76,14 +76,16 @@ Shader "Unlit/Bullet/BossLaser"
 
             float4 renderLaser(float2 p)
             {
+                float t = _Time.y;
+
+                p -= amod(p, .01);
+
                 float3 edgeCol = float3(0., 0.7, 0.9);
                 float3 insideCol = float3(1., 1., 1.);
 
-                float laserHeight = .3; //-.5 to oscillate .3 and .5
+                float laserHeight = -.5 + .8 * sqrt(saturate((t - 4.)/(4.3-4.))) + fsin(t*4.4)*.08; //-.5 to oscillate .3 and .5
                 float laserStepWidth = .03;
                 float laserEndStepCount = 3.;
-
-                float t = _Time.y;
 
                 //hehe unusual polar
                 float r = .5;
@@ -93,12 +95,12 @@ Shader "Unlit/Bullet/BossLaser"
                 //Laser body
                 p.y = abs(p.y);
                 float distort = sampleDistort(p.x, t);
-                //p.y *= (1. - distort);
+                p.y *= (1. - distort);
                 float isLaser = step(p.y, laserHeight*.5);
                 
                 //Laser color edges
                 float distEdge = laserHeight*.5 - p.y;
-                float distId = distEdge;// - amod(distEdge, laserStepWidth);
+                float distId = distEdge - amod(distEdge, laserStepWidth);
                 float interpo = 1.-saturate((distId)/(laserEndStepCount*laserStepWidth));
                 
                 //Dithering
@@ -110,26 +112,28 @@ Shader "Unlit/Bullet/BossLaser"
 
                 //Glow
                 //p = pixelate(p, 0.01);
-                float3 emission = edgeCol * getGlow((p.y - laserHeight*.5)/(1.-distort));
+                float g = getGlow((p.y - laserHeight*.5)/(1.-distort));
+                float3 emission = edgeCol * g;
                 
                 //Compositing
                 float3 laserBodyCol = insideCol;
                 float3 col = isLaser * lerp(laserBodyCol, edgeCol, interpo) + (1.-isLaser) * emission;
                 
                 //offset mark vertical part of laser body meaning edge overrides
-                return float4(col, isLaser);
+                return float4(col, max(g, isLaser));
                 
             }
 
 
-            fixed4 frag (vIn i) : SV_Target
+            fixed4 frag (vOut i) : SV_Target
             {
+
                 float laserHeightSample = 1./_LaserScale;
 
-                //i.uv.x *= _LaserXScale;
-                //i.uv *= laserHeightSample;
+                i.uv.x *= _LaserXScale;
+                i.uv *= laserHeightSample;
                 
-                return float4(i.uv.x, i.uv.y, 0., 1.);//renderLaser(i.uv);
+                return renderLaser(i.uv);
 
             }
             ENDCG

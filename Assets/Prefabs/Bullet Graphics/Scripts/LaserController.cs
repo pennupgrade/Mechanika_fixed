@@ -8,26 +8,24 @@ public class LaserController : MonoBehaviour
 {
 
     static LaserController ins;
-    void Awake() => ins = this;
+    void Awake() { ins = this; LaserParticleSystem = Instantiate(LaserParticleSystem); }
 
     [SerializeField] Material LaserMaterial;
-
-    static readonly Mesh laserQuad = new ()
-    {
-        vertices = new Vector3[] 
-            { new(0f, -1f), new(0f, 1f), new(1f, -1f), new(1f, 1f) },
-        uv = new Vector2[]
-            { new(0f, -1f), new(0f, 1f), new(1f, -1f), new(1f, 1f) },
-        triangles = new int[]
-            { 0, 1, 2, 1, 2, 3 }
-    };
+    [SerializeField] ParticleSystem LaserParticleSystem;
 
     public static void DrawLaser(Vector2 start, Vector2 end)
     {
-        //Graphics.DrawMesh(laserQuad, Matrix4x4.TRS(start, Quaternion.FromToRotation(Vector3.right, (end - start).xyz()), new Vector3(math.length(start - end), 1f, 1f)), ins.LaserMaterial);
-        ins.LaserMaterial.SetPass(0);
-        Graphics.DrawMeshNow(laserQuad, Matrix4x4.TRS(start, Quaternion.FromToRotation(Vector3.right, (end - start).xyz()), new Vector3(math.length(start - end), 1f, 1f)));
-        //Graphics.DrawMesh(laserQuad, start, Quaternion.FromToRotation(Vector3.right, (end - start).xyz()), new Vector3(math.length(start - end), 1f, 1f), ins.LaserMaterial);
+
+        // Laser Body
+        ins.LaserMaterial.SetFloat("_LaserXScale", math.length(end - start));
+        Matrix4x4 mat = Matrix4x4.TRS(start, Quaternion.FromToRotation(Vector3.right, ((Vector3)(end - start).xyz()).normalized), new Vector3(math.length(start - end), 1f, 1f));
+        Graphics.DrawMesh(Utils.Quad, mat, ins.LaserMaterial, LayerMask.NameToLayer("Default"), Camera.main, 0, null, false, false);
+
+        // Laser Particle
+        ins.LaserParticleSystem.transform.position = end.xyz();
     }
+
+    public static void EnableParticles() => ins.LaserParticleSystem.gameObject.SetActive(true);
+    public static void DisableParticles() => ins.LaserParticleSystem.gameObject.SetActive(false);
 
 }

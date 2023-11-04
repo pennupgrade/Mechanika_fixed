@@ -81,4 +81,14 @@ public static class Utils
     public static float3 xyz(this float2 v, float z = 0f) => new float3(v.x, v.y, z);
     public static Vector4 xyzw(this Vector3 v, float w = 0f) => new(v.x, v.y, v.z, w);
     public static float4 xyzw(this float3 v, float w = 0f) => new(v.x, v.y, v.z, w);
+
+    public static readonly Mesh Quad = new()
+    {
+        vertices = new Vector3[]
+            { new(0f, -3f), new(0f, 3f), new(1f, -3f), new(1f, 3f) },
+        uv = new Vector2[]
+            { new(0f, -3f), new(0f, 3f), new(1f, -3f), new(1f, 3f) },
+        triangles = new int[]
+            { 0, 1, 2, 1, 2, 3 }
+    };
 }

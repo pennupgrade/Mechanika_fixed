@@ -108,11 +108,12 @@ public class Boss2AI : MonoBehaviour, IEnemy
         if(Player==null) {StopAllCoroutines(); yield break;}
         tracking = false; laser = false; Cturn = 0; attackNum = 1; 
         warning = true;
-        yield return new WaitForSeconds(1.6f); laser = true; warning = false;
+        yield return new WaitForSeconds(1.6f); laser = true; warning = false; LaserController.EnableParticles();
         if (Vector3.Dot(fp.right, (Player.transform.position-transform.position).normalized)>0){
                 Cturn = -turnSpeed;
         } else Cturn = turnSpeed;
         yield return new WaitForSeconds(2);
+        LaserController.DisableParticles();
         laser = false; tracking = true;
         AttackSelect();
     }
@@ -229,7 +230,10 @@ public class Boss2AI : MonoBehaviour, IEnemy
     private void LaserDamage(){
         RaycastHit2D hit = Physics2D.Raycast((Vector2)fp.transform.position, (Vector2)fp.up, 70, 1<<11);
         var endpt = fp.transform.position+hit.distance*fp.up;
+
         Debug.DrawLine(fp.transform.position, endpt, Color.red, 0.2f);
+        LaserController.DrawLaser(fp.transform.position, endpt);
+
         if(Physics2D.Raycast((Vector2)fp.transform.position, (Vector2)fp.up,
         50, 1<<6)){
             if (Player.TryGetComponent<MikuMechControl>(out MikuMechControl miku)){
