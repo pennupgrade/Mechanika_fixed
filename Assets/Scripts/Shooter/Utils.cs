@@ -45,7 +45,7 @@ public static class Utils
                 endEnclose = si[i..].IndexOf('<') + i;
                 stack.Append
                     ((
-                        si[endEnclose..(si[i..].IndexOf('>') + i + 1)],
+                        si[endEnclose..(si[(i+1)..].IndexOf('>') + (i+1) + 1)],
                         endEnclose
                     ));
             }
