@@ -17,7 +17,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
     private int currentWaypoint;
     private float bulletCDTimer, bulletReload=3, bulletReloadTimer, missileCD=10, missileCDTimer;
     private float shotgunCDTimer, shotgunCD=5, spawnTime=10;
-    private float Cturn, meleeTimer, stunTimer, searchTimer, aimTimer, spawnTimer, bounceTimer;
+    private float Cturn, meleeTimer, stunTimer, searchTimer, aimTimer, spawnTimer, bounceTimer, wayPointTimer;
     private bool stunned, bounce;
     private Vector2 TargetDir, MoveDir, bounceVector;
     private Rigidbody2D rb;
@@ -42,7 +42,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
         mspeed=moveSpeed;
         StartCoroutine(FindPlayer());
         bulletCDTimer = 0; meleeTimer = 0; stunTimer = 0; bulletReloadTimer = 0; missileCDTimer = 15;
-        searchTimer = 3; aimTimer = 0; spawnTimer=0; shotgunCDTimer = 0;
+        searchTimer = 3; aimTimer = 0; spawnTimer=0; shotgunCDTimer = 0; wayPointTimer = 0;
         bounceTimer = 0; bounce = false; bounceVector = Vector2.zero;
         nextWaypointDistance = 1;
         Hbar.SetHealth(health, maxHealth);
@@ -74,6 +74,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
             TargetDir = MoveDir;
         }
         if(state!=0){
+            wayPointTimer += Time.deltaTime;
             if(s>0.9994f) Cturn=0;
             else{
                 if (Vector3.Dot(fp.right, TargetDir)>0){
@@ -90,8 +91,12 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
                 MoveDir=Vector2.zero;
                 UpdatePath();
             }else{
+                if (wayPointTimer > 8){
+                    UpdatePath();
+                    MoveDir=Vector2.zero;
+                }
                 MoveDir = ((Vector2)path.vectorPath[currentWaypoint]-rb.position).normalized;
-                if(Vector2.Distance(rb.position,path.vectorPath[currentWaypoint])<nextWaypointDistance){
+                if (Vector2.Distance(rb.position,path.vectorPath[currentWaypoint])<nextWaypointDistance){
                     currentWaypoint++;
                 }
             }
@@ -196,6 +201,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
         if(!p.error){
             path=p;
             currentWaypoint=0;
+            wayPointTimer=0;
         }
     }
     public void SetState(int s){
