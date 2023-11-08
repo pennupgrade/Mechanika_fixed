@@ -6,7 +6,7 @@ public static class SaveData
     public static bool W3VNCompleted = false;
     public static int SceneNum = -1;
     public static int[] Deaths = new int[6];
-    public static string[] WeaponName = {"", "Cepheid", "DISC", "Senbonzakura", "NOVA", "Meteor"};
+    public static string[] WeaponName = {"", "Grey Zone", "Blue Star", "Senbonzakura", "Hibana", "Meteor"};
     public static string[] WeaponDialogue = {"", 
         "Low damage. High energy efficiency and rate of fire. Lower energy leads to higher damage.",
         "Moderate damage. Phases through enemies and bounces off walls. Useful against large numbers.",

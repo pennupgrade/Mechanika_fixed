@@ -15,7 +15,7 @@ public class WeaponPickup : MonoBehaviour
             if(weapon==3){
                 GM.Dialogue("Unlocked: Senbonzakura", "Close range weapon. Damage, range, and dispersion improve when charged.");
             } else if (weapon==4){
-                GM.Dialogue("Unlocked: Nova", "Effective against larger enemies. High energy expenditure compensated by high damage.");
+                GM.Dialogue("Unlocked: Hibana", "Effective against larger enemies. High energy expenditure compensated by high damage.");
             } else{
                 GM.Dialogue("Unlocked: Meteor", "Homing missiles track cursor. High damage, high energy usage.");
             }
