@@ -12,6 +12,8 @@ using UnityEngine.UI;
 
 using static Utils;
 
+using static Unity.Mathematics.math;
+
 // Called Main because it interacts directly with Unity
 //can split into pratial
 public partial class VNMain : MonoBehaviour
@@ -27,9 +29,10 @@ public partial class VNMain : MonoBehaviour
     { 
         bossSpriteDictionary = new()
         {
-            {"miku", MikuSprite},
-            {"charis", CharisSprite}
+            {"miku", (MikuSprite, MikuMaterial)},
+            {"charis", (CharisSprite, CharisMaterial)}
         };
+        lState = InactiveLeftState; rState = InactiveRightState;
 
         ins = this;
         story = new Story(StoryData.text); 
@@ -56,11 +59,12 @@ public partial class VNMain : MonoBehaviour
             var splitPnt = s.IndexOf(' '); //don't wanna use array cuz only two
             string command = s.Substring(0, splitPnt);
             string param = s.Substring(splitPnt+1);
+            
+            UnityEngine.Debug.Log(s);
 
             //Boss and Miku expressions can be changed since they may be on screen at same time later.
             switch(command)
             {
-                //waaaah you made it 2 cases when it could be on- SHUT UP.
                 case "setLeftCharacter":
                 SetCharacter(true, param);
                     break;
@@ -69,8 +73,16 @@ public partial class VNMain : MonoBehaviour
                 SetCharacter(false, param);
                     break;
 
+                case "activateSpeaker":
+                SetSpeaker(param, true, false);
+                    break;
+
+                case "deactivateSpeaker":
+                SetSpeaker(param, false, false);
+                    break;
+
                 case "setSpeaker":
-                SetSpeaker(param);
+                SetSpeaker(param, true, true);
                     break;
 
                 case "setLeftExpression":
@@ -171,6 +183,17 @@ public partial class VNMain // Unity Refs
     [SerializeField] Sprite MikuSprite;
     [SerializeField] Sprite CharisSprite;
     [SerializeField] RectTransform CharacterHolder;
+
+    [Header (" -=- VN Character Materials -=- ")]
+    [SerializeField] Material MikuMaterial;
+    [SerializeField] Material CharisMaterial;
+
+    [Header (" -=- VN Character States -=- ")]
+    [SerializeField] CharacterState ActivateRightState;
+    [SerializeField] CharacterState InactiveRightState;
+    [SerializeField] CharacterState ActivateLeftState;
+    [SerializeField] CharacterState InactiveLeftState;
+
 }
 
 public partial class VNMain // Display
@@ -226,35 +249,40 @@ public partial class VNMain
 {
 
     //
-    float2 lTargetPos;
-    float2 rTargetPos;
+    CharacterState lState;
+    CharacterState rState;
 
-    Dictionary<string, Sprite> bossSpriteDictionary;
+    //
+    bool isActiveLeft;
+    bool isActiveRight;
+
+    Dictionary<string, (Sprite, Material)> bossSpriteDictionary;
     void SetCharacter(bool isLeft, String character) 
     {
         character = character.ToLower();
 
         var img = isLeft ? LeftImage : RightImage;
-        img.sprite = bossSpriteDictionary[character];
-        if(isLeft) lName = character; rName = character;
+        var data = bossSpriteDictionary[character]; img.sprite = data.Item1; img.material = data.Item2;
+
+        if(isLeft) lName = character; else rName = character;
     }
 
     string lName; string rName;
-    void SetSpeaker(string s)
+    void SetSpeaker(string s, bool active = true, bool otherOpp = true)
     {
         s = s.ToLower();
-        if(s == "left" || s == "right") SetSpeaker(s == "left");
-        else if(s == lName) SetSpeaker(true);
-        else if(s == rName) SetSpeaker(false);
+        if(s == "left" || s == "right") { SetSpeaker(s == "left", active); if(otherOpp) SetSpeaker(s != "left", !active); }
+        else if(s == lName) { SetSpeaker(true, active); if(otherOpp) SetSpeaker(false, !active); }
+        else if(s == rName) { SetSpeaker(false, active); if(otherOpp) SetSpeaker(true, !active); }
         else throw new Exception ("Invalid Speaker");
     }
-    void SetSpeaker(bool isLeft) // miku will almost always be on the left
+    void SetSpeaker(bool isLeft, bool activate = true) // miku will almost always be on the left
     {
         float2 far = new (240f, 0f);
         float2 close = new (100f, 0f);
 
-        if(isLeft) { lTargetPos = close * new float2(-1f, 0f); rTargetPos = far;}
-        else { lTargetPos = far * new float2(-1f, 0f); rTargetPos = close;}
+        if(isLeft) isActiveLeft = activate;
+        else       isActiveRight = activate;
     }
 
     //
@@ -263,12 +291,41 @@ public partial class VNMain
 
     void UpdatePortraits(float dt)
     {
-        //also change scale on movement
-        currLPos = math.lerp(currLPos, lTargetPos, 2f*dt);
-        currRPos = math.lerp(currRPos, rTargetPos, 2f*dt);
+        lState.Lerp(isActiveLeft ? ActivateLeftState : InactiveLeftState, 2f*dt); 
+        rState.Lerp(isActiveRight ? ActivateRightState : InactiveRightState, 2f*dt);
 
-        LeftImage.transform.position = CharacterHolder.transform.position + (Vector3) currLPos.xyz();
-        RightImage.transform.position = CharacterHolder.transform.position + (Vector3) currRPos.xyz();
+        UnityEngine.Debug.Log(isActiveLeft + " " + isActiveRight);
+
+        lState.SendToImage(LeftImage);
+        rState.SendToImage(RightImage);
+    }
+
+    [System.Serializable]
+    struct CharacterState
+    {
+
+        public float2 Position;
+        public float Size;
+        public float Fade;
+
+        public void Lerp(CharacterState o, float t) // could make ref
+        {
+            Position = math.lerp(Position, o.Position, t);
+            Size = math.lerp(Size, o.Size, t);
+            Fade = math.lerp(Fade, o.Fade, t);
+        }
+
+        public static CharacterState FlipX(CharacterState old)
+             { old.Position *= float2(-1f, 1f); return old; }
+
+        public void SendToImage(Image img)
+        {
+            img.transform.localPosition = Position.xyz();
+            img.transform.localScale = Vector3.one * Size;
+            img.material.SetFloat("_Fade", Fade);
+            //setting aspect to reflect, but it's done automatically?
+        }
+
     }
 
 }
