@@ -9,6 +9,7 @@ Shader "Unlit/Bullet/BossLaser"
         _Amplitude ("Amplitude", Float) = 1.
 
         [HideInInspector] _LaserXScale ("Laser X Scale", Float) = 1.
+        [HideInInspector] _LastStartTime ("Last Start Time", Float) = 0.
     }
     SubShader
     {
@@ -56,6 +57,8 @@ Shader "Unlit/Bullet/BossLaser"
 
             float _LaserXScale;
 
+            float _LastStartTime;
+
             float getGlow(float dist)
             {
                 return smoothstep(0.25, 0.1, dist)/(max(1., pow((dist+.11+.04)*10., 2.)));
@@ -76,14 +79,14 @@ Shader "Unlit/Bullet/BossLaser"
 
             float4 renderLaser(float2 p)
             {
-                float t = _Time.y;
+                float t = _Time.y - _LastStartTime;
 
                 p -= amod(p, .01);
 
                 float3 edgeCol = float3(0., 0.7, 0.9);
                 float3 insideCol = float3(1., 1., 1.);
 
-                float laserHeight = -.5 + .8 * sqrt(saturate((t - 4.)/(4.3-4.))) + fsin(t*4.4)*.08; //-.5 to oscillate .3 and .5
+                float laserHeight = -.5 + .8 * sqrt(saturate(t/(4.3-4.))) + fsin(t*4.4)*.08*1.5; //-.5 to oscillate .3 and .5
                 float laserStepWidth = .03;
                 float laserEndStepCount = 3.;
 

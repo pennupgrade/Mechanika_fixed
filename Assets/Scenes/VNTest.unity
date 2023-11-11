@@ -639,6 +639,7 @@ GameObject:
   - component: {fileID: 1593178810}
   - component: {fileID: 1593178809}
   - component: {fileID: 1593178811}
+  - component: {fileID: 1593178812}
   m_Layer: 0
   m_Name: LOG_VN
   m_TagString: Untagged
@@ -661,8 +662,9 @@ MonoBehaviour:
   ChoiceFolder: {fileID: 1676862358}
   ChoicePrefab: {fileID: 308300917658321432, guid: 1f979c9834e90634e90a32e1166b9167, type: 3}
   ChoiceVerticalSeparation: 16
+  VNFolder: {fileID: 1664583664}
   OutputTextbox: {fileID: 1804705779}
-  StoryData: {fileID: 4900000, guid: 0aaf8582bd4499b48a05184e097920e8, type: 3}
+  StoryData: {fileID: 4900000, guid: 4176758c4703a4146b3c7b090f565e44, type: 3}
   TextSpeed: 30
   LeftImage: {fileID: 128726996}
   RightImage: {fileID: 1543217874}
@@ -695,6 +697,22 @@ MonoBehaviour:
       y: 0
     Size: 4.5
     Fade: 0
+  MikuCharisExchange: {fileID: 4900000, guid: 4176758c4703a4146b3c7b090f565e44, type: 3}
+  AudioPlayer: {fileID: 1593178812}
+  Sounds:
+    _serializedList:
+    - Key: herewego
+      Value: {fileID: 8300000, guid: 02a657dc88aa83c4a9fb2d26785b6376, type: 3}
+    - Key: mariotime
+      Value: {fileID: 8300000, guid: 28ab058d26af9a54586f5683b0a2b253, type: 3}
+    - Key: ohyeah
+      Value: {fileID: 8300000, guid: 7aa80c791e999e94a8db9fba89af2607, type: 3}
+    - Key: ohohoh
+      Value: {fileID: 8300000, guid: 0e08986db0f8ed84686d45600e4470f6, type: 3}
+    - Key: owowow
+      Value: {fileID: 8300000, guid: 2f4dbd178f88bdf42b5ad53a7e04e5cc, type: 3}
+    - Key: grandstar
+      Value: {fileID: 8300000, guid: 5731af295b7aa3441a85c0b5b9f95522, type: 3}
 --- !u!4 &1593178810
 Transform:
   m_ObjectHideFlags: 0
@@ -724,6 +742,102 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OutputTextboxMaterial: {fileID: 2100000, guid: 5cd814ae2d6260f44b9a3ecb1b1acff5, type: 2}
   TextboxSpriteTransform: {fileID: 815334764}
+--- !u!82 &1593178812
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593178808}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1664583664
 GameObject:
   m_ObjectHideFlags: 0

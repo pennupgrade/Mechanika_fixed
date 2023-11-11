@@ -13,13 +13,14 @@ using UnityEngine.UI;
 using static Utils;
 
 using static Unity.Mathematics.math;
+using AYellowpaper.SerializedCollections;
 
 public partial class VNMain : MonoBehaviour
 {
 
     public static void Activate(Story story)
     {
-        ins.ChoiceFolder.SetActive(true);
+        ins.VNFolder.SetActive(true);
 
         ins.story = story;
         ins.ResetStates();
@@ -27,7 +28,7 @@ public partial class VNMain : MonoBehaviour
     }
 
     public static void Deactivate() 
-        => ins.ChoiceFolder.SetActive(false);
+        => ins.VNFolder.SetActive(false);
 
 }
 
@@ -44,8 +45,8 @@ public partial class VNMain : MonoBehaviour
     { 
         bossSpriteDictionary = new()
         {
-            {"miku", (MikuSprite, MikuMaterial)},
-            {"charis", (CharisSprite, CharisMaterial)}
+            {"miku", (MikuSpriteData, MikuMaterial)},
+            {"charis", (CharisSpriteData, CharisMaterial)}
         };
         lState = InactiveLeftState; rState = InactiveRightState;
 
@@ -69,7 +70,7 @@ public partial class VNMain : MonoBehaviour
 
         foreach(var tag in story.currentTags)
         {
-            string s = tag.Trim();
+            string s = tag.Trim().ToLower();
 
             var splitPnt = s.IndexOf(' '); //don't wanna use array cuz only two
             string command = s.Substring(0, splitPnt);
@@ -80,32 +81,41 @@ public partial class VNMain : MonoBehaviour
             //Boss and Miku expressions can be changed since they may be on screen at same time later.
             switch(command)
             {
-                case "setLeftCharacter":
+                case "setleftcharacter":
                 SetCharacter(true, param);
                     break;
 
-                case "setRightCharacter":
+                case "setrightcharacter":
                 SetCharacter(false, param);
                     break;
 
-                case "activateSpeaker":
+                case "activatespeaker":
                 SetSpeaker(param, true, false);
                     break;
 
-                case "deactivateSpeaker":
+                case "deactivatespeaker":
                 SetSpeaker(param, false, false);
                     break;
 
-                case "setSpeaker":
+                case "setspeaker":
                 SetSpeaker(param, true, true);
                     break;
 
-                case "setLeftExpression":
-
+                case "switchspeaker":
+                SwitchSpeaker();
                     break;
 
-                case "setRightExpression":
+                case "playsound":
+                AudioPlayer.clip = ins.Sounds[param];
+                AudioPlayer.Play();
+                    break;
 
+                case "sethappy": //improve later make multiple param commands just use split
+                SetExpression(param, true);
+                    break; 
+
+                case "setsad":
+                SetExpression(param, false);
                     break;
             }
         }
@@ -154,14 +164,16 @@ public partial class VNMain : MonoBehaviour
 
     public void OnInteract()
     {
-        (bool cc, bool du, bool ch) = (story.canContinue, RunningState(State.DISPUPDATING), RunningState(State.CHOOSING));
+        (bool cc, bool du, bool ch, bool csh) = (story.canContinue, RunningState(State.DISPUPDATING), RunningState(State.CHOOSING), story.currentChoices.Count > 0);
 
         if (cc && !du)
             Continue();
         else if (du)
             ForceFinishDisplay();
-        else if (!cc && !du && !ch)
+        else if (!cc && !du && !ch && csh)
             DoChoices();
+        else 
+            Deactivate();
     }
     public void OnExit()
     {
@@ -184,6 +196,7 @@ public partial class VNMain // Unity Refs
     [Min(0.0f)] [SerializeField] float ChoiceVerticalSeparation;
 
     [Header(" -=- Misc -=- ")]
+    [SerializeField] GameObject VNFolder;
     [SerializeField] TMP_Text OutputTextbox;
     [SerializeField] TextAsset StoryData;
 
@@ -195,8 +208,8 @@ public partial class VNMain // Unity Refs
     [SerializeField] Image RightImage;
     
     [Header(" -=- VN Character Sprites -=- ")]
-    [SerializeField] Sprite MikuSprite;
-    [SerializeField] Sprite CharisSprite;
+    [SerializeField] CharacterSpriteData MikuSpriteData;
+    [SerializeField] CharacterSpriteData CharisSpriteData;
     [SerializeField] RectTransform CharacterHolder;
 
     [Header (" -=- VN Character Materials -=- ")]
@@ -208,6 +221,13 @@ public partial class VNMain // Unity Refs
     [SerializeField] CharacterState InactiveRightState;
     [SerializeField] CharacterState ActivateLeftState;
     [SerializeField] CharacterState InactiveLeftState;
+
+    [Header (" -=- Stories -=- ")]
+    [SerializeField] TextAsset MikuCharisExchange;
+
+    [Header(" -=- Audio -=- ")]
+    [SerializeField] AudioSource AudioPlayer;
+    [SerializeField] SerializedDictionary<string, AudioClip> Sounds;
 
 }
 
@@ -275,27 +295,39 @@ public partial class VNMain
     bool isActiveLeft;
     bool isActiveRight;
 
-    Dictionary<string, (Sprite, Material)> bossSpriteDictionary;
-    void SetCharacter(bool isLeft, String character) 
+    Dictionary<string, (CharacterSpriteData, Material)> bossSpriteDictionary;
+    void SetCharacter(bool isLeft, string character) 
     {
         character = character.ToLower();
 
         var img = isLeft ? LeftImage : RightImage;
-        UnityEngine.Debug.Log("setcharacter " + isLeft);
-        var data = bossSpriteDictionary[character]; img.sprite = data.Item1; img.material = data.Item2;
+        var data = bossSpriteDictionary[character]; img.sprite = data.Item1.HappyCharacter; img.material = data.Item2;
 
         if(isLeft) lName = character; else rName = character;
     }
 
     string lName; string rName;
+    bool StringToSide(string s) 
+    {
+        if(s == "left" || s == "right") return s == "left";
+        else if(s == lName) return true;
+        else if(s == rName) return false;
+        else throw new Exception ("Invalid Side");
+    }
     void SetSpeaker(string s, bool active = true, bool otherOpp = true)
     {
-        s = s.ToLower();
-        if(s == "left" || s == "right") { SetSpeaker(s == "left", active); if(otherOpp) SetSpeaker(s != "left", !active); }
-        else if(s == lName) { SetSpeaker(true, active); if(otherOpp) SetSpeaker(false, !active); }
-        else if(s == rName) { SetSpeaker(false, active); if(otherOpp) SetSpeaker(true, !active); }
-        else throw new Exception ("Invalid Speaker");
+        bool side = StringToSide(s);
+        SetSpeaker(side, active); if(otherOpp) SetSpeaker(!side, !active);
     }
+    void SetExpression(string s, bool happy)
+    {
+        if(StringToSide(s))
+            LeftImage.sprite = happy ? bossSpriteDictionary[lName].Item1.HappyCharacter : bossSpriteDictionary[lName].Item1.SadCharacter;
+        else
+            RightImage.sprite = happy ? bossSpriteDictionary[rName].Item1.HappyCharacter : bossSpriteDictionary[rName].Item1.SadCharacter;
+        
+    }
+    void SwitchSpeaker() { isActiveLeft = !isActiveLeft; isActiveRight = !isActiveRight; }
     void SetSpeaker(bool isLeft, bool activate = true) // miku will almost always be on the left
     {
         float2 far = new (240f, 0f);
@@ -344,6 +376,14 @@ public partial class VNMain
             //setting aspect to reflect, but it's done automatically?
         }
 
+    }
+
+    [System.Serializable]
+    struct CharacterSpriteData
+    {
+
+        public Sprite HappyCharacter;
+        public Sprite SadCharacter;
     }
 
 }
