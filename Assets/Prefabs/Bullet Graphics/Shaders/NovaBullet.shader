@@ -91,12 +91,12 @@ Shader "Unlit/Bullet/NovaBullet"
                 float inOverlayCircle = step(polar.x, rOverlay);
 
                 // Overlay Banner Stuff
-                float ltheta = amod(polar.y, size) - size*.5;
+                float ltheta = amod(polar.y + _Time.y, size) - size*.5;
                 bannerSize *= pow(polar.x, -1.);
                 float isBanner = step(abs(ltheta), bannerSize*.5) * smoothstep(fadeOutRange.y, fadeOutRange.x, polar.x) * (1.-inOverlayCircle);
 
                 // Overlay Composite
-                float highIntensity = inOverlayCircle;// + isBanner;
+                float highIntensity = inOverlayCircle + isBanner;
 
                 // Final Composite
                 float3 lowCol = lerp(_LowColor, _HighColor, 1.-op) * lowIntensity;

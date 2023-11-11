@@ -18,8 +18,12 @@ using AYellowpaper.SerializedCollections;
 public partial class VNMain : MonoBehaviour
 {
 
-    public static void Activate(Story story)
+    static Action currCallback;
+
+    public static void Activate(Story story, Action callback)
     {
+        currCallback = callback;
+
         ins.VNFolder.SetActive(true);
 
         ins.story = story;
@@ -27,8 +31,8 @@ public partial class VNMain : MonoBehaviour
         ins.Continue();
     }
 
-    public static void Deactivate() 
-        => ins.VNFolder.SetActive(false);
+    public static void Deactivate()
+    { currCallback(); ins.VNFolder.SetActive(false); }
 
 }
 
