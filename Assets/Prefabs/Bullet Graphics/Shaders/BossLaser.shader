@@ -10,6 +10,7 @@ Shader "Unlit/Bullet/BossLaser"
 
         [HideInInspector] _LaserXScale ("Laser X Scale", Float) = 1.
         [HideInInspector] _LastStartTime ("Last Start Time", Float) = 0.
+        [HideInInspector] _UVYMult ("UV Y Mult", Float) = 1.
     }
     SubShader
     {
@@ -58,10 +59,17 @@ Shader "Unlit/Bullet/BossLaser"
             float _LaserXScale;
 
             float _LastStartTime;
+            
+            float _UVYMult;
 
             float getGlow(float dist)
             {
                 return smoothstep(0.25, 0.1, dist)/(max(1., pow((dist+.11+.04)*10., 2.)));
+            }
+
+            float getGlowLaserBody(float dist)
+            {
+                return smoothstep(0.8, 0.3, dist)/(max(1., pow((dist*.8+.11+.04)*6., 2.)));
             }
 
             float sampleDistort(float x, float t)
@@ -86,7 +94,7 @@ Shader "Unlit/Bullet/BossLaser"
                 float3 edgeCol = float3(0., 0.7, 0.9);
                 float3 insideCol = float3(1., 1., 1.);
 
-                float laserHeight = -.5 + .8 * sqrt(saturate(t/(4.3-4.))) + fsin(t*4.4)*.08*1.5; //-.5 to oscillate .3 and .5
+                float laserHeight = -.5 + .8*1.4 * sqrt(saturate(t/(4.3-4.))) + fsin(t*4.4)*.08*1.5*1.5; //-.5 to oscillate .3 and .5
                 float laserStepWidth = .03;
                 float laserEndStepCount = 3.;
 
@@ -115,7 +123,7 @@ Shader "Unlit/Bullet/BossLaser"
 
                 //Glow
                 //p = pixelate(p, 0.01);
-                float g = getGlow((p.y - laserHeight*.5)/(1.-distort));
+                float g = getGlowLaserBody((p.y - laserHeight*.5)/(1.-distort));
                 float3 emission = edgeCol * g;
                 
                 //Compositing
@@ -133,6 +141,7 @@ Shader "Unlit/Bullet/BossLaser"
 
                 float laserHeightSample = 1./_LaserScale;
 
+                i.uv.y *= _UVYMult;
                 i.uv.x *= _LaserXScale;
                 i.uv *= laserHeightSample;
                 
