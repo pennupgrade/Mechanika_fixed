@@ -14,8 +14,23 @@ using static Utils;
 
 using static Unity.Mathematics.math;
 
-// Called Main because it interacts directly with Unity
-//can split into pratial
+public partial class VNMain : MonoBehaviour
+{
+
+    public static void Activate(Story story)
+    {
+        ins.ChoiceFolder.SetActive(true);
+
+        ins.story = story;
+        ins.ResetStates();
+        ins.Continue();
+    }
+
+    public static void Deactivate() 
+        => ins.ChoiceFolder.SetActive(false);
+
+}
+
 public partial class VNMain : MonoBehaviour
 {
 
@@ -235,6 +250,10 @@ public partial class VNMain // state machine
     void InitStates()
     {
         stateLoopActions = new Action<float>[3] { UpdateDisplay, null, UpdatePortraits };
+        ResetStates();
+    }
+    void ResetStates()
+    {
         SetState(State.DISPUPDATING, true);
         SetState(State.PORTRAITMOVING, true);
     }
@@ -262,6 +281,7 @@ public partial class VNMain
         character = character.ToLower();
 
         var img = isLeft ? LeftImage : RightImage;
+        UnityEngine.Debug.Log("setcharacter " + isLeft);
         var data = bossSpriteDictionary[character]; img.sprite = data.Item1; img.material = data.Item2;
 
         if(isLeft) lName = character; else rName = character;
@@ -293,8 +313,6 @@ public partial class VNMain
     {
         lState.Lerp(isActiveLeft ? ActivateLeftState : InactiveLeftState, 2f*dt); 
         rState.Lerp(isActiveRight ? ActivateRightState : InactiveRightState, 2f*dt);
-
-        UnityEngine.Debug.Log(isActiveLeft + " " + isActiveRight);
 
         lState.SendToImage(LeftImage);
         rState.SendToImage(RightImage);
