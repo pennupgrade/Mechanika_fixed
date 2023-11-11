@@ -29,7 +29,7 @@ public class LaserController : MonoBehaviour
         ins.LaserParticleSystem.transform.position = end.xyz();
     }
 
-    public static void EnableParticles() => ins.LaserParticleSystem.gameObject.SetActive(true);
+    public static void EnableParticles() { ins.LaserParticleSystem.gameObject.SetActive(true); ins.LaserMaterial.SetFloat("_LastStartTime", Time.timeSinceLevelLoad); }
     public static void DisableParticles() => ins.LaserParticleSystem.gameObject.SetActive(false);
 
 }
