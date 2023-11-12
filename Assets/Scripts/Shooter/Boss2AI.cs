@@ -87,7 +87,9 @@ public class Boss2AI : MonoBehaviour, IEnemy
     void FixedUpdate()
     {
         rb.MovePosition(rb.position + Time.fixedDeltaTime*mspeed*MoveDir);
+        //TODO: update animation
         fp.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward; 
+
     }
 
     private void FireBullet(){
