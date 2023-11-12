@@ -94,7 +94,7 @@ Shader "Unlit/Bullet/BossLaser"
                 float3 edgeCol = float3(0., 0.7, 0.9);
                 float3 insideCol = float3(1., 1., 1.);
 
-                float laserHeight = -.5 + .8*1.4 * sqrt(saturate(t/(4.3-4.))) + fsin(t*4.4)*.08*1.5*1.5; //-.5 to oscillate .3 and .5
+                float laserHeight = -.5 + .8*1.4*.8 * sqrt(saturate(t/(4.3-4.))) + fsin(t*4.4)*.08*1.5*1.5; //-.5 to oscillate .3 and .5
                 float laserStepWidth = .03;
                 float laserEndStepCount = 3.;
 

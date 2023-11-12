@@ -4,6 +4,8 @@ Shader "Unlit/Bullet/NovaBullet"
     {
         _LowColor ("Low Color", Color) = (0., .8, 1., 1.)
         _HighColor ("High Color", Color) = (0., .3, 1., 1.)
+        _FarOuterColor ("Far Outer Color", Color) = (0., 0., 0., 1.)
+        _ShiftOuterFade ("Shift Outer Fade", Float) = 0.
 
         _StepSize ("Step Size", Float) = .15
         _StepCount ("Step Count", Float) = 3.
@@ -52,10 +54,14 @@ Shader "Unlit/Bullet/NovaBullet"
 
             float _StepSize;
             float _StepCount;
+            float _ShiftOuterFade;
+
+            float4 _FarOuterColor;
 
             fixed4 frag (vOut i) : SV_Target
             {
                 float2 p = i.uv*2.-1.;
+                p *= .9;
                 p -= amod(p, 0.02);
 
                 float2 polar = toPolar(p);
@@ -79,7 +85,6 @@ Shader "Unlit/Bullet/NovaBullet"
                 float lowIntensity = inCircle + isStripe*op;
 
                 /// Blue Overlay
-
                 float rOverlay = .2;
 
                 float repCount = 5.;
@@ -102,9 +107,17 @@ Shader "Unlit/Bullet/NovaBullet"
                 float3 lowCol = lerp(_LowColor, _HighColor, 1.-op) * lowIntensity;
                 float3 highCol = _HighColor * highIntensity;
                 float stepSize = _StepSize; float stepCount = _StepCount;
-                float3 col = lerp(_HighColor, _LowColor, saturate((polar.x - amod(polar.x, stepSize))/(stepSize*stepCount)));//, highIntensity);
 
-                return float4(col, pow(max(lowIntensity, highIntensity), 1.));
+                float cID = ((polar.x - amod(polar.x, stepSize))/(stepSize*stepCount));
+                float3 col = lerp(_HighColor, _LowColor, saturate(cID));//, highIntensity);
+                col = lerp(col, _FarOuterColor, smoothstep(.5, 1.2, polar.x +_ShiftOuterFade*.1 - amod(polar.x+.1, stepSize)));
+                col += .4*step(cID, 0.5);
+
+                //
+                float glow = .5/max(1.,pow(polar.x*10., 2.0));
+                float3 emi = _HighColor*glow;
+
+                return float4(col+emi, pow(max(lowIntensity, max(highIntensity, glow)), 1.));
             }
             ENDCG
         }
