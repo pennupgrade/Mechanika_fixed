@@ -155,11 +155,11 @@ public class Boss2AI : MonoBehaviour, IEnemy
         }else if (mType==4){
             for(int i = 0; i<4; i++){
             GameObject missile = Instantiate (MissilePrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -100-20*i));
-            missile.GetComponent<IMissile>().SetSpeed(22,-7,14);
-            missile.GetComponent<IMissile>().SetValues (missileDMG, 4, 110, true, Player);
+            missile.GetComponent<IMissile>().SetSpeed(20,-8,12);
+            missile.GetComponent<IMissile>().SetValues (missileDMG, 3.6f, 110, true, Player);
             GameObject missile2 = Instantiate (MissilePrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 100+20*i));
-            missile2.GetComponent<IMissile>().SetSpeed(22,-7,14);
-            missile2.GetComponent<IMissile>().SetValues (missileDMG, 4, 110, true, Player);
+            missile2.GetComponent<IMissile>().SetSpeed(20,-8,12);
+            missile2.GetComponent<IMissile>().SetValues (missileDMG, 3.6f, 110, true, Player);
             yield return new WaitForSeconds(.32f);
             }
         }else if (mType==5){
