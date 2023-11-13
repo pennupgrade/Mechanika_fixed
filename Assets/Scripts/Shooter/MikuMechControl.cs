@@ -362,7 +362,7 @@ public class MikuMechControl : MonoBehaviour
         float timeScale = 0;
 
         while(timeScale < 1){
-            if(health < 20){
+            if(shield == 0 && health < 20){
                 timeScale += Time.deltaTime*2.5f;
             } else {
                 timeScale += Time.deltaTime/3;
