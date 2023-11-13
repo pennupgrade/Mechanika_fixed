@@ -362,7 +362,11 @@ public class MikuMechControl : MonoBehaviour
         float timeScale = 0;
 
         while(timeScale < 1){
-            timeScale += Time.deltaTime/3;
+            if(health < 20){
+                timeScale += Time.deltaTime*2.5f;
+            } else {
+                timeScale += Time.deltaTime/3;
+            }
             sBar.value = Mathf.Lerp(startShield, shield, timeScale);
             yield return null;
         }
