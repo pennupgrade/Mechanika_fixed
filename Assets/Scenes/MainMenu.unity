@@ -1700,26 +1700,26 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Health and Shields: While shield (cyan) will regenerate after 18 seconds
-    of taking no damage, your health (pink) will not regen. It can only be healed
-    through medkits dropped my enemies. Your speed is slightly faster when your health
-    is low.
+  m_text: 'Health and Shields: Shield will regenerate after 18 seconds of taking
+    no damage, but your health will not regen. It can only be healed through medkits
+    dropped by some enemies. Your speed is slightly faster when your health is low.
 
 
-    Dash: Gives you a quick burst of speed, damage immunity, and inflicts
-    varying damage to enemies.
+    Dash:
+    Gives you a quick burst of speed, damage immunity, and inflicts varying damage
+    to enemies. Missiles cannot induce slowness when dashing.
 
 
-    Energy: A constantly regenerating resource.
-    Energy is required to use any weapon, although in varying amounts. It is also
-    needed to dash. Manage your energy wisely, or you might find yourself without
-    enough energy to dash in a pivotal moment.
+    Energy: A constantly
+    regenerating resource. Energy is required to use any weapon, although in varying
+    amounts. It is also needed to dash. Manage your energy wisely, or you might find
+    yourself without enough energy to dash in a pivotal moment.
 
 
-    Weapons: You start with 2 weapons
-    at the start of the game. Others can be unlocked as you find them throughout
-    the map. Outside of boss fights, clicking on weapons will give you a description
-    of their capabilities.'
+    Weapons: Outside
+    of boss fights, clicking on weapons will give you a description of their capabilities.
+    You start with 2 weapons at the start of the game. Others can be unlocked as
+    you find them throughout the maps.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
   m_sharedMaterial: {fileID: 2164040, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
@@ -1746,8 +1746,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 11
-  m_fontSizeBase: 11
+  m_fontSize: 11.5
+  m_fontSizeBase: 11.5
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2624,7 +2624,7 @@ MonoBehaviour:
   m_text: 'This is a sci-fi RPG themed bullet hell with VN elements.
 
     By Kevin,
-    Aidan, T, and Rin'
+    Aidan, T, Rin, and Yichen'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
   m_sharedMaterial: {fileID: 2164040, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
