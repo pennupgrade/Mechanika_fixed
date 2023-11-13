@@ -146,11 +146,11 @@ public class Boss2AI : MonoBehaviour, IEnemy
             for(int i = 0; i<6; i++){
             GameObject missile = Instantiate (MissilePrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -24*i));
             missile.GetComponent<IMissile>().SetSpeed(4,4,11);
-            missile.GetComponent<IMissile>().SetValues (missileDMG, 6.4f, 75, true, Player);
+            missile.GetComponent<IMissile>().SetValues (missileDMG, 6.4f, 75, false, Player);
             yield return new WaitForSeconds(.08f);
             GameObject missile2 = Instantiate (MissilePrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 24*i));
             missile2.GetComponent<IMissile>().SetSpeed(4,4,11);
-            missile2.GetComponent<IMissile>().SetValues (missileDMG, 6.4f, 75, true, Player);
+            missile2.GetComponent<IMissile>().SetValues (missileDMG, 6.4f, 75, false, Player);
             yield return new WaitForSeconds(.08f);
             }
             yield return new WaitForSeconds(0.8f);
@@ -158,10 +158,10 @@ public class Boss2AI : MonoBehaviour, IEnemy
             for(int i = 0; i<4; i++){
             GameObject missile = Instantiate (MissilePrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -100-20*i));
             missile.GetComponent<IMissile>().SetSpeed(20,-8,12);
-            missile.GetComponent<IMissile>().SetValues (missileDMG, 3.6f, 110, true, Player);
+            missile.GetComponent<IMissile>().SetValues (missileDMG, 3.6f, 110, false, Player);
             GameObject missile2 = Instantiate (MissilePrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 100+20*i));
             missile2.GetComponent<IMissile>().SetSpeed(20,-8,12);
-            missile2.GetComponent<IMissile>().SetValues (missileDMG, 3.6f, 110, true, Player);
+            missile2.GetComponent<IMissile>().SetValues (missileDMG, 3.6f, 110, false, Player);
             yield return new WaitForSeconds(.32f);
             }
         }else if (mType==5){
