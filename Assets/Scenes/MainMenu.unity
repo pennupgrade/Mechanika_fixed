@@ -1700,7 +1700,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Health and Shields: Shield will regenerate after 18 seconds of taking
+  m_text: 'Health and Shields: Shield will regenerate after 16 seconds of taking
     no damage, but your health will not regen. It can only be healed through medkits
     dropped by some enemies. Your speed is slightly faster when your health is low.
 

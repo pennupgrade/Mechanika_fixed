@@ -106,8 +106,8 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
             Boss.SetAttack(1); Boss.SetMode(-1);
         } else if (!commands[10]&&songPosition>130){ commands[10] = true;
             Boss.SetAttack(2222); 
-            if(SaveData.Deaths[SceneManager.GetActiveScene().buildIndex]>3)
-                    Dialogue("Charis", "Let's dance.");
+            if(SaveData.Deaths[SceneManager.GetActiveScene().buildIndex]>4)
+                Dialogue("Charis", "Let's dance.");
             else Dialogue("Charis", "Interesting. Disengaging autopilot. Assuming direct control.");
         } else if (!commands[11]&&songPosition>137){ commands[11] = true;
             Boss.SetMode(-2);

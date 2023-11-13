@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class MikuMechControl : MonoBehaviour
 {
     public GameObject[] WeaponUI;
-    public Slider hBar, sBar, eBar, cBar;
+    public Slider hBar, sBar, eBar, cBar, rBar;
     public GameObject GM;
     [Header("Prefabs")]
     public GameObject CepheidPrefab;
@@ -143,6 +143,8 @@ public class MikuMechControl : MonoBehaviour
                 StartCoroutine(FireMeteor());
             }
         }
+
+        rBar.value = 16 - shieldRegenTimer;
 
         //update timers
         weaponCDTimer = TimerF(weaponCDTimer); dashCDTimer = TimerF(dashCDTimer); dashTimer = TimerF(dashTimer);

@@ -295,17 +295,17 @@ public class Boss2AI : MonoBehaviour, IEnemy
     }
     public void SetMode(int m){
         mode = m;
-        if (mode==-10){
-            mode = 0 ; health=maxHealth; Waypoint=new Vector2(0,36);
+        if (mode == -10){
+            mode = 0 ; health = maxHealth; Waypoint = new Vector2(0,36);
             StartCoroutine(BarAnimation());
         }
-        if (mode==-1||mode==0) moveState = 0;
-        else if (mode==4) moveState = 3;
-        else if (mode==3||mode==6) moveState = 2;
+        if (mode == -1 || mode == 0) moveState = 0;
+        else if (mode == 4) moveState = 3;
+        else if (mode == 3 || mode == 6) moveState = 2;
         else moveState = 1;
 
-        if(moveState==0) mspeed=0;
-        else if(moveState==1) {mspeed = moveSpeed; tspeed = turnSpeed;}
+        if(moveState == 0) mspeed = 0;
+        else if(moveState == 1) {mspeed = moveSpeed; tspeed = turnSpeed;}
         else {mspeed = moveSpeed2; tspeed = turnSpeed2;}
 
     }
@@ -357,7 +357,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
     }
 
     public void Damage (int dmg, bool stun){
-        if(mode==0) dmg -= 10;
+        if(mode == 0 || mode == -1) dmg -= 10;
         health-=dmg;
         if (health<0) health = 0;
         Bar.value = health;
