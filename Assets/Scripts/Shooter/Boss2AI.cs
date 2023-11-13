@@ -281,15 +281,15 @@ public class Boss2AI : MonoBehaviour, IEnemy
         else if (mode==6){
             var r  = Random.value;
             if (r<0.05f) StartCoroutine(Attack1());
-            else if (r<0.32f) {StartCoroutine(Attack2(1)); Dash();}
-            else if (r<0.75f) {
+            else if (r<0.3f) {StartCoroutine(Attack2(1)); Dash();}
+            else if (r<0.72f) {
                 var s = Random.value;
                 if(s>0.7f) StartCoroutine(Attack2(2));
                 else if (s>0.5f) StartCoroutine(Attack2(3));
                 else if (s>0.3f) StartCoroutine(Attack2(4));
                 else StartCoroutine(Attack2(5));
             }
-            else if (r<0.92f) StartCoroutine(Attack3());
+            else if (r<0.95f) StartCoroutine(Attack3());
             else StartCoroutine(Attack4());
         }
     }
@@ -390,6 +390,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
     }
 
     private IEnumerator Destruction(){
+        LaserController.DisableParticles();
         cam.GetComponent<CamShake>().Shake();
         for (int i = 0; i<8; i++){
             var a = Random.value*3-1.5f;
