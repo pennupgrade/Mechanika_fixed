@@ -23,6 +23,11 @@ public partial class VNMain : MonoBehaviour
 
     public static Story MikuCharisStory;
 
+    void InitStories()
+    {
+        MikuCharisStory = new(MikuCharisExchange.text);
+    }
+
 }
 
 public partial class VNMain : MonoBehaviour
@@ -32,6 +37,8 @@ public partial class VNMain : MonoBehaviour
 
     public static void Activate(Story story, Action callback, bool skippable)
     {
+        //TODO: add backdrop blur post processing
+
         currCallback = callback;
 
         ins.VNFolder.SetActive(true);
@@ -58,21 +65,15 @@ public partial class VNMain : MonoBehaviour
 
     private void Awake()
     { 
-        bossSpriteDictionary = new()
-        {
-            {"miku", (MikuSpriteData, MikuMaterial)},
-            {"charis", (CharisSpriteData, CharisMaterial)}
-        };
-        lState = InactiveLeftState; rState = InactiveRightState;
-
-        //temp: set up button logic
-
+        
         ins = this;
-        story = new Story(StoryData.text); 
-        InitStates();
-        Continue();
 
-        MikuCharisStory = new(MikuCharisExchange.text);
+        InitVNSprites();
+        InitStates();
+        InitSkipFunctionality();
+        InitStories();
+
+        Deactivate();
     }
     private void Update()
     {
@@ -212,6 +213,7 @@ public partial class VNMain // Unity Refs
 
     [Header(" -=- Skip Button -=- ")]
     [SerializeField] GameObject SkipFolder;
+    [SerializeField] GameObject SkipObject;
 
     [Header(" -=- Choice Settings -=- ")]
     [SerializeField] GameObject ChoiceFolder;
@@ -399,12 +401,33 @@ public partial class VNMain
 
     }
 
+    void InitVNSprites()
+    {
+        bossSpriteDictionary = new()
+        {
+            {"miku", (MikuSpriteData, MikuMaterial)},
+            {"charis", (CharisSpriteData, CharisMaterial)}
+        };
+        lState = InactiveLeftState; rState = InactiveRightState;
+    }
+
     [System.Serializable]
     struct CharacterSpriteData
     {
 
         public Sprite HappyCharacter;
         public Sprite SadCharacter;
+    }
+
+}
+
+public partial class VNMain
+{
+
+    void InitSkipFunctionality()
+    {
+        Button b = SkipObject.GetComponent<Button>();
+        b.onClick.AddListener(() => Deactivate());
     }
 
 }
