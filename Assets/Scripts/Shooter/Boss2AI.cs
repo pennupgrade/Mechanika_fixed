@@ -99,7 +99,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
 
         //
         float repLen = PI*.5f;
-        float2 orientation = toCartesian(new float2(1f, fp.eulerAngles.z*D2R - (amod(fp.eulerAngles.z*D2R + repLen*.5f, repLen) - repLen*.5f)));
+        float2 orientation = toCartesian(new float2(1f, fp.eulerAngles.z*D2R - (amod(fp.eulerAngles.z*D2R + repLen*.5f, repLen) - repLen*1.5f)));
 
         Debug.Log("Angle: " + fp.eulerAngles.z + " Aaa: " + (fp.eulerAngles.z*D2R - (amod(fp.eulerAngles.z*D2R + repLen*.5f, repLen) - repLen*.5f))/PI + " Bbb: " + orientation);
 
