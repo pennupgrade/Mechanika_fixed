@@ -8,6 +8,8 @@ using Unity.VisualScripting;
 
 using static Unity.Mathematics.math;
 
+using static Utils;
+
 public static class Utils
 {
     public static void ForeachIndex<T>(this List<T> l, Action<T, int> action)
@@ -111,4 +113,19 @@ public static class Utils
         => float2(length(cart), amod(atan2(cart.y, cart.x), TAU));
     public static float2 toCartesian(float2 polar)
         => polar.x * float2(cos(polar.y), sin(polar.y));
+}
+
+public static class EnemyUtils
+{
+    public static int2 AngleDegreesToFourOrientation(float a)
+    {
+        float repLen = Utils.PI * .5f;
+        float2 orientation = toCartesian(new float2(1f, a*D2R - (amod(a*D2R + repLen*.5f, repLen) - repLen*1.5f)));
+        
+        return new int2
+        (
+            Mathf.RoundToInt(orientation.x),
+            Mathf.RoundToInt(orientation.y)
+        );
+    }
 }

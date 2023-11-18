@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
+using Unity.Mathematics;
+using Random = UnityEngine.Random;
 
 public class UpgradedNPC2AI : MonoBehaviour, IEnemy
 {
@@ -25,6 +27,13 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
     public GameObject Player; private bool pfound;
     [SerializeField] private int enemyType, state, spawnCounter;
     private int frameTimer;
+
+    [Header("Misc")]
+    [SerializeField] Animator Animator;
+
+    [Header("Colliders")]
+    [SerializeField] CircleCollider2D BigCollider;
+    [SerializeField] BoxCollider2D SideSmallCollider;
 
     // Start is called before the first frame update
     void Start()
@@ -121,6 +130,20 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
             rb.MovePosition(rb.position - Time.fixedDeltaTime*moveSpeed*bounceVector);
         }
         fp.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward; 
+
+        //
+        int2 ori = EnemyUtils.AngleDegreesToFourOrientation(fp.eulerAngles.z);
+
+        Animator.SetInteger("Horizontal", ori.x);
+        Animator.SetInteger("Vertical", ori.y);
+
+        //
+        bool useBigCollider = ori.x == 0;
+
+        BigCollider.enabled = useBigCollider;
+        SideSmallCollider.enabled = !useBigCollider;
+
+        //Animator.SetBool("IsMoving", (MoveDir.magnitude >= 0.0001f));
     }
 
     private void FireBullet(){
