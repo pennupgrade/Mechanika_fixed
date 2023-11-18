@@ -20,7 +20,7 @@ public partial class VNMain : MonoBehaviour
 
     static Action currCallback;
 
-    public static void Activate(Story story, Action callback)
+    public static void Activate(Story story, Action callback, bool skippable)
     {
         currCallback = callback;
 
