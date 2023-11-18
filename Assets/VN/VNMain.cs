@@ -50,7 +50,7 @@ public partial class VNMain : MonoBehaviour
     }
 
     public static void Deactivate()
-    { currCallback?.Invoke(); ins.VNFolder.SetActive(false); }
+    { currCallback?.Invoke(); currCallback = null; ins.VNFolder.SetActive(false); }
 
 }
 
