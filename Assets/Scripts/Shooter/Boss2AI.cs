@@ -5,6 +5,10 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEditor.Animations;
 
+using static Utils;
+using Unity.Mathematics;
+using Random = UnityEngine.Random;
+
 public class Boss2AI : MonoBehaviour, IEnemy
 {
     public GameObject cam;
@@ -31,7 +35,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
     private int frameTimer;
 
     [Header("Misc")]
-    [SerializeField] AnimatorController Animator;
+    [SerializeField] Animator Animator;
 
     // Start is called before the first frame update
     void Awake(){
@@ -93,7 +97,17 @@ public class Boss2AI : MonoBehaviour, IEnemy
         rb.MovePosition(rb.position + Time.fixedDeltaTime*mspeed*MoveDir);
         fp.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward; 
 
-        //fp.eulerAngles.z * 
+        //
+        float repLen = PI*.5f;
+        float2 orientation = toCartesian(new float2(1f, fp.eulerAngles.z*D2R - (amod(fp.eulerAngles.z*D2R + repLen*.5f, repLen) - repLen*.5f)));
+
+        Debug.Log("Angle: " + fp.eulerAngles.z + " Aaa: " + (fp.eulerAngles.z*D2R - (amod(fp.eulerAngles.z*D2R + repLen*.5f, repLen) - repLen*.5f))/PI + " Bbb: " + orientation);
+
+        int horizontal = Mathf.RoundToInt(orientation.x);
+        int vertical = Mathf.RoundToInt(orientation.y);
+
+        Animator.SetInteger("Horizontal", horizontal);
+        Animator.SetInteger("Vertical", vertical);
 
     }
 
