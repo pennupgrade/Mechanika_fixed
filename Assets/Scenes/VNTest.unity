@@ -666,6 +666,7 @@ MonoBehaviour:
   OutputTextbox: {fileID: 1804705779}
   StoryData: {fileID: 4900000, guid: 4176758c4703a4146b3c7b090f565e44, type: 3}
   TextSpeed: 30
+  CharacterAnimateSpeed: 3
   LeftImage: {fileID: 128726996}
   RightImage: {fileID: 1543217874}
   MikuSpriteData:

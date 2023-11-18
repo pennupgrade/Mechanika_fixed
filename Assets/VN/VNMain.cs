@@ -32,7 +32,7 @@ public partial class VNMain : MonoBehaviour
     }
 
     public static void Deactivate()
-    { currCallback(); ins.VNFolder.SetActive(false); }
+    { currCallback?.Invoke(); ins.VNFolder.SetActive(false); }
 
 }
 
@@ -204,8 +204,9 @@ public partial class VNMain // Unity Refs
     [SerializeField] TMP_Text OutputTextbox;
     [SerializeField] TextAsset StoryData;
 
-    [Header(" -=- Text Settings -=- ")]
+    [Header(" -=- Speed Settings -=- ")]
     [SerializeField] float TextSpeed;
+    [SerializeField] [Min(1f)] float CharacterAnimateSpeed = 2f;
 
     [Header(" -=- VN Character Objects -=- ")]
     [SerializeField] Image LeftImage;
@@ -347,8 +348,8 @@ public partial class VNMain
 
     void UpdatePortraits(float dt)
     {
-        lState.Lerp(isActiveLeft ? ActivateLeftState : InactiveLeftState, 2f*dt); 
-        rState.Lerp(isActiveRight ? ActivateRightState : InactiveRightState, 2f*dt);
+        lState.Lerp(isActiveLeft ? ActivateLeftState : InactiveLeftState, CharacterAnimateSpeed*dt); 
+        rState.Lerp(isActiveRight ? ActivateRightState : InactiveRightState, CharacterAnimateSpeed*dt);
 
         lState.SendToImage(LeftImage);
         rState.SendToImage(RightImage);
