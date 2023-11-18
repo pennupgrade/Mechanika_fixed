@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1330764695177153550}
   - component: {fileID: 8703082522288285249}
   - component: {fileID: 4173038805807427946}
+  - component: {fileID: 4854399207175616470}
   m_Layer: 10
   m_Name: Boss2BounceBullet
   m_TagString: Untagged
@@ -137,3 +138,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionPrefab: {fileID: 1111096597883011677, guid: 752a5e831b60a3a4e8f6865c5cb7c7a5, type: 3}
+--- !u!95 &4854399207175616470
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6496016192876550901}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 43cc16ccd65ebfd41a5b0718c934c5bc, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
