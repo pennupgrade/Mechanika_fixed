@@ -98,16 +98,10 @@ public class Boss2AI : MonoBehaviour, IEnemy
         fp.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward; 
 
         //
-        float repLen = PI*.5f;
-        float2 orientation = toCartesian(new float2(1f, fp.eulerAngles.z*D2R - (amod(fp.eulerAngles.z*D2R + repLen*.5f, repLen) - repLen*1.5f)));
+        int2 ori = EnemyUtils.AngleDegreesToFourOrientation(fp.eulerAngles.z);
 
-        Debug.Log("Angle: " + fp.eulerAngles.z + " Aaa: " + (fp.eulerAngles.z*D2R - (amod(fp.eulerAngles.z*D2R + repLen*.5f, repLen) - repLen*.5f))/PI + " Bbb: " + orientation);
-
-        int horizontal = Mathf.RoundToInt(orientation.x);
-        int vertical = Mathf.RoundToInt(orientation.y);
-
-        Animator.SetInteger("Horizontal", horizontal);
-        Animator.SetInteger("Vertical", vertical);
+        Animator.SetInteger("Horizontal", ori.x);
+        Animator.SetInteger("Vertical", ori.y);
 
     }
 

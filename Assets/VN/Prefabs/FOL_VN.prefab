@@ -603,7 +603,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MikuCharisExchange: {fileID: 4900000, guid: 4176758c4703a4146b3c7b090f565e44, type: 3}
   SkipFolder: {fileID: 4681247693936095497}
-  SkipObject: {fileID: 0}
+  SkipObject: {fileID: 4681247694730987058}
   ChoiceFolder: {fileID: 4681247693345642505}
   ChoicePrefab: {fileID: 308300917658321432, guid: 1f979c9834e90634e90a32e1166b9167, type: 3}
   ChoiceVerticalSeparation: 16
@@ -654,6 +654,10 @@ MonoBehaviour:
       Value: {fileID: 8300000, guid: 02a657dc88aa83c4a9fb2d26785b6376, type: 3}
     - Key: okie
       Value: {fileID: 8300000, guid: 2521af659c3e6ad4d9e7b81aadcb1035, type: 3}
+    - Key: mikulaugh
+      Value: {fileID: 8300000, guid: 8e06a1826679d3147812188e8f42d69f, type: 3}
+    - Key: mikutalk
+      Value: {fileID: 8300000, guid: ce07e36de008f8240968ca8a2f1e3b37, type: 3}
     - Key: yahoo
       Value: {fileID: 8300000, guid: 52ba42c94424a764080d66046c860746, type: 3}
     - Key: mariotime
