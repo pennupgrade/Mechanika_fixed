@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class MikuMechControl : MonoBehaviour
 {
     public GameObject[] WeaponUI;
-    public Slider hBar, sBar, eBar, cBar;
+    public Slider hBar, sBar, eBar, cBar, rBar;
     public GameObject GM;
     [Header("Prefabs")]
     public GameObject CepheidPrefab;
@@ -27,7 +27,7 @@ public class MikuMechControl : MonoBehaviour
     private int knockback, dashDMG = 200, dashEnergy = 20; 
     private float dashTimer, dashCDTimer; private float dashCD = 0.75f;
 
-    private int w1DMG = 15, w1Energy = 3, cepheidMode = 1; private float w1CD = 0.18f;
+    private int w1DMG = 18, w1Energy = 3, cepheidMode = 1; private float w1CD = 0.18f;
     private int w2DMG = 72, w2Energy = 20; private float w2CD = 0.7f;
     private int w3DMG = 24, w3Energy = 22; private float w3CD = 0.4f;
     private int w4DMG = 200, w4Energy = 20; private float w4CD = 0.1f;
@@ -143,6 +143,8 @@ public class MikuMechControl : MonoBehaviour
                 StartCoroutine(FireMeteor());
             }
         }
+
+        rBar.value = 16 - shieldRegenTimer;
 
         //update timers
         weaponCDTimer = TimerF(weaponCDTimer); dashCDTimer = TimerF(dashCDTimer); dashTimer = TimerF(dashTimer);
@@ -362,7 +364,11 @@ public class MikuMechControl : MonoBehaviour
         float timeScale = 0;
 
         while(timeScale < 1){
-            timeScale += Time.deltaTime/3;
+            if(shield == 0 && health < 20){
+                timeScale += Time.deltaTime*2.5f;
+            } else {
+                timeScale += Time.deltaTime/3;
+            }
             sBar.value = Mathf.Lerp(startShield, shield, timeScale);
             yield return null;
         }

@@ -34,9 +34,11 @@ public class BounceBulletScript : MonoBehaviour, IBullet
         if (c.gameObject.tag=="Environment"){
             bounces++; spd +=0.6f;
             Vector3 newDir;
-            try{
-                newDir=Vector3.Reflect(transform.up, c.contacts[0].normal+c.contacts[1].normal);
-            }catch (Exception e) {
+            GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
+            Destroy(expl, 2);
+            try {
+                newDir = Vector3.Reflect(transform.up, c.contacts[0].normal + c.contacts[1].normal);
+            } catch (Exception e) {
                 newDir = Vector3.Reflect(transform.up, c.contacts[0].normal);
             } 
             var a = 1;

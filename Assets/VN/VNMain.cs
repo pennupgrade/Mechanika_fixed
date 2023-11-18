@@ -18,13 +18,24 @@ using AYellowpaper.SerializedCollections;
 public partial class VNMain : MonoBehaviour
 {
 
+    [Header (" -=- Stories -=- ")]
+    [SerializeField] TextAsset MikuCharisExchange;
+
+    public static Story MikuCharisStory;
+
+}
+
+public partial class VNMain : MonoBehaviour
+{
+
     static Action currCallback;
 
-    public static void Activate(Story story, Action callback)
+    public static void Activate(Story story, Action callback, bool skippable)
     {
         currCallback = callback;
 
         ins.VNFolder.SetActive(true);
+        ins.SkipFolder.SetActive(skippable);
 
         ins.story = story;
         ins.ResetStates();
@@ -54,11 +65,14 @@ public partial class VNMain : MonoBehaviour
         };
         lState = InactiveLeftState; rState = InactiveRightState;
 
+        //temp: set up button logic
+
         ins = this;
         story = new Story(StoryData.text); 
         InitStates();
         Continue();
 
+        MikuCharisStory = new(MikuCharisExchange.text);
     }
     private void Update()
     {
@@ -67,6 +81,8 @@ public partial class VNMain : MonoBehaviour
             if (stateStatuses[i])
                 stateLoopActions[i]?.Invoke(Time.deltaTime);
         }
+
+
     }
 
     void DoTags()
@@ -194,6 +210,9 @@ public partial class VNMain : MonoBehaviour
 public partial class VNMain // Unity Refs 
 {
 
+    [Header(" -=- Skip Button -=- ")]
+    [SerializeField] GameObject SkipFolder;
+
     [Header(" -=- Choice Settings -=- ")]
     [SerializeField] GameObject ChoiceFolder;
     [SerializeField] GameObject ChoicePrefab;
@@ -226,9 +245,6 @@ public partial class VNMain // Unity Refs
     [SerializeField] CharacterState InactiveRightState;
     [SerializeField] CharacterState ActivateLeftState;
     [SerializeField] CharacterState InactiveLeftState;
-
-    [Header (" -=- Stories -=- ")]
-    [SerializeField] TextAsset MikuCharisExchange;
 
     [Header(" -=- Audio -=- ")]
     [SerializeField] AudioSource AudioPlayer;
