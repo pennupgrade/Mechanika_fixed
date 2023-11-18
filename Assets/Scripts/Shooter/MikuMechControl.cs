@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using static Utils;
+
 public class MikuMechControl : MonoBehaviour
 {
     public GameObject[] WeaponUI;
@@ -58,6 +60,8 @@ public class MikuMechControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        IconUpdate(Time.deltaTime);
+
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
 
@@ -242,29 +246,52 @@ public class MikuMechControl : MonoBehaviour
             cBar.maxValue = 4;
         } else cBar.gameObject.SetActive(false);
         for (int i =0; i<5; i++){
-            Image img = WeaponUI[i].GetComponent<Image>();
+            Image img = WeaponIconImages[i];//WeaponUI[i].GetComponent<Image>();
             if(i+1==weaponNum) img.color = new Color(img.color.r, img.color.g, img.color.b, 1);
             else img.color = new Color(img.color.r, img.color.g, img.color.b, 0.4f);
         }
         WeaponUI[2].gameObject.SetActive(!W3Locked);
         WeaponUI[3].gameObject.SetActive(!W4Locked);
         WeaponUI[4].gameObject.SetActive(!W5Locked);
-    }private void HealthUpdate(int h){
+    } private void HealthUpdate(int h) {
         health+=h;
         if (health>390) {health = 390; moveSpeed=10;}
         else if (health<0) health = 0;
         if(!lerpingHealth) StartCoroutine(LerpHealth());
-    }private void ShieldUpdate(int h){
+    } private void ShieldUpdate(int h) {
         shield+=h;
         if (shield<0) shield = 0;
         else if (shield>maxShield) shield = maxShield;
         if(!lerpingShield) StartCoroutine(LerpShield());
-    }private void EnergyUpdate(int h){
+    } private void EnergyUpdate(int h) {
         energy += h;
         if (energy>100) energy = 100;
         else if (energy<0) energy = 0;
         if(!lerpingEnergy) StartCoroutine(LerpEnergy());
+    } private void IconUpdate(float dt) {
+        float s; bool isActive;
+        RectTransform iT; Image iI;
+        for(int i=0; i<5; i++)
+        {
+            iT = WeaponIconTransforms[i];
+            iI = WeaponIconImages[i];
+
+            isActive = i == weaponNum - 1;
+
+            s = Unity.Mathematics.math.lerp(iT.localScale.x, isActive ? ActiveTargetScale : InactiveTargetScale, ApproachTargetSpeed*dt); 
+            iT.localScale = s * Vector3.one;
+
+        }
     }
+
+    [Header(" Weapon Icon UI ")]
+    [SerializeField] List<RectTransform> WeaponIconTransforms;
+    [SerializeField] List<Image> WeaponIconImages;
+    
+    [SerializeField] [Min(0f)] float ActiveTargetScale = 1.1f;
+    [SerializeField] [Min(0f)] float InactiveTargetScale = 0.95f;
+
+    [SerializeField] [Min(0f)] float ApproachTargetSpeed = 2f;
 
     private IEnumerator Regenerator(){
         shieldRegen = true;

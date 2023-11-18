@@ -44413,6 +44413,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1740912470}
     - target: {fileID: 1091831780773708906, guid: 2a9d8fe35c3e29949abd76f93b2dc563, type: 3}
+      propertyPath: ApproachTargetSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1091831780773708906, guid: 2a9d8fe35c3e29949abd76f93b2dc563, type: 3}
       propertyPath: WeaponUI.Array.data[0]
       value: 
       objectReference: {fileID: 90387530}
@@ -44432,6 +44436,58 @@ PrefabInstance:
       propertyPath: WeaponUI.Array.data[4]
       value: 
       objectReference: {fileID: 1864754498}
+    - target: {fileID: 1091831780773708906, guid: 2a9d8fe35c3e29949abd76f93b2dc563, type: 3}
+      propertyPath: WeaponIconImages.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1091831780773708906, guid: 2a9d8fe35c3e29949abd76f93b2dc563, type: 3}
+      propertyPath: WeaponIconImages.Array.data[0]
+      value: 
+      objectReference: {fileID: 90387532}
+    - target: {fileID: 1091831780773708906, guid: 2a9d8fe35c3e29949abd76f93b2dc563, type: 3}
+      propertyPath: WeaponIconImages.Array.data[1]
+      value: 
+      objectReference: {fileID: 1160566362}
+    - target: {fileID: 1091831780773708906, guid: 2a9d8fe35c3e29949abd76f93b2dc563, type: 3}
+      propertyPath: WeaponIconImages.Array.data[2]
+      value: 
+      objectReference: {fileID: 657990491}
+    - target: {fileID: 1091831780773708906, guid: 2a9d8fe35c3e29949abd76f93b2dc563, type: 3}
+      propertyPath: WeaponIconImages.Array.data[3]
+      value: 
+      objectReference: {fileID: 1337560046}
+    - target: {fileID: 1091831780773708906, guid: 2a9d8fe35c3e29949abd76f93b2dc563, type: 3}
+      propertyPath: WeaponIconImages.Array.data[4]
+      value: 
+      objectReference: {fileID: 1864754500}
+    - target: {fileID: 1091831780773708906, guid: 2a9d8fe35c3e29949abd76f93b2dc563, type: 3}
+      propertyPath: WeaponIconTransforms.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1091831780773708906, guid: 2a9d8fe35c3e29949abd76f93b2dc563, type: 3}
+      propertyPath: WeaponIconTransforms.Array.data[0]
+      value: 
+      objectReference: {fileID: 90387531}
+    - target: {fileID: 1091831780773708906, guid: 2a9d8fe35c3e29949abd76f93b2dc563, type: 3}
+      propertyPath: WeaponIconTransforms.Array.data[1]
+      value: 
+      objectReference: {fileID: 1160566361}
+    - target: {fileID: 1091831780773708906, guid: 2a9d8fe35c3e29949abd76f93b2dc563, type: 3}
+      propertyPath: WeaponIconTransforms.Array.data[2]
+      value: 
+      objectReference: {fileID: 657990490}
+    - target: {fileID: 1091831780773708906, guid: 2a9d8fe35c3e29949abd76f93b2dc563, type: 3}
+      propertyPath: WeaponIconTransforms.Array.data[3]
+      value: 
+      objectReference: {fileID: 1337560045}
+    - target: {fileID: 1091831780773708906, guid: 2a9d8fe35c3e29949abd76f93b2dc563, type: 3}
+      propertyPath: WeaponIconTransforms.Array.data[4]
+      value: 
+      objectReference: {fileID: 1864754499}
+    - target: {fileID: 1091831780773708906, guid: 2a9d8fe35c3e29949abd76f93b2dc563, type: 3}
+      propertyPath: WeaponIconTransforms.Array.data[5]
+      value: 
+      objectReference: {fileID: 1864754499}
     - target: {fileID: 1091831780773708907, guid: 2a9d8fe35c3e29949abd76f93b2dc563, type: 3}
       propertyPath: m_Name
       value: MikuMech
