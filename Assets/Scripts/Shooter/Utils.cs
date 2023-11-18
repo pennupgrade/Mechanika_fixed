@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System;
 using Unity.Mathematics;
 using UnityEngine;
+using Unity.VisualScripting;
+
+using static Unity.Mathematics.math;
 
 public static class Utils
 {
@@ -91,4 +94,21 @@ public static class Utils
         triangles = new int[]
             { 0, 1, 2, 1, 2, 3 }
     };
+
+    public static float amod(float f, float m)
+    {
+        float s = fmod(abs(f), m);
+        return s + step(f, 0f) * (m - 2f*s);
+    }
+
+    public const float D2R = 0.01745f;
+    public const float R2D = 57.296f;
+
+    public const float PI = 3.141592f;
+    public const float TAU = 6.28318f;
+
+    public static float2 toPolar(float2 cart)
+        => float2(length(cart), amod(atan2(cart.y, cart.x), TAU));
+    public static float2 toCartesian(float2 polar)
+        => polar.x * float2(cos(polar.y), sin(polar.y));
 }

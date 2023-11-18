@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using static Utils;
+
 public class MikuMechControl : MonoBehaviour
 {
     public GameObject[] WeaponUI;
-    public Slider hBar, sBar, eBar, cBar;
+    public Slider hBar, sBar, eBar, cBar, rBar;
     public GameObject GM;
     [Header("Prefabs")]
     public GameObject CepheidPrefab;
@@ -20,14 +22,14 @@ public class MikuMechControl : MonoBehaviour
     [Header("Player Values")]
     [SerializeField] private int health, maxShield, shield, energy, weaponNum;
     private float shieldRegenTimer, meleeTimer, weaponCDTimer, chargeTimer;
-    private bool shieldRegen, W3Locked, W4Locked, W5Locked;
+    private bool frozen, shieldRegen, W3Locked, W4Locked, W5Locked;
     private float stunTimer;
 
     [SerializeField] private bool stunned, dashing;
     private int knockback, dashDMG = 200, dashEnergy = 20; 
     private float dashTimer, dashCDTimer; private float dashCD = 0.75f;
 
-    private int w1DMG = 15, w1Energy = 3, cepheidMode = 1; private float w1CD = 0.18f;
+    private int w1DMG = 18, w1Energy = 3, cepheidMode = 1; private float w1CD = 0.18f;
     private int w2DMG = 72, w2Energy = 20; private float w2CD = 0.7f;
     private int w3DMG = 24, w3Energy = 22; private float w3CD = 0.4f;
     private int w4DMG = 200, w4Energy = 20; private float w4CD = 0.1f;
@@ -46,7 +48,7 @@ public class MikuMechControl : MonoBehaviour
         rb = GetComponent<Rigidbody2D>(); tr = GetComponent<TrailRenderer>(); animator = GetComponent<Animator>();
         mspeed = moveSpeed; weaponNum = 1; cepheidMode = 1;
         energy = 100; health = 390; maxShield = 410; shield = 0;
-        shieldRegen = false; dashing = false; knockback = 0;
+        frozen = false; shieldRegen = false; dashing = false; knockback = 0;
         shieldRegenTimer = 0; weaponCDTimer = 0; dashCDTimer = 0;
         dashTimer = 0; chargeTimer = 0; meleeTimer = 0;
         stunTimer = 0; stunned = false; W3Locked = false; W4Locked = false; W5Locked = false;
@@ -58,6 +60,8 @@ public class MikuMechControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        IconUpdate(Time.deltaTime);
+
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
 
@@ -100,49 +104,53 @@ public class MikuMechControl : MonoBehaviour
         }
 
         //weapon fire
-        if (weaponNum==1){
-            if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001 && energy-w1Energy >= 0){
-                weaponCDTimer=w1CD; EnergyUpdate(-w1Energy);
-                if(energy<50) energy+=1;
-                FireCepheid();
-            }
-        }else if (weaponNum==2){
-            if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001 && energy-w2Energy >= 0){
-                weaponCDTimer=w2CD; EnergyUpdate(-w2Energy);
-                FireDISC();
-            }
-        }else if (weaponNum==3){
-            if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001){
-                chargeTimer+=Time.deltaTime; cBar.value = chargeTimer;
-                if (chargeTimer>1) chargeTimer=1;
-            } else if (Input.GetKeyUp(KeyCode.Mouse0) && weaponCDTimer<0.001 && energy-w3Energy >= 0){
-                weaponCDTimer=w3CD; EnergyUpdate(-w3Energy);
-                FireSenbonzakura(chargeTimer);
-                chargeTimer = 0; cBar.value = chargeTimer;
-            }
-            else {chargeTimer = 0; cBar.value = chargeTimer;}
-        }else if (weaponNum==4){
-            if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001){
-                moveSpeed = mspeed/1.5f;
-                chargeTimer+=Time.deltaTime; cBar.value = chargeTimer;
-                if (chargeTimer>4) chargeTimer=4;
-                if(w4Energy*chargeTimer>energy){
-                    weaponCDTimer=1; EnergyUpdate(-100);
+        if(!frozen){
+            if (weaponNum==1){
+                if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001 && energy-w1Energy >= 0){
+                    weaponCDTimer=w1CD; EnergyUpdate(-w1Energy);
+                    if(energy<50) energy+=1;
+                    FireCepheid();
+                }
+            }else if (weaponNum==2){
+                if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001 && energy-w2Energy >= 0){
+                    weaponCDTimer=w2CD; EnergyUpdate(-w2Energy);
+                    FireDISC();
+                }
+            }else if (weaponNum==3){
+                if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001){
+                    chargeTimer+=Time.deltaTime; cBar.value = chargeTimer;
+                    if (chargeTimer>1) chargeTimer=1;
+                } else if (Input.GetKeyUp(KeyCode.Mouse0) && weaponCDTimer<0.001 && energy-w3Energy >= 0){
+                    weaponCDTimer=w3CD; EnergyUpdate(-w3Energy);
+                    FireSenbonzakura(chargeTimer);
+                    chargeTimer = 0; cBar.value = chargeTimer;
+                }
+                else {chargeTimer = 0; cBar.value = chargeTimer;}
+            }else if (weaponNum==4){
+                if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001){
+                    moveSpeed = mspeed/1.5f;
+                    chargeTimer+=Time.deltaTime; cBar.value = chargeTimer;
+                    if (chargeTimer>4) chargeTimer=4;
+                    if(w4Energy*chargeTimer>energy){
+                        weaponCDTimer=1; EnergyUpdate(-100);
+                        FireNOVA(chargeTimer); chargeTimer = 0; cBar.value = chargeTimer;
+                        moveSpeed = mspeed+3*((400-health)/400.0f);
+                    }
+                } else if (Input.GetKeyUp(KeyCode.Mouse0) && weaponCDTimer<0.001){
+                    weaponCDTimer=w4CD; EnergyUpdate(-(int)(w4Energy*chargeTimer));
                     FireNOVA(chargeTimer); chargeTimer = 0; cBar.value = chargeTimer;
                     moveSpeed = mspeed+3*((400-health)/400.0f);
                 }
-            } else if (Input.GetKeyUp(KeyCode.Mouse0) && weaponCDTimer<0.001){
-                weaponCDTimer=w4CD; EnergyUpdate(-(int)(w4Energy*chargeTimer));
-                FireNOVA(chargeTimer); chargeTimer = 0; cBar.value = chargeTimer;
-                moveSpeed = mspeed+3*((400-health)/400.0f);
-            }
-            else {chargeTimer = 0; cBar.value = chargeTimer; moveSpeed = mspeed+3*((400-health)/400.0f);}
-        }else if(weaponNum==5){
-            if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001 && energy-w5Energy >= 0){
-                weaponCDTimer=w5CD;
-                StartCoroutine(FireMeteor());
+                else {chargeTimer = 0; cBar.value = chargeTimer; moveSpeed = mspeed+3*((400-health)/400.0f);}
+            }else if(weaponNum==5){
+                if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001 && energy-w5Energy >= 0){
+                    weaponCDTimer=w5CD;
+                    StartCoroutine(FireMeteor());
+                }
             }
         }
+
+        rBar.value = 16 - shieldRegenTimer;
 
         //update timers
         weaponCDTimer = TimerF(weaponCDTimer); dashCDTimer = TimerF(dashCDTimer); dashTimer = TimerF(dashTimer);
@@ -156,7 +164,11 @@ public class MikuMechControl : MonoBehaviour
             moveSpeed = mspeed*0.5f;
             if (stunTimer<0.001f) {moveSpeed = mspeed+3*((400-health)/400.0f); stunned = false;}
         }
-        velocity = moveSpeed*movement.normalized;
+        if (frozen){
+            velocity = Vector2.zero;
+        } else {
+            velocity = moveSpeed*movement.normalized;
+        }
         if(knockback>0){
             knockback--;
             velocity-=5*lookDir.normalized;
@@ -234,29 +246,52 @@ public class MikuMechControl : MonoBehaviour
             cBar.maxValue = 4;
         } else cBar.gameObject.SetActive(false);
         for (int i =0; i<5; i++){
-            Image img = WeaponUI[i].GetComponent<Image>();
+            Image img = WeaponIconImages[i];//WeaponUI[i].GetComponent<Image>();
             if(i+1==weaponNum) img.color = new Color(img.color.r, img.color.g, img.color.b, 1);
             else img.color = new Color(img.color.r, img.color.g, img.color.b, 0.4f);
         }
         WeaponUI[2].gameObject.SetActive(!W3Locked);
         WeaponUI[3].gameObject.SetActive(!W4Locked);
         WeaponUI[4].gameObject.SetActive(!W5Locked);
-    }private void HealthUpdate(int h){
+    } private void HealthUpdate(int h) {
         health+=h;
         if (health>390) {health = 390; moveSpeed=10;}
         else if (health<0) health = 0;
         if(!lerpingHealth) StartCoroutine(LerpHealth());
-    }private void ShieldUpdate(int h){
+    } private void ShieldUpdate(int h) {
         shield+=h;
         if (shield<0) shield = 0;
         else if (shield>maxShield) shield = maxShield;
         if(!lerpingShield) StartCoroutine(LerpShield());
-    }private void EnergyUpdate(int h){
+    } private void EnergyUpdate(int h) {
         energy += h;
         if (energy>100) energy = 100;
         else if (energy<0) energy = 0;
         if(!lerpingEnergy) StartCoroutine(LerpEnergy());
+    } private void IconUpdate(float dt) {
+        float s; bool isActive;
+        RectTransform iT; Image iI;
+        for(int i=0; i<5; i++)
+        {
+            iT = WeaponIconTransforms[i];
+            iI = WeaponIconImages[i];
+
+            isActive = i == weaponNum - 1;
+
+            s = Unity.Mathematics.math.lerp(iT.localScale.x, isActive ? ActiveTargetScale : InactiveTargetScale, ApproachTargetSpeed*dt); 
+            iT.localScale = s * Vector3.one;
+
+        }
     }
+
+    [Header(" Weapon Icon UI ")]
+    [SerializeField] List<RectTransform> WeaponIconTransforms;
+    [SerializeField] List<Image> WeaponIconImages;
+    
+    [SerializeField] [Min(0f)] float ActiveTargetScale = 1.1f;
+    [SerializeField] [Min(0f)] float InactiveTargetScale = 0.95f;
+
+    [SerializeField] [Min(0f)] float ApproachTargetSpeed = 2f;
 
     private IEnumerator Regenerator(){
         shieldRegen = true;
@@ -362,7 +397,11 @@ public class MikuMechControl : MonoBehaviour
         float timeScale = 0;
 
         while(timeScale < 1){
-            timeScale += Time.deltaTime/3;
+            if(shield == 0 && health < 20){
+                timeScale += Time.deltaTime*2.5f;
+            } else {
+                timeScale += Time.deltaTime/3;
+            }
             sBar.value = Mathf.Lerp(startShield, shield, timeScale);
             yield return null;
         }
@@ -383,7 +422,8 @@ public class MikuMechControl : MonoBehaviour
 
 
 
-
+    public void Freeze() {frozen = true;}
+    public void UnFreeze() {frozen = false;}
     public Vector2 Velocity { get {return velocity;} set{}}
     public Vector2 MousePos { get {return mousePos;} set{}}
 }

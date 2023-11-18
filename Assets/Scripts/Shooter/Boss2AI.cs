@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor.Animations;
+
+using static Utils;
+using Unity.Mathematics;
+using Random = UnityEngine.Random;
 
 public class Boss2AI : MonoBehaviour, IEnemy
 {
@@ -28,6 +33,9 @@ public class Boss2AI : MonoBehaviour, IEnemy
     public GameObject Player;
     [SerializeField] private int moveState, mode;
     private int frameTimer;
+
+    [Header("Misc")]
+    [SerializeField] Animator Animator;
 
     // Start is called before the first frame update
     void Awake(){
@@ -87,8 +95,19 @@ public class Boss2AI : MonoBehaviour, IEnemy
     void FixedUpdate()
     {
         rb.MovePosition(rb.position + Time.fixedDeltaTime*mspeed*MoveDir);
-        //TODO: update animation
         fp.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward; 
+
+        //
+        float repLen = PI*.5f;
+        float2 orientation = toCartesian(new float2(1f, fp.eulerAngles.z*D2R - (amod(fp.eulerAngles.z*D2R + repLen*.5f, repLen) - repLen*1.5f)));
+
+        Debug.Log("Angle: " + fp.eulerAngles.z + " Aaa: " + (fp.eulerAngles.z*D2R - (amod(fp.eulerAngles.z*D2R + repLen*.5f, repLen) - repLen*.5f))/PI + " Bbb: " + orientation);
+
+        int horizontal = Mathf.RoundToInt(orientation.x);
+        int vertical = Mathf.RoundToInt(orientation.y);
+
+        Animator.SetInteger("Horizontal", horizontal);
+        Animator.SetInteger("Vertical", vertical);
 
     }
 
@@ -146,22 +165,22 @@ public class Boss2AI : MonoBehaviour, IEnemy
             for(int i = 0; i<6; i++){
             GameObject missile = Instantiate (MissilePrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -24*i));
             missile.GetComponent<IMissile>().SetSpeed(4,4,11);
-            missile.GetComponent<IMissile>().SetValues (missileDMG, 6.4f, 75, true, Player);
+            missile.GetComponent<IMissile>().SetValues (missileDMG, 6.4f, 75, false, Player);
             yield return new WaitForSeconds(.08f);
             GameObject missile2 = Instantiate (MissilePrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 24*i));
             missile2.GetComponent<IMissile>().SetSpeed(4,4,11);
-            missile2.GetComponent<IMissile>().SetValues (missileDMG, 6.4f, 75, true, Player);
+            missile2.GetComponent<IMissile>().SetValues (missileDMG, 6.4f, 75, false, Player);
             yield return new WaitForSeconds(.08f);
             }
             yield return new WaitForSeconds(0.8f);
         }else if (mType==4){
             for(int i = 0; i<4; i++){
             GameObject missile = Instantiate (MissilePrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -100-20*i));
-            missile.GetComponent<IMissile>().SetSpeed(22,-7,14);
-            missile.GetComponent<IMissile>().SetValues (missileDMG, 4, 110, true, Player);
+            missile.GetComponent<IMissile>().SetSpeed(20,-8,12);
+            missile.GetComponent<IMissile>().SetValues (missileDMG, 3.6f, 110, false, Player);
             GameObject missile2 = Instantiate (MissilePrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 100+20*i));
-            missile2.GetComponent<IMissile>().SetSpeed(22,-7,14);
-            missile2.GetComponent<IMissile>().SetValues (missileDMG, 4, 110, true, Player);
+            missile2.GetComponent<IMissile>().SetSpeed(20,-8,12);
+            missile2.GetComponent<IMissile>().SetValues (missileDMG, 3.6f, 110, false, Player);
             yield return new WaitForSeconds(.32f);
             }
         }else if (mType==5){
@@ -281,31 +300,31 @@ public class Boss2AI : MonoBehaviour, IEnemy
         else if (mode==6){
             var r  = Random.value;
             if (r<0.05f) StartCoroutine(Attack1());
-            else if (r<0.32f) {StartCoroutine(Attack2(1)); Dash();}
-            else if (r<0.75f) {
+            else if (r<0.3f) {StartCoroutine(Attack2(1)); Dash();}
+            else if (r<0.72f) {
                 var s = Random.value;
                 if(s>0.7f) StartCoroutine(Attack2(2));
                 else if (s>0.5f) StartCoroutine(Attack2(3));
                 else if (s>0.3f) StartCoroutine(Attack2(4));
                 else StartCoroutine(Attack2(5));
             }
-            else if (r<0.92f) StartCoroutine(Attack3());
+            else if (r<0.95f) StartCoroutine(Attack3());
             else StartCoroutine(Attack4());
         }
     }
     public void SetMode(int m){
         mode = m;
-        if (mode==-10){
-            mode = 0 ; health=maxHealth; Waypoint=new Vector2(0,36);
+        if (mode == -10){
+            mode = 0 ; health = maxHealth; Waypoint = new Vector2(0,36);
             StartCoroutine(BarAnimation());
         }
-        if (mode==-1||mode==0) moveState = 0;
-        else if (mode==4) moveState = 3;
-        else if (mode==3||mode==6) moveState = 2;
+        if (mode == -1 || mode == 0) moveState = 0;
+        else if (mode == 4) moveState = 3;
+        else if (mode == 3 || mode == 6) moveState = 2;
         else moveState = 1;
 
-        if(moveState==0) mspeed=0;
-        else if(moveState==1) {mspeed = moveSpeed; tspeed = turnSpeed;}
+        if(moveState == 0) mspeed = 0;
+        else if(moveState == 1) {mspeed = moveSpeed; tspeed = turnSpeed;}
         else {mspeed = moveSpeed2; tspeed = turnSpeed2;}
 
     }
@@ -357,7 +376,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
     }
 
     public void Damage (int dmg, bool stun){
-        if(mode==0) dmg -= 10;
+        if(mode == 0 || mode == -1) dmg -= 10;
         health-=dmg;
         if (health<0) health = 0;
         Bar.value = health;
@@ -390,6 +409,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
     }
 
     private IEnumerator Destruction(){
+        LaserController.DisableParticles();
         cam.GetComponent<CamShake>().Shake();
         for (int i = 0; i<8; i++){
             var a = Random.value*3-1.5f;

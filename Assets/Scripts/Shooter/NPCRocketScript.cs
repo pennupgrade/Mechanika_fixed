@@ -38,7 +38,9 @@ public class NPCRocketScript : MonoBehaviour, IMissile
         rb.MovePosition(rb.position+(Vector2)(Time.fixedDeltaTime*spd*transform.up));
         if(player==null) return;
         frameTimer--;
-        if(frameTimer==0){ frameTimer = 3;
+        if(frameTimer==0){ 
+            if (duration<0) frameTimer = 3;
+            else frameTimer = 1;
             TargetDirection = (player.transform.position-(Vector3)rb.position).normalized;
             //if (homingStr != 0 && Vector2.Distance(player.MousePos,rb.position)<2) homingStr = 0;
             if(homingStr!=0){

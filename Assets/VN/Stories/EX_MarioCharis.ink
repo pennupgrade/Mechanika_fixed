@@ -12,6 +12,11 @@ MARIO!!!! are you okay?
 Oohohhohhh!! #playsound ohohoh
 # switchspeaker s
 I'm sorry Mario..
+Maybe doing your best impression of Hatsune Miku, your favorite vocaloid, would cheer you up!
+#switchspeaker s
+Okie dokie! #sethappy miku #playsound okie
+My name is <color=\#86cecb>Hatsune Miku!</color> #playsound mikutalk
+\*laughs\* #playsound mikulaugh
 -> END
 
 === MarioOkay ===

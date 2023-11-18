@@ -139,8 +139,8 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
     private IEnumerator MissileCor(){
         for(int i = 0; i<2; i++){
             GameObject missile = Instantiate (MissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 40-80*i));
-            missile.GetComponent<IMissile>().SetSpeed(5,5,16);
-            missile.GetComponent<IMissile>().SetValues (missileDMG, 6, 130, true, Player);
+            missile.GetComponent<IMissile>().SetSpeed(6,6,16);
+            missile.GetComponent<IMissile>().SetValues (missileDMG, 6, 130, false, Player);
             yield return new WaitForSeconds(.3f);
         }
     }

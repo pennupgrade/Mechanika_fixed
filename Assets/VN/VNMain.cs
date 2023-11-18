@@ -18,13 +18,31 @@ using AYellowpaper.SerializedCollections;
 public partial class VNMain : MonoBehaviour
 {
 
+    [Header (" -=- Stories -=- ")]
+    [SerializeField] TextAsset MikuCharisExchange;
+
+    public static Story MikuCharisStory;
+
+    void InitStories()
+    {
+        MikuCharisStory = new(MikuCharisExchange.text);
+    }
+
+}
+
+public partial class VNMain : MonoBehaviour
+{
+
     static Action currCallback;
 
-    public static void Activate(Story story, Action callback)
+    public static void Activate(Story story, Action callback, bool skippable)
     {
+        //TODO: add backdrop blur post processing
+
         currCallback = callback;
 
         ins.VNFolder.SetActive(true);
+        ins.SkipFolder.SetActive(skippable);
 
         ins.story = story;
         ins.ResetStates();
@@ -32,7 +50,7 @@ public partial class VNMain : MonoBehaviour
     }
 
     public static void Deactivate()
-    { currCallback(); ins.VNFolder.SetActive(false); }
+    { currCallback?.Invoke(); currCallback = null; ins.VNFolder.SetActive(false); }
 
 }
 
@@ -47,18 +65,15 @@ public partial class VNMain : MonoBehaviour
 
     private void Awake()
     { 
-        bossSpriteDictionary = new()
-        {
-            {"miku", (MikuSpriteData, MikuMaterial)},
-            {"charis", (CharisSpriteData, CharisMaterial)}
-        };
-        lState = InactiveLeftState; rState = InactiveRightState;
-
+        
         ins = this;
-        story = new Story(StoryData.text); 
-        InitStates();
-        Continue();
 
+        InitVNSprites();
+        InitStates();
+        InitSkipFunctionality();
+        InitStories();
+
+        Deactivate();
     }
     private void Update()
     {
@@ -67,6 +82,8 @@ public partial class VNMain : MonoBehaviour
             if (stateStatuses[i])
                 stateLoopActions[i]?.Invoke(Time.deltaTime);
         }
+
+
     }
 
     void DoTags()
@@ -176,7 +193,7 @@ public partial class VNMain : MonoBehaviour
             ForceFinishDisplay();
         else if (!cc && !du && !ch && csh)
             DoChoices();
-        else 
+        else if(!ch)
             Deactivate();
     }
     public void OnExit()
@@ -194,6 +211,10 @@ public partial class VNMain : MonoBehaviour
 public partial class VNMain // Unity Refs 
 {
 
+    [Header(" -=- Skip Button -=- ")]
+    [SerializeField] GameObject SkipFolder;
+    [SerializeField] GameObject SkipObject;
+
     [Header(" -=- Choice Settings -=- ")]
     [SerializeField] GameObject ChoiceFolder;
     [SerializeField] GameObject ChoicePrefab;
@@ -204,8 +225,9 @@ public partial class VNMain // Unity Refs
     [SerializeField] TMP_Text OutputTextbox;
     [SerializeField] TextAsset StoryData;
 
-    [Header(" -=- Text Settings -=- ")]
+    [Header(" -=- Speed Settings -=- ")]
     [SerializeField] float TextSpeed;
+    [SerializeField] [Min(1f)] float CharacterAnimateSpeed = 2f;
 
     [Header(" -=- VN Character Objects -=- ")]
     [SerializeField] Image LeftImage;
@@ -225,9 +247,6 @@ public partial class VNMain // Unity Refs
     [SerializeField] CharacterState InactiveRightState;
     [SerializeField] CharacterState ActivateLeftState;
     [SerializeField] CharacterState InactiveLeftState;
-
-    [Header (" -=- Stories -=- ")]
-    [SerializeField] TextAsset MikuCharisExchange;
 
     [Header(" -=- Audio -=- ")]
     [SerializeField] AudioSource AudioPlayer;
@@ -347,8 +366,8 @@ public partial class VNMain
 
     void UpdatePortraits(float dt)
     {
-        lState.Lerp(isActiveLeft ? ActivateLeftState : InactiveLeftState, 2f*dt); 
-        rState.Lerp(isActiveRight ? ActivateRightState : InactiveRightState, 2f*dt);
+        lState.Lerp(isActiveLeft ? ActivateLeftState : InactiveLeftState, CharacterAnimateSpeed*dt); 
+        rState.Lerp(isActiveRight ? ActivateRightState : InactiveRightState, CharacterAnimateSpeed*dt);
 
         lState.SendToImage(LeftImage);
         rState.SendToImage(RightImage);
@@ -382,12 +401,33 @@ public partial class VNMain
 
     }
 
+    void InitVNSprites()
+    {
+        bossSpriteDictionary = new()
+        {
+            {"miku", (MikuSpriteData, MikuMaterial)},
+            {"charis", (CharisSpriteData, CharisMaterial)}
+        };
+        lState = InactiveLeftState; rState = InactiveRightState;
+    }
+
     [System.Serializable]
     struct CharacterSpriteData
     {
 
         public Sprite HappyCharacter;
         public Sprite SadCharacter;
+    }
+
+}
+
+public partial class VNMain
+{
+
+    void InitSkipFunctionality()
+    {
+        Button b = SkipObject.GetComponent<Button>();
+        b.onClick.AddListener(() => Deactivate());
     }
 
 }
