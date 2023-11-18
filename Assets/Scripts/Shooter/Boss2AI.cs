@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor.Animations;
 
 public class Boss2AI : MonoBehaviour, IEnemy
 {
@@ -28,6 +29,9 @@ public class Boss2AI : MonoBehaviour, IEnemy
     public GameObject Player;
     [SerializeField] private int moveState, mode;
     private int frameTimer;
+
+    [Header("Misc")]
+    [SerializeField] AnimatorController Animator;
 
     // Start is called before the first frame update
     void Awake(){
@@ -87,8 +91,9 @@ public class Boss2AI : MonoBehaviour, IEnemy
     void FixedUpdate()
     {
         rb.MovePosition(rb.position + Time.fixedDeltaTime*mspeed*MoveDir);
-        //TODO: update animation
         fp.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward; 
+
+        //fp.eulerAngles.z * 
 
     }
 
