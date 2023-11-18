@@ -20,7 +20,7 @@ public class MikuMechControl : MonoBehaviour
     [Header("Player Values")]
     [SerializeField] private int health, maxShield, shield, energy, weaponNum;
     private float shieldRegenTimer, meleeTimer, weaponCDTimer, chargeTimer;
-    private bool shieldRegen, W3Locked, W4Locked, W5Locked;
+    private bool frozen, shieldRegen, W3Locked, W4Locked, W5Locked;
     private float stunTimer;
 
     [SerializeField] private bool stunned, dashing;
@@ -46,7 +46,7 @@ public class MikuMechControl : MonoBehaviour
         rb = GetComponent<Rigidbody2D>(); tr = GetComponent<TrailRenderer>(); animator = GetComponent<Animator>();
         mspeed = moveSpeed; weaponNum = 1; cepheidMode = 1;
         energy = 100; health = 390; maxShield = 410; shield = 0;
-        shieldRegen = false; dashing = false; knockback = 0;
+        frozen = false; shieldRegen = false; dashing = false; knockback = 0;
         shieldRegenTimer = 0; weaponCDTimer = 0; dashCDTimer = 0;
         dashTimer = 0; chargeTimer = 0; meleeTimer = 0;
         stunTimer = 0; stunned = false; W3Locked = false; W4Locked = false; W5Locked = false;
@@ -100,47 +100,49 @@ public class MikuMechControl : MonoBehaviour
         }
 
         //weapon fire
-        if (weaponNum==1){
-            if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001 && energy-w1Energy >= 0){
-                weaponCDTimer=w1CD; EnergyUpdate(-w1Energy);
-                if(energy<50) energy+=1;
-                FireCepheid();
-            }
-        }else if (weaponNum==2){
-            if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001 && energy-w2Energy >= 0){
-                weaponCDTimer=w2CD; EnergyUpdate(-w2Energy);
-                FireDISC();
-            }
-        }else if (weaponNum==3){
-            if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001){
-                chargeTimer+=Time.deltaTime; cBar.value = chargeTimer;
-                if (chargeTimer>1) chargeTimer=1;
-            } else if (Input.GetKeyUp(KeyCode.Mouse0) && weaponCDTimer<0.001 && energy-w3Energy >= 0){
-                weaponCDTimer=w3CD; EnergyUpdate(-w3Energy);
-                FireSenbonzakura(chargeTimer);
-                chargeTimer = 0; cBar.value = chargeTimer;
-            }
-            else {chargeTimer = 0; cBar.value = chargeTimer;}
-        }else if (weaponNum==4){
-            if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001){
-                moveSpeed = mspeed/1.5f;
-                chargeTimer+=Time.deltaTime; cBar.value = chargeTimer;
-                if (chargeTimer>4) chargeTimer=4;
-                if(w4Energy*chargeTimer>energy){
-                    weaponCDTimer=1; EnergyUpdate(-100);
+        if(!frozen){
+            if (weaponNum==1){
+                if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001 && energy-w1Energy >= 0){
+                    weaponCDTimer=w1CD; EnergyUpdate(-w1Energy);
+                    if(energy<50) energy+=1;
+                    FireCepheid();
+                }
+            }else if (weaponNum==2){
+                if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001 && energy-w2Energy >= 0){
+                    weaponCDTimer=w2CD; EnergyUpdate(-w2Energy);
+                    FireDISC();
+                }
+            }else if (weaponNum==3){
+                if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001){
+                    chargeTimer+=Time.deltaTime; cBar.value = chargeTimer;
+                    if (chargeTimer>1) chargeTimer=1;
+                } else if (Input.GetKeyUp(KeyCode.Mouse0) && weaponCDTimer<0.001 && energy-w3Energy >= 0){
+                    weaponCDTimer=w3CD; EnergyUpdate(-w3Energy);
+                    FireSenbonzakura(chargeTimer);
+                    chargeTimer = 0; cBar.value = chargeTimer;
+                }
+                else {chargeTimer = 0; cBar.value = chargeTimer;}
+            }else if (weaponNum==4){
+                if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001){
+                    moveSpeed = mspeed/1.5f;
+                    chargeTimer+=Time.deltaTime; cBar.value = chargeTimer;
+                    if (chargeTimer>4) chargeTimer=4;
+                    if(w4Energy*chargeTimer>energy){
+                        weaponCDTimer=1; EnergyUpdate(-100);
+                        FireNOVA(chargeTimer); chargeTimer = 0; cBar.value = chargeTimer;
+                        moveSpeed = mspeed+3*((400-health)/400.0f);
+                    }
+                } else if (Input.GetKeyUp(KeyCode.Mouse0) && weaponCDTimer<0.001){
+                    weaponCDTimer=w4CD; EnergyUpdate(-(int)(w4Energy*chargeTimer));
                     FireNOVA(chargeTimer); chargeTimer = 0; cBar.value = chargeTimer;
                     moveSpeed = mspeed+3*((400-health)/400.0f);
                 }
-            } else if (Input.GetKeyUp(KeyCode.Mouse0) && weaponCDTimer<0.001){
-                weaponCDTimer=w4CD; EnergyUpdate(-(int)(w4Energy*chargeTimer));
-                FireNOVA(chargeTimer); chargeTimer = 0; cBar.value = chargeTimer;
-                moveSpeed = mspeed+3*((400-health)/400.0f);
-            }
-            else {chargeTimer = 0; cBar.value = chargeTimer; moveSpeed = mspeed+3*((400-health)/400.0f);}
-        }else if(weaponNum==5){
-            if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001 && energy-w5Energy >= 0){
-                weaponCDTimer=w5CD;
-                StartCoroutine(FireMeteor());
+                else {chargeTimer = 0; cBar.value = chargeTimer; moveSpeed = mspeed+3*((400-health)/400.0f);}
+            }else if(weaponNum==5){
+                if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001 && energy-w5Energy >= 0){
+                    weaponCDTimer=w5CD;
+                    StartCoroutine(FireMeteor());
+                }
             }
         }
 
@@ -158,7 +160,11 @@ public class MikuMechControl : MonoBehaviour
             moveSpeed = mspeed*0.5f;
             if (stunTimer<0.001f) {moveSpeed = mspeed+3*((400-health)/400.0f); stunned = false;}
         }
-        velocity = moveSpeed*movement.normalized;
+        if (frozen){
+            velocity = Vector2.zero;
+        } else {
+            velocity = moveSpeed*movement.normalized;
+        }
         if(knockback>0){
             knockback--;
             velocity-=5*lookDir.normalized;
@@ -389,7 +395,8 @@ public class MikuMechControl : MonoBehaviour
 
 
 
-
+    public void Freeze() {frozen = true;}
+    public void UnFreeze() {frozen = false;}
     public Vector2 Velocity { get {return velocity;} set{}}
     public Vector2 MousePos { get {return mousePos;} set{}}
 }
