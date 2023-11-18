@@ -193,7 +193,7 @@ public partial class VNMain : MonoBehaviour
             ForceFinishDisplay();
         else if (!cc && !du && !ch && csh)
             DoChoices();
-        else 
+        else if(!ch)
             Deactivate();
     }
     public void OnExit()

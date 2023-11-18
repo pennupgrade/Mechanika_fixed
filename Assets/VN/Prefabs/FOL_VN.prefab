@@ -652,6 +652,8 @@ MonoBehaviour:
     _serializedList:
     - Key: herewego
       Value: {fileID: 8300000, guid: 02a657dc88aa83c4a9fb2d26785b6376, type: 3}
+    - Key: okie
+      Value: {fileID: 8300000, guid: 2521af659c3e6ad4d9e7b81aadcb1035, type: 3}
     - Key: yahoo
       Value: {fileID: 8300000, guid: 52ba42c94424a764080d66046c860746, type: 3}
     - Key: mariotime
