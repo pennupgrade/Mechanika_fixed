@@ -409,16 +409,6 @@ public class Boss2AI : MonoBehaviour, IEnemy
             var a = Random.value*3-1.5f;
             var b = Random.value*3-1.5f;
             Instantiate(explosionPrefab, transform.position+transform.up*a+transform.right*b, Quaternion.Euler(new Vector3(0, 180, 0)));
-            if(i==3){
-                var temp = gameObject.GetComponent<SpriteRenderer>().color;
-                temp.a = 0.7f;
-                gameObject.GetComponent<SpriteRenderer>().color = temp;
-            }
-            if(i==6){
-                var temp = gameObject.GetComponent<SpriteRenderer>().color;
-                temp.a = 0.4f;
-                gameObject.GetComponent<SpriteRenderer>().color = temp;
-            }
             yield return new WaitForSeconds(0.1f);
         }
         BossName.gameObject.SetActive(false);
