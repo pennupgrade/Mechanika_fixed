@@ -181,7 +181,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
         spawnTimer=spawnTime; spawnCounter++;
         GameObject ptcl = Instantiate (SpawnExplosionPrefab, rb.position-2*MoveDir, Quaternion.Euler(new Vector3(0, 180, 0)));
         Destroy(ptcl,5);
-        GameObject npc = Instantiate (DefaultNPCPrefab, rb.position-2*MoveDir, fp.rotation);
+        GameObject npc = Instantiate (DefaultNPCPrefab, rb.position-2*MoveDir, Quaternion.identity);
         npc.GetComponent<DefaultNPC2AI>().SetType(2);
     }
     private void CheckRaycast(){
