@@ -50,32 +50,32 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: DitheringSettings
   m_EditorClassIdentifier: Assembly-CSharp::DitheringSettings
-  active: 1
+  active: 0
   enabled:
     overrideState: 1
     value: 1
   Interpolation:
     overrideState: 1
-    value: 0.393
+    value: 1
   DitherTexture:
     overrideState: 1
     value: {fileID: 2800000, guid: 97057187fe6803548af1af6a795537f7, type: 3}
     defaultState: 1
   UnderDitherColor:
     overrideState: 1
-    value: {r: 0, g: 0, b: 0, a: 1}
+    value: {r: 0.06666668, g: 0.83137256, b: 0.3498293, a: 1}
   TimeVariation:
     overrideState: 1
     value: {x: 0, y: 0}
   Scale:
     overrideState: 1
-    value: 68.78
+    value: 56.4
   Speed:
     overrideState: 1
     value: {x: 0, y: 0}
   Offset:
     overrideState: 1
-    value: 3.44
+    value: -0.82
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
