@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class Boss2GMScript : MonoBehaviour, IGameManager
 {
-    public TextMeshProUGUI DialogueName, DialogueText;
+    public TextMeshProUGUI DialogueName, DialogueText, MissionComplete;
     public TextMeshProUGUI CountDown;
     public GameObject DefaultSong;
     public GameObject BlackPanel, PausePanel;
@@ -150,6 +150,12 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
     private IEnumerator Win(){
         yield return new WaitForSeconds(2);
         //go to VN
+        yield return StartCoroutine(SetPanelTrue());
+        yield return new WaitForSeconds(2);
+        yield return StartCoroutine(FadeInText(MissionComplete));
+        SaveData.SceneNum = 4;
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadSceneAsync("MainMenu");
     }
 
     private IEnumerator SetPanelFalse(){
@@ -164,6 +170,15 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
             yield return null;
         }
         BlackPanel.SetActive(false);
+    }
+    private IEnumerator SetPanelTrue() {
+        BlackPanel.SetActive(true);
+        Image img = BlackPanel.GetComponent<Image>();
+        while (img.color.a<1){
+            var temp = img.color.a;
+            img.color = new Color(img.color.r, img.color.g, img.color.b, temp+0.5f*Time.deltaTime);
+            yield return null;
+        }
     }
     public void Restart(bool death){
         if(death){
