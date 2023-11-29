@@ -1166,7 +1166,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: eeccce9825b3cf14b98c103bf4ec9279, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1726,7 +1726,6 @@ MonoBehaviour:
   BounceBulletPrefab: {fileID: 6496016192876550901, guid: 0882a9433aefbf943ba2ef77152f547f, type: 3}
   health: 0
   maxHealth: 0
-  attackNum: 0
   moveSpeed: 0
   moveSpeed2: 0
   turnSpeed: 0

@@ -5,6 +5,7 @@ public static class SaveData
     public static bool W2VNCompleted = false;
     public static bool W3VNCompleted = false;
     public static int SceneNum = -1;
+    public static int W3EnemyNum = 0;
     public static int[] Deaths = new int[6];
     public static string[] WeaponName = {"", "Grey Zone", "Blue Star", "Senbonzakura", "Hibana", "Meteor"};
     public static string[] WeaponDialogue = {"", 
