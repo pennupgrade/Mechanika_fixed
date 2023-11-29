@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class World2End : MonoBehaviour
 {
     public GameObject BlackPanel;
+    [SerializeField] private string sceneName;
     void OnTriggerEnter2D(Collider2D c){
         if(c.gameObject.tag == "Player"){
             bool[] weapons = c.gameObject.GetComponent<MikuMechControl>().UnlockWeapon(0);
@@ -25,6 +26,6 @@ public class World2End : MonoBehaviour
             img.color = new Color(img.color.r, img.color.g, img.color.b, temp+Time.deltaTime);
             yield return null;
         }
-        SceneManager.LoadSceneAsync("World2Boss");
+        SceneManager.LoadSceneAsync(sceneName);
     }
 }
