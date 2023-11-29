@@ -20,7 +20,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
         ChargedShotPrefab, BounceBulletPrefab;
     [Header("Enemy Values")]
     public int health;
-    [SerializeField] private int maxHealth, attackNum;
+    [SerializeField] private int maxHealth;
     [SerializeField] private float moveSpeed, moveSpeed2, turnSpeed, turnSpeed2, mspeed, tspeed;
     private int bulletDMG, rocketDMG, missileDMG, cqDMG, laserDMG, chargedShotDMG, bounceBulletDMG;
     private float trackingBspd, bulletSpeed, chargedShotSpeed, bounceBulletSpeed, bulletCD;
@@ -111,7 +111,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
     }
 
     private IEnumerator Attack0(bool m){
-        trackingBspd = bulletSpeed; tracking = true; attackNum = 0; laser = false; warning = false;
+        trackingBspd = bulletSpeed; tracking = true; laser = false; warning = false;
         LaserController.DisableParticles();
         yield return new WaitForSeconds(0.8f);
         for (int i = 0; i<20; i++){
@@ -123,7 +123,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
     }
     private IEnumerator Attack1(){
         if(Player==null) {StopAllCoroutines(); yield break;}
-        tracking = false; laser = false; Cturn = 0; attackNum = 1;
+        tracking = false; laser = false; Cturn = 0;
         warning = true;
         yield return new WaitForSeconds(1.6f); laser = true; warning = false; LaserController.EnableParticles();
         if (Vector3.Dot(fp.right, (Player.transform.position-transform.position).normalized)>0){
@@ -135,7 +135,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
         AttackSelect();
     }
     private IEnumerator Attack2(int mType){
-        trackingBspd = chargedShotSpeed; tracking = true; attackNum = 2; laser = false; warning = false;
+        trackingBspd = chargedShotSpeed; tracking = true; laser = false; warning = false;
         LaserController.DisableParticles();
         if(mType == 1){
             for(int i = 0; i<6; i++){
@@ -192,7 +192,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
         AttackSelect();
     }
     private IEnumerator Attack3(){
-        trackingBspd = chargedShotSpeed; tracking = true; attackNum = 3; laser = false;
+        trackingBspd = chargedShotSpeed; tracking = true; laser = false;
         LaserController.DisableParticles();
         for (int i = 0; i<2; i++){
             warning = true;
@@ -205,7 +205,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
         AttackSelect();
     }
     private IEnumerator Attack4(){
-        trackingBspd = bounceBulletSpeed; tracking = true; attackNum = 4; laser = false; warning = false;
+        trackingBspd = bounceBulletSpeed; tracking = true; laser = false; warning = false;
         LaserController.DisableParticles();
         for (int i = 0; i<5; i++){
             GameObject bullet = Instantiate (BounceBulletPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 8*(Random.value-0.5f)));

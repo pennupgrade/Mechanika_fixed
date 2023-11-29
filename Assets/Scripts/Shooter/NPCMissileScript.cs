@@ -84,7 +84,7 @@ public class NPCMissileScript : MonoBehaviour, IMissile
         this.player = player;
         damage = dmg;
         duration = timer;
-        homingStr = (0.9f+0.2f*Random.value)*homingStrength;
+        homingStr = (0.94f+0.12f*Random.value)*homingStrength;
         this.stun = stun;
     }
 
