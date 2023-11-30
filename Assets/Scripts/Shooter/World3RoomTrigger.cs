@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class World3RoomTrigger : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    [SerializeField] private GM3Script gm;
+    [SerializeField] private int number;
+    void OnTriggerEnter2D(Collider2D c){
+        if(c.gameObject.tag == "Player"){
+            gm.lockDown(number);
+            Destroy(gameObject);
+        }
     }
 }
