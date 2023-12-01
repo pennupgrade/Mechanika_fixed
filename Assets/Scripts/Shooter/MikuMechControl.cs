@@ -181,6 +181,7 @@ public class MikuMechControl : MonoBehaviour
     }
 
     private void FireCepheid(){
+        SFXPlayer.PlaySound("a");
         GameObject bullet = Instantiate (CepheidPrefab, transform.position+0.15f*Vector3.up, Quaternion.identity);
         bullet.GetComponent<IBullet>().SetValues (w1DMG+(int)(w1DMG*((100.0f - energy)/100)), 8+(4*(100.0f - energy)/100), 1.5f, -3, 0.6f*velocity);
         bullet.GetComponent<CepheidBulletScript>().SetMode(cepheidMode);
