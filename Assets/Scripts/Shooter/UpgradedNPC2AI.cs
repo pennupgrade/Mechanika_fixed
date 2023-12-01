@@ -177,7 +177,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
         return true;
     }
     private void SpawnNPC(){
-        if(spawnTimer>0.01||spawnCounter>3) return;
+        if(spawnCounter>2||spawnTimer>0.01) return;
         spawnTimer=spawnTime; spawnCounter++;
         GameObject ptcl = Instantiate (SpawnExplosionPrefab, rb.position-2*MoveDir, Quaternion.Euler(new Vector3(0, 180, 0)));
         Destroy(ptcl,5);
