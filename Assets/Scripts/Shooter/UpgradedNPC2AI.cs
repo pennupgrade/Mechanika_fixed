@@ -177,7 +177,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
         return true;
     }
     private void SpawnNPC(){
-        if(spawnTimer>0.01||spawnCounter>5) return;
+        if(spawnTimer>0.01||spawnCounter>3) return;
         spawnTimer=spawnTime; spawnCounter++;
         GameObject ptcl = Instantiate (SpawnExplosionPrefab, rb.position-2*MoveDir, Quaternion.Euler(new Vector3(0, 180, 0)));
         Destroy(ptcl,5);
@@ -259,6 +259,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
         do{
         point = (Vector2)Player.transform.position + Random.insideUnitCircle*12;
         iter++;
+        //bad
         }while(iter<12&&Physics2D.Raycast(point, (Vector2)(Player.transform.position-(Vector3)point), Vector3.Distance(Player.transform.position,(Vector3)point), 1<<11)
         &&Vector3.Distance(Player.transform.position,(Vector3)point)<5f);
         if(iter>11) return (Vector2)Player.transform.position;

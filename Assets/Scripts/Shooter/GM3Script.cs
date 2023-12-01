@@ -18,35 +18,39 @@ public class GM3Script : MonoBehaviour
     private int[][] enemyComp2 = {
         new int[] {0, 1, 3, 3, 3},
         new int[] {0, 0, 1, 1, 2, 2},
-        new int[] {2, 2, 2, 1, 1, 3},
-        new int[] {2, 1, 1, 4, 4}
+        new int[] {2, 2, 2, 5, 1, 3},
+        new int[] {2, 2, 1, 1, 4, 4}
     };
     private int[][] enemyComp3 = {
-        new int[] {2, 2, 2, 4, 4, 4},
-        new int[] {2, 2, 3, 5, 5},
+        new int[] {2, 2, 2, 4, 4, 6},
+        new int[] {2, 2, 3, 5, 5, 5},
         new int[] {5, 5, 5, 5, 6, 6},
         new int[] {5, 5, 4, 4, 6, 6},
         new int[] {4, 4, 5, 5, 5, 6, 6, 6}
     };
     private int roomNum, waveNum;
+    private AudioSource AS;
 
 
     // Start is called before the first frame update
     void Start()
     {
         roomNum = 0; waveNum = 0;
+        AS = GetComponent<AudioSource>();
     }
 
     public void lockDown (int room) {
         roomNum = room; waveNum = 0;
         lines.SetActive(false);
         doors.SetActive(true);
+        AS.Play();
         StartCoroutine(SpawningCor());
     }
 
     private void roomCleared () {
         lines.SetActive(true);
         doors.SetActive(false);
+        StartCoroutine(FadeOut(AS, 2));
     }
     public void ReportDeath () {
         SaveData.W3EnemyNum--;
@@ -73,7 +77,7 @@ public class GM3Script : MonoBehaviour
         } else {
             enemyComp = enemyComp3;
         }
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(8);
         Spawn(enemyComp[wNum][0]);
         for (int i = 1; i < enemyComp[wNum].Length; i++) {
             Spawn(enemyComp[wNum][i]);
@@ -111,5 +115,17 @@ public class GM3Script : MonoBehaviour
         SaveData.W3EnemyNum++;
     }
 
+    private IEnumerator FadeOut (AudioSource audioSource, float FadeTime) {
+        float startVolume = audioSource.volume;
+ 
+        while (audioSource.volume > 0) {
+            audioSource.volume -= startVolume * Time.deltaTime / FadeTime;
+ 
+            yield return null;
+        }
+ 
+        audioSource.Stop ();
+        audioSource.volume = startVolume;
+    }
     
 }

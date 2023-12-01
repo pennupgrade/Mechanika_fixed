@@ -200,6 +200,7 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
         do{
         point = (Vector2)Player.transform.position + Random.insideUnitCircle*12;
         iter++;
+        //bad
         }while(iter<11&&Physics2D.Raycast(point, (Vector2)(Player.transform.position-(Vector3)point), Vector3.Distance(Player.transform.position,(Vector3)point), 1<<11)
         &&Vector3.Distance(Player.transform.position,(Vector3)point)<3.5f);
         if(iter>10) return (Vector2)Player.transform.position;

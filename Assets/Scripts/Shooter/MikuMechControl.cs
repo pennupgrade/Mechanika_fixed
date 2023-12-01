@@ -17,7 +17,7 @@ public class MikuMechControl : MonoBehaviour
     public GameObject NOVAPrefab;
     public GameObject MeteorPrefab, explosionPrefab;
     private TrailRenderer tr;
-    private float moveSpeed=7.5f, mspeed;
+    private float moveSpeed=8, mspeed;
     private bool lerpingHealth, lerpingShield, lerpingEnergy;
     [Header("Player Values")]
     [SerializeField] private int health, maxShield, shield, energy, weaponNum;
@@ -134,14 +134,14 @@ public class MikuMechControl : MonoBehaviour
                     if(w4Energy*chargeTimer>energy){
                         weaponCDTimer=1; EnergyUpdate(-100);
                         FireNOVA(chargeTimer); chargeTimer = 0; cBar.value = chargeTimer;
-                        moveSpeed = mspeed+3*((400-health)/400.0f);
+                        moveSpeed = mspeed+4*((400-health)/400.0f);
                     }
                 } else if (Input.GetKeyUp(KeyCode.Mouse0) && weaponCDTimer<0.001){
                     weaponCDTimer=w4CD; EnergyUpdate(-(int)(w4Energy*chargeTimer));
                     FireNOVA(chargeTimer); chargeTimer = 0; cBar.value = chargeTimer;
-                    moveSpeed = mspeed+3*((400-health)/400.0f);
+                    moveSpeed = mspeed+4*((400-health)/400.0f);
                 }
-                else {chargeTimer = 0; cBar.value = chargeTimer; moveSpeed = mspeed+3*((400-health)/400.0f);}
+                else {chargeTimer = 0; cBar.value = chargeTimer; moveSpeed = mspeed+4*((400-health)/400.0f);}
             }else if(weaponNum==5){
                 if (Input.GetKey(KeyCode.Mouse0) && weaponCDTimer<0.001 && energy-w5Energy >= 0){
                     weaponCDTimer=w5CD;
@@ -162,7 +162,7 @@ public class MikuMechControl : MonoBehaviour
         //stunned
         if (stunned){
             moveSpeed = mspeed*0.5f;
-            if (stunTimer<0.001f) {moveSpeed = mspeed+3*((400-health)/400.0f); stunned = false;}
+            if (stunTimer<0.001f) {moveSpeed = mspeed+4*((400-health)/400.0f); stunned = false;}
         }
         if (frozen){
             velocity = Vector2.zero;
@@ -255,6 +255,7 @@ public class MikuMechControl : MonoBehaviour
         WeaponUI[4].gameObject.SetActive(!W5Locked);
     } private void HealthUpdate(int h) {
         health+=h;
+        moveSpeed = mspeed+4*((400-health)/400.0f);
         if (health>390) {health = 390; moveSpeed=10;}
         else if (health<0) health = 0;
         if(!lerpingHealth) StartCoroutine(LerpHealth());
@@ -325,7 +326,7 @@ public class MikuMechControl : MonoBehaviour
         if (dashing) return;
         if (shield>0) {ShieldUpdate(-dmg);}
         else {
-            HealthUpdate(-dmg); moveSpeed = mspeed+3*((400-health)/400.0f);
+            HealthUpdate(-dmg);
         }
 
         shieldRegenTimer = 16;
@@ -336,7 +337,7 @@ public class MikuMechControl : MonoBehaviour
         if (meleeTimer>0.001 || dashing) return;
         if (shield>0) {ShieldUpdate(-dmg);}
         else {
-            HealthUpdate(-dmg); moveSpeed = mspeed+3*((400-health)/400.0f);
+            HealthUpdate(-dmg);
         }
 
         shieldRegenTimer = 16;
