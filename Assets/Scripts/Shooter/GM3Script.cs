@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GM3Script : MonoBehaviour
 {
-    public GameObject DefaultEnemy, UpgradedEnemy, SpawnParticles;
+    public GameObject DefaultEnemy, UpgradedEnemy;
     [SerializeField] private GameObject[] Room1SpwnPts;
     [SerializeField] private GameObject[] Room2SpwnPts;
     [SerializeField] private GameObject[] Room3SpwnPts;
