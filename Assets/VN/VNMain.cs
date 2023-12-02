@@ -87,12 +87,18 @@ public partial class VNMain : MonoBehaviour
 
     }
 
+    List<String> tagProcessQueue = new();
     void DoTags()
     {
 
         foreach(var tag in story.currentTags)
-        {
-            string s = tag.Trim().ToLower();
+            ProcessCommand(tag);
+        
+    }
+
+    void ProcessCommand(String tag)
+    {
+        string s = tag.Trim().ToLower();
 
             string[] fullCommand = s.Split(' ');
             Func<int, string> getParam = i =>
@@ -138,10 +144,17 @@ public partial class VNMain : MonoBehaviour
                     break;
 
                 case "setvisible":
-                SetVisible(StringToSide(getParam(0)), bool.Parse(getParam(1)));
+                SetVisible(bool.Parse(getParam(0)));
+                    break;
+
+                case "setvisibleinst":
+                SetVisible(bool.Parse(getParam(0)), true);
+                    break;
+
+                case "onend":
+                tagProcessQueue.Add(tag.Substring(tag.IndexOf(' ')+1));
                     break;
             }
-        }
     }
 
     void Continue()
@@ -205,7 +218,9 @@ public partial class VNMain : MonoBehaviour
 
     void OnDisplayFinish()
     {
-        
+        foreach(var tag in tagProcessQueue)
+            ProcessCommand(tag);
+        tagProcessQueue.Clear();
     }
 
 }
@@ -229,6 +244,7 @@ public partial class VNMain // Unity Refs
 
     [Header(" -=- Speed Settings -=- ")]
     [SerializeField] float TextSpeed;
+    [SerializeField] float TextQuickSpeed;
     [SerializeField] [Min(1f)] float CharacterAnimateSpeed = 2f;
 
     [Header(" -=- VN Character Objects -=- ")]
@@ -260,10 +276,13 @@ public partial class VNMain // Display
         OutputTextbox.text = "";
         textboxTimer.Restart();
         SetState(State.DISPUPDATING, true);
+        dispProgress = 0f;
     }
+    float dispProgress;
     void UpdateDisplay(float dt)
     {
-        string newText = PartialStringSpaceTrim(toDisplay, (int)(textboxTimer.Elapsed.TotalSeconds * TextSpeed));
+        dispProgress += dt * (Input.GetMouseButton(1) ? TextQuickSpeed : TextSpeed);
+        string newText = PartialStringSpaceTrim(toDisplay, (int) dispProgress);
         OutputTextbox.text = newText;
         if (newText == toDisplay)
             { SetState(State.DISPUPDATING, false); OnDisplayFinish(); }
@@ -318,10 +337,6 @@ public partial class VNMain
     //
     string lName;
     string rName;
-
-    //
-    bool lVisible = true;
-    bool rVisible = true;
     
     void SetCharacter(bool isLeft, string character, string emotion = "happy") 
     {
@@ -385,9 +400,11 @@ public partial class VNMain
     }
     void SetExpression(string s, string emotion) => SetExpression(StringToSide(s), emotion);
 
-    void SetVisible(bool isLeft, bool visible)
-    { if(isLeft) lVisible = visible; else rVisible = visible; }
-
+    void SetVisible(bool visible, bool instant = false)
+    { 
+        CharacterState.FadeOverride = visible ? -1 : 0.9f;
+        if(instant) { lState.Fade = 0.9f; rState.Fade = 0.9f; }
+    }
     
     void SetSpeaker(bool isLeft, bool activate = true)
     {
@@ -401,8 +418,8 @@ public partial class VNMain
 
     void UpdatePortraits(float dt)
     {
-        lState.Lerp(isActiveLeft ? ActivateLeftState : InactiveLeftState, CharacterAnimateSpeed*dt, lVisible ? -1 : 0); 
-        rState.Lerp(isActiveRight ? ActivateRightState : InactiveRightState, CharacterAnimateSpeed*dt, rVisible ? -1 : 0);
+        lState.Lerp(isActiveLeft ? ActivateLeftState : InactiveLeftState, CharacterAnimateSpeed*dt); 
+        rState.Lerp(isActiveRight ? ActivateRightState : InactiveRightState, CharacterAnimateSpeed*dt);
 
         lState.SendToImage(LeftImage);
         rState.SendToImage(RightImage);
@@ -416,11 +433,13 @@ public partial class VNMain
         public float Size;
         public float Fade;
 
-        public void Lerp(CharacterState o, float t, float fadeOverride = -1) // could make ref
+        public static float FadeOverride;
+
+        public void Lerp(CharacterState o, float t) // could make ref
         {
             Position = math.lerp(Position, o.Position, t);
             Size = math.lerp(Size, o.Size, t);
-            Fade = math.lerp(Fade, fadeOverride == -1 ? o.Fade : fadeOverride, t);
+            Fade = math.lerp(Fade, FadeOverride == -1 ? o.Fade : FadeOverride, t);
         }
 
         public static CharacterState FlipX(CharacterState old)
