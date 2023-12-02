@@ -11,15 +11,21 @@ public class GM3Script : MonoBehaviour
     [SerializeField] private GameObject lines;
     [SerializeField] private GameObject doors;
     private int[][] enemyComp1 = {
-        new int[] {0, 0, 1, 1},
-        new int[] {0, 0, 1, 1, 3},
-        new int[] {0, 1, 1, 3, 3}
+        new int[] {0, 0},
+        new int[] {0, 1},
+        new int[] {1, 1},
+        new int[] {0, 1, 1},
+        new int[] {1, 3},
+        new int[] {0, 3, 3},
+        new int[] {0, 1, 1, 3}
     };
     private int[][] enemyComp2 = {
-        new int[] {0, 1, 3, 3, 3},
-        new int[] {0, 0, 1, 1, 2, 2},
-        new int[] {2, 2, 2, 5, 1, 3},
-        new int[] {2, 2, 1, 1, 4, 4}
+        new int[] {0, 1, 3, 3},
+        new int[] {0, 2, 2, 0},
+        new int[] {0, 1, 1, 2, 2},
+        new int[] {0, 2, 2, 2, 3},
+        new int[] {1, 2, 2, 5},
+        new int[] {2, 1, 4, 4}
     };
     private int[][] enemyComp3 = {
         new int[] {2, 2, 2, 4, 4, 6},
@@ -97,25 +103,31 @@ public class GM3Script : MonoBehaviour
         
         GameObject newEnemy;
         if (type == 0) {
-            GameObject npc = Instantiate (DefaultEnemy, spawnPos, Quaternion.identity);
-            npc.GetComponent<DefaultEnemy3AI>().SetState(0);
+            newEnemy = Instantiate (DefaultEnemy, spawnPos, Quaternion.identity);
+            newEnemy.GetComponent<DefaultEnemy3AI>().SetState(0);
         } else if (type == 1) {
-            GameObject npc = Instantiate (DefaultEnemy, spawnPos, Quaternion.identity);
-            npc.GetComponent<DefaultEnemy3AI>().SetState(1);
+            newEnemy = Instantiate (DefaultEnemy, spawnPos, Quaternion.identity);
+            newEnemy.GetComponent<DefaultEnemy3AI>().SetState(1);
         } else if (type == 2) {
-            GameObject npc = Instantiate (DefaultEnemy, spawnPos, Quaternion.identity);
-            npc.GetComponent<DefaultEnemy3AI>().SetState(2);
+            newEnemy = Instantiate (DefaultEnemy, spawnPos, Quaternion.identity);
+            newEnemy.GetComponent<DefaultEnemy3AI>().SetState(2);
         } else if (type == 3) {
-            GameObject npc = Instantiate (DefaultEnemy, spawnPos, Quaternion.identity);
-            npc.GetComponent<DefaultEnemy3AI>().SetState(3);
+            newEnemy = Instantiate (DefaultEnemy, spawnPos, Quaternion.identity);
+            newEnemy.GetComponent<DefaultEnemy3AI>().SetState(3);
         } else if (type == 4) {
-            
+            //
+            newEnemy = Instantiate (DefaultEnemy, spawnPos, Quaternion.identity);
+            newEnemy.GetComponent<DefaultEnemy3AI>().SetState(3);
         } else if (type == 5) {
-            
+            //
+            newEnemy = Instantiate (DefaultEnemy, spawnPos, Quaternion.identity);
+            newEnemy.GetComponent<DefaultEnemy3AI>().SetState(3);
         } else {
-
+            //
+            newEnemy = Instantiate (DefaultEnemy, spawnPos, Quaternion.identity);
+            newEnemy.GetComponent<DefaultEnemy3AI>().SetState(3);
         }
-        //newEnemy.transform.SetParent(gameObject.transform);
+        newEnemy.transform.SetParent(gameObject.transform);
         SaveData.W3EnemyNum++;
     }
 
