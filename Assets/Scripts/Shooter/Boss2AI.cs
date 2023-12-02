@@ -124,7 +124,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
     private IEnumerator Attack1(){
         if(Player==null) {StopAllCoroutines(); yield break;}
         tracking = false; laser = false; Cturn = 0;
-        warning = true;
+        warning = true; LaserController.StartDrawTelegraph();
         yield return new WaitForSeconds(1.6f); laser = true; warning = false; LaserController.EnableParticles();
         if (Vector3.Dot(fp.right, (Player.transform.position-transform.position).normalized)>0){
                 Cturn = -turnSpeed;
@@ -192,7 +192,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
         AttackSelect();
     }
     private IEnumerator Attack3(){
-        trackingBspd = chargedShotSpeed; tracking = true; laser = false;
+        trackingBspd = chargedShotSpeed; tracking = true; laser = false; LaserController.StartDrawTelegraph();
         LaserController.DisableParticles();
         for (int i = 0; i<2; i++){
             warning = true;
@@ -261,7 +261,9 @@ public class Boss2AI : MonoBehaviour, IEnemy
         }
     }
     private void Warning(){
-        Debug.DrawLine(fp.transform.position, fp.transform.position+10*fp.up, Color.cyan, 0.3f);
+        RaycastHit2D hit = Physics2D.Raycast((Vector2)fp.transform.position, (Vector2)fp.up, 70, 1<<11);
+        endpt = fp.transform.position+hit.distance*fp.up;
+        LaserController.DrawTelegraph((Vector2)fp.transform.position, (Vector2)endpt);
     }
 
 
