@@ -4,6 +4,8 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+using Utilities;
+
 public class LaserController : MonoBehaviour
 {
 

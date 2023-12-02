@@ -4,6 +4,8 @@ using UnityEngine;
 
 using static UnityEngine.Mathf;
 
+using static Utilities.Swizzle;
+
 public class MainTest : MonoBehaviour
 {
 

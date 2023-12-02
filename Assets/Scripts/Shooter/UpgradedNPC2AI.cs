@@ -5,6 +5,8 @@ using Pathfinding;
 using Unity.Mathematics;
 using Random = UnityEngine.Random;
 
+using Utilities;
+
 public class UpgradedNPC2AI : MonoBehaviour, IEnemy
 {
     public Healthbar Hbar;

@@ -10,7 +10,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-using static Utils;
+using static Utilities.Utils;
+using static Utilities.Swizzle;
 
 using static Unity.Mathematics.math;
 using AYellowpaper.SerializedCollections;
