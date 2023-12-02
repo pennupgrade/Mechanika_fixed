@@ -24,7 +24,7 @@ public class GM3Script : MonoBehaviour
         new int[] {1, 1, 2, 2},
         new int[] {2, 2, 2, 3},
         new int[] {5},
-        new int[] {5, 2, 2},
+        new int[] {2, 5, 2},
         new int[] {1, 4}
     };
     private int[][] enemyComp3 = {
