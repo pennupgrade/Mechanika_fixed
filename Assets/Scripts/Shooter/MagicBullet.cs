@@ -23,6 +23,7 @@ public class MagicBullet : MonoBehaviour, IMissile
     // Update is called once per frame
     void Update()
     {
+        if(player==null) return;
         duration -= Time.deltaTime;
         spd += acc*Time.deltaTime;
         if (spd>max) spd = max;
@@ -33,6 +34,7 @@ public class MagicBullet : MonoBehaviour, IMissile
                 Target = player.transform.position+6*(Vector3)UnityEngine.Random.insideUnitCircle;
             } else if (targetNum==1){
                 duration = 5;
+                max=max+2;
                 targetNum--;
                 homingStr = 150;
             } else {
