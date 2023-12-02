@@ -332,11 +332,9 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
                 Player.GetComponent<MikuMechControl>().MeleeDamage(140, false);
             }
         }
+        transform.parent.gameObject.GetComponent<GM3Script>().ReportDeath();
+        isDead = true;
         Destroy(gameObject);
-        if(!isDead){
-            transform.parent.gameObject.GetComponent<GM3Script>().ReportDeath();
-            isDead = true;
-        }
         if(Random.value>0.92) Instantiate (medkitPrefab, rb.position, Quaternion.identity);
     }
 

@@ -71,7 +71,7 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
             moveSpeed = 9;
             turnSpeed = 75;
             specialCD = 18;
-            specialCD2 = 13;
+            specialCD2 = 18;
             minDistance = 6;
             maxDistance = 18;
         }
@@ -214,7 +214,7 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
             if (Random.value>0.6){
                 specialCDTimer = specialCD-4+4*(Random.value-0.5f);
                 GameObject missile = Instantiate (mageBulletPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 8*(Random.value-0.5f)));
-                missile.GetComponent<IMissile>().SetSpeed(6,2,14);
+                missile.GetComponent<IMissile>().SetSpeed(6,2,10);
                 missile.GetComponent<IMissile>().SetValues (90, 5, 240, true, Player);
             } else {
                 specialCDTimer = specialCD+4*(Random.value-0.5f);
@@ -397,11 +397,10 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
                 Player.GetComponent<MikuMechControl>().MeleeDamage(200, false);
             }
         }
+        transform.parent.gameObject.GetComponent<GM3Script>().ReportDeath();
+        isDead = true;
         Destroy(gameObject);
-        if(!isDead){
-            transform.parent.gameObject.GetComponent<GM3Script>().ReportDeath();
-            isDead = true;
-        }
+        
         if(Random.value>0.75) Instantiate (medkitPrefab, rb.position, Quaternion.identity);
     }
 
