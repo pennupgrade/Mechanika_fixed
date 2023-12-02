@@ -60,14 +60,14 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
             minDistance = 5;
             maxDistance = 15;
         } else if (enemyType == 2) {
-            maxHealth = 280;
+            maxHealth = 320;
             moveSpeed = 9.5f;
-            turnSpeed = 100;
+            turnSpeed = 110;
             specialCD = 12;
             minDistance = 2;
             maxDistance = 12;
         } else {
-            maxHealth = 390;
+            maxHealth = 320;
             moveSpeed = 9;
             turnSpeed = 75;
             specialCD = 18;
