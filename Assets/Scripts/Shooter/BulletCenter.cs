@@ -21,6 +21,7 @@ public class BulletCenter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(player==null) return;
         timer += Time.deltaTime;
         if(timer>0 && timer <= 1){
             transform.position = Vector3.Lerp(spawnPos, player.transform.position, timer);

@@ -36,6 +36,8 @@ public class GM3Script : MonoBehaviour
     };
     private int roomNum, waveNum;
     private AudioSource AS;
+    private bool isSpawning;
+    private int stored;
 
 
     // Start is called before the first frame update
@@ -43,6 +45,8 @@ public class GM3Script : MonoBehaviour
     {
         roomNum = 0; waveNum = 0;
         AS = GetComponent<AudioSource>();
+        isSpawning = false;
+        stored = 0;
     }
 
     public void lockDown (int room) {
@@ -67,12 +71,18 @@ public class GM3Script : MonoBehaviour
             ) {
                 StopAllCoroutines();
                 roomCleared();
+                isSpawning = false;
             } else {
-               StartCoroutine(SpawningCor()); 
+                if(!isSpawning){
+                    StartCoroutine(SpawningCor());
+                } else {
+                    stored++;
+                }
             }
         }
     }
     private IEnumerator SpawningCor() {
+        isSpawning = true;
         int wNum = waveNum;
         waveNum++;
         int[][] enemyComp;
@@ -83,11 +93,16 @@ public class GM3Script : MonoBehaviour
         } else {
             enemyComp = enemyComp3;
         }
-        yield return new WaitForSeconds(8);
+        yield return new WaitForSeconds(4);
         Spawn(enemyComp[wNum][0]);
         for (int i = 1; i < enemyComp[wNum].Length; i++) {
-            Spawn(enemyComp[wNum][i]);
             yield return new WaitForSeconds(3);
+            Spawn(enemyComp[wNum][i]);
+        }
+        isSpawning = false;
+        if(stored>0){
+            stored--;
+            StartCoroutine(SpawningCor());
         }
     }
 
@@ -127,6 +142,8 @@ public class GM3Script : MonoBehaviour
             newEnemy = Instantiate (DefaultEnemy, spawnPos, Quaternion.identity);
             newEnemy.GetComponent<DefaultEnemy3AI>().SetState(3);
         }
+        GameObject ptcl = Instantiate (SpawnParticles, spawnPos, Quaternion.Euler(new Vector3(0, 180, 0)));
+        Destroy(ptcl,5);
         newEnemy.transform.SetParent(gameObject.transform);
         SaveData.W3EnemyNum++;
     }

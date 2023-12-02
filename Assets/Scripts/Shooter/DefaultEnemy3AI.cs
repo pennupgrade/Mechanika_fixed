@@ -21,7 +21,7 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
     private int currentWaypoint;
     private float bulletCDTimer, specialCD, specialCDTimer, specialCD2, specialCD2Timer;
     private float Cturn, meleeTimer, stunTimer, aimTimer, bounceTimer, wayPointTimer, dashTimer, dashCDTimer, freezeTimer;
-    private bool stunned, bounce, dashing, frozen;
+    private bool stunned, bounce, dashing, frozen, isDead;
     private Vector2 TargetDir, MoveDir, bounceVector, dashVector, spawnPos;
     private Rigidbody2D rb;
     public Transform fp;
@@ -39,11 +39,11 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
         state = 1; frameTimer = 1;
         bulletDMG=80;
         bulletCD=1.2f; bulletSpeed = 10;
-        stunned=false; dashing = false; frozen = false;
+        stunned=false; dashing = false; frozen = false; isDead = false;
         dashTimer = 0; dashCDTimer = 0; freezeTimer = 0;
         bulletCDTimer = 0; meleeTimer = 0; stunTimer = 0; 
         aimTimer = 0; wayPointTimer = 0;
-        specialCDTimer = 5; specialCD2Timer = 10;
+        specialCDTimer = 4+4*Random.value; specialCD2Timer = 9+5*Random.value;
         bounceTimer = 0; bounce = false; bounceVector = Vector2.zero;
         nextWaypointDistance = 1;
     }
@@ -76,7 +76,7 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
             moveSpeed = 8;
             turnSpeed = 70;
             specialCD = 20;
-            specialCD2 = 14;
+            specialCD2 = 18;
             minDistance = 6;
             maxDistance = 18;
         }
@@ -211,8 +211,8 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
         }
         if (enemyType == 3){
             GameObject missile = Instantiate (mageBulletPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 8*(Random.value-0.5f)));
-            missile.GetComponent<IMissile>().SetSpeed(6,0.5f,11);
-            missile.GetComponent<IMissile>().SetValues (200, 5, 120, true, Player);
+            missile.GetComponent<IMissile>().SetSpeed(6,0.5f,10);
+            missile.GetComponent<IMissile>().SetValues (200, 5, 110, true, Player);
         }
         
     }
@@ -282,12 +282,13 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
     }
 
     public void Damage (int dmg, bool stun){
-        if(enemyType==2) dmg -= 10;
+        if(enemyType==2||enemyType==1) dmg -= 10;
         health-=dmg; if (health<1) Destruction();
         if (stun){stunTimer += 1; stunned = true;}
         Hbar.SetHealth(health, maxHealth);
     }
     public void MeleeDamage (int dmg, bool stun){
+        dmg = dmg/2;
         if (meleeTimer>0.001) return;
         health-=dmg/2; if (health<1) Destruction();
         meleeTimer = 0.5f;
@@ -331,8 +332,11 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
             }
         }
         Destroy(gameObject);
-        transform.parent.gameObject.GetComponent<GM3Script>().ReportDeath();
-        if(Random.value>0.85) Instantiate (medkitPrefab, rb.position, Quaternion.identity);
+        if(!isDead){
+            transform.parent.gameObject.GetComponent<GM3Script>().ReportDeath();
+            isDead = true;
+        }
+        if(Random.value>0.92) Instantiate (medkitPrefab, rb.position, Quaternion.identity);
     }
 
     private float TimerF( float val){
