@@ -376,3 +376,8 @@ float2 pixelate(float2 uv)
 {
 	return pixelate(uv, .04);
 }
+
+float getGlow(float r, float start, float scale)
+{
+	return min(1., pow(max(0.0001, r - start) / scale, -2.));
+}

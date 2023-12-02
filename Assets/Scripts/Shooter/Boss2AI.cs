@@ -5,9 +5,10 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEditor.Animations;
 
-using static Utils;
 using Unity.Mathematics;
 using Random = UnityEngine.Random;
+
+using Utilities;
 
 public class Boss2AI : MonoBehaviour, IEnemy
 {

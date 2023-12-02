@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-using static Utils;
-
-public class MikuMechControl : MonoBehaviour
+public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
 {
     public GameObject[] WeaponUI;
     public Slider hBar, sBar, eBar, cBar, rBar;
@@ -425,6 +423,19 @@ public class MikuMechControl : MonoBehaviour
 
     public void Freeze() {frozen = true;}
     public void UnFreeze() {frozen = false;}
+
     public Vector2 Velocity { get {return velocity;} set{}}
     public Vector2 MousePos { get {return mousePos;} set{}}
+
+    // Bullet Engine Interface for Boss 2
+    public void Hit()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public bool CanBeHit => throw new System.NotImplementedException();
+
+    public Unity.Mathematics.float2 Position => throw new System.NotImplementedException();
+
+    public float Radius => throw new System.NotImplementedException();
 }
