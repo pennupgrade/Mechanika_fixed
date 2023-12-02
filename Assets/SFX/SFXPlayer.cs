@@ -22,18 +22,19 @@ public class SFXPlayer : MonoBehaviour
         ins = this;
     }
 
-    //add loop parameter, volume, and stuff like that, would probably force guarantee new audioplayer
-    public static void PlaySound(AudioClip clip)
+    public static void PlaySound(AudioClip clip, float volume = 1f)
     {
         AudioSource player = players.FirstOrDefault(p => !p.AudioPlayer.isPlaying)?.AudioPlayer;
         if(player is null)
             player = Instantiate(ins).AudioPlayer;
 
+        player.volume = volume;
+
         player.clip = clip;
         player.Play();
     }
 
-    public static void PlaySound(string soundName)
-        => PlaySound(ins.Sounds[soundName]);
+    public static void PlaySound(string soundName, float volume = 1f)
+        => PlaySound(ins.Sounds[soundName], volume);
 
 }

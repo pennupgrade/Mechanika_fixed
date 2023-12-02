@@ -601,28 +601,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 830bc4e69a135df4fb611ea8f8fecf2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MikuCharisExchange: {fileID: 4900000, guid: 4176758c4703a4146b3c7b090f565e44, type: 3}
+  MikuCharisExchange: {fileID: 4900000, guid: 0aaf8582bd4499b48a05184e097920e8, type: 3}
   SkipFolder: {fileID: 4681247693936095497}
   SkipObject: {fileID: 4681247694730987058}
   ChoiceFolder: {fileID: 4681247693345642505}
   ChoicePrefab: {fileID: 308300917658321432, guid: 1f979c9834e90634e90a32e1166b9167, type: 3}
-  ChoiceVerticalSeparation: 16
+  ChoiceVerticalSeparation: 19
   VNFolder: {fileID: 4681247693350026351}
   OutputTextbox: {fileID: 4681247693204923500}
   StoryData: {fileID: 4900000, guid: 4176758c4703a4146b3c7b090f565e44, type: 3}
   TextSpeed: 30
+  TextQuickSpeed: 50
   CharacterAnimateSpeed: 3
   LeftImage: {fileID: 4681247695017675851}
   RightImage: {fileID: 4681247694016125261}
-  MikuSpriteData:
-    HappyCharacter: {fileID: 21300000, guid: 1c9ef97a6ec6d5442b45420812c68faf, type: 3}
-    SadCharacter: {fileID: 21300000, guid: d884798f5ae1dfa47bba8d8550b3c61c, type: 3}
-  CharisSpriteData:
-    HappyCharacter: {fileID: 21300000, guid: 5cd2fc3482004aa42a604880af0d2832, type: 3}
-    SadCharacter: {fileID: 21300000, guid: 5cd2fc3482004aa42a604880af0d2832, type: 3}
+  BossSpriteDictionary:
+    _serializedList:
+    - Key: miku
+      Value:
+        HappyCharacter: {fileID: 21300000, guid: 46b815eab7aa9fc41aeffa1a99b792c7, type: 3}
+        SadCharacter: {fileID: 21300000, guid: fe714280d7cdf7e4f92a653b51af7290, type: 3}
+        EvilCharacter: {fileID: 21300000, guid: fce86dea56721894ea279f3c1e6b01ba, type: 3}
+        ScaredCharacter: {fileID: 21300000, guid: d07feed068ffc5c46977997000ce9e8e, type: 3}
+        CharacterMaterial: {fileID: 2100000, guid: f6e59c5a397b01747a8fa71a13c1ae77, type: 2}
+    - Key: charis
+      Value:
+        HappyCharacter: {fileID: 21300000, guid: 5cd2fc3482004aa42a604880af0d2832, type: 3}
+        SadCharacter: {fileID: 21300000, guid: 5cd2fc3482004aa42a604880af0d2832, type: 3}
+        EvilCharacter: {fileID: 21300000, guid: 5cd2fc3482004aa42a604880af0d2832, type: 3}
+        ScaredCharacter: {fileID: 21300000, guid: 5cd2fc3482004aa42a604880af0d2832, type: 3}
+        CharacterMaterial: {fileID: 2100000, guid: de5329a64b4612641b6a2498da78d4b6, type: 2}
   CharacterHolder: {fileID: 4681247694363539974}
-  MikuMaterial: {fileID: 2100000, guid: a75d0f4a381a9b44d921963b43b2acc8, type: 2}
-  CharisMaterial: {fileID: 2100000, guid: de5329a64b4612641b6a2498da78d4b6, type: 2}
   ActivateRightState:
     Position:
       x: 150

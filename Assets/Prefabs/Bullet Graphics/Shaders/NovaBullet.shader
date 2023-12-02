@@ -114,8 +114,8 @@ Shader "Unlit/Bullet/NovaBullet"
                 col += .4*step(cID, 0.5);
 
                 //
-                float glow = .5/max(1.,pow(polar.x*10., 2.0));
-                float3 emi = _HighColor*glow;
+                float glow = smoothstep(.95, 0., polar.x)*getGlow(polar.x, 0.4, 0.5)*.4;
+                float3 emi = glow*_HighColor;
 
                 return float4(col+emi, pow(max(lowIntensity, max(highIntensity, glow)), 1.));
             }

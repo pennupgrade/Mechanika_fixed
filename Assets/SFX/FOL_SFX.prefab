@@ -80,6 +80,14 @@ MonoBehaviour:
   AudioPlayer: {fileID: 2603094767545816441}
   Sounds:
     _serializedList:
+    - Key: HIT_SMALL1
+      Value: {fileID: 8300000, guid: 4d82e8f654230e34bb799bbf0366bc88, type: 3}
+    - Key: HIT_BIG1
+      Value: {fileID: 8300000, guid: d6bcd0347709f3f419346fd8fd7159d7, type: 3}
+    - Key: HIT_BIG2
+      Value: {fileID: 8300000, guid: 61082345303db6d49adc44ee61d07e3d, type: 3}
+    - Key: HIT_SELF1
+      Value: {fileID: 8300000, guid: 6339b1159022ff243935d2e009af8ccf, type: 3}
     - Key: WP_1A
       Value: {fileID: 8300000, guid: 8c2fb77fade4a2d4282fc1e087b701c9, type: 3}
     - Key: WP_1B

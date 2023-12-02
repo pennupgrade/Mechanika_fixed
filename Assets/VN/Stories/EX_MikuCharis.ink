@@ -18,7 +18,7 @@ Her back is turned towards you as you enter.
 <i>without looking</i>   I apologize, but I’m terribly busy at the moment. Let’s see... I don’t have any appointments scheduled for this time slot, so I’d be more than happy to speak with you once you’ve scheduled a tentative appointment and had it vetted by my secretary. The next available slot should be in around three months. #onend emotion miku sad
 * [I wouldn’t have burst in if this wasn’t an emergency, Chancellor.] -> c1
 * [I’m about to go on a tour and decided this was worth my while.] -> c2
-* [The only thing that’ll be on your schedule in three months is physical therapy.] -> c3
+* [I’m afraid your evil deeds end here, the Vocaloid Fandom rises against you! Repent, then you may die.] -> c3
 
 = c1
 I wouldn’t have burst in if this wasn’t an emergency, Chancellor. #switchspeaker
@@ -27,32 +27,33 @@ This gets her attention, and she turns around in her seat to face you.
 #setvisible true
 #switchspeaker
 I suppose this can wait, I’ve been a little ahead of schedule today. What is the emergency?
-Wait a minute–you’re Netsuha Kumi. You’re very popular amongst my citizens. Strange. All of my security drones have been incapacitated, but no alarms were triggered. How could this be?
+Wait a minute–blue twintails–red eyes–you’re Netsuha Kumi. You’re very popular amongst my citizens. Strange. All of my security drones have been incapacitated, but no alarms were triggered. How could this be? 
 #switchspeaker
 #emotion miku happy
 I am hiding in your WIFI. 
 #switchspeaker
-I see. So what could possibly have brought you here?
+Of course. So what could possibly have brought you here?
 -> charis2c1
 = c2
 #emotion miku happy
-I’m about to go on a tour and decided this was worth my while. And if it’s worth my while, it sure as heck is worth yours, too, lady. #switchspeaker
+I’m about to go on a tour and decided this was worth my while. And if it’s worth my while, it sure is worth yours, too, <i>miss</i>. #switchspeaker
 #setvisible false
 She pauses, her hands hovering above her holographic keyboard. You certainly have her attention, if not reluctantly. She still has her back to you.
 #setvisible true
 #switchspeaker
-Ah. You must be Netsuha Kumi. My citizens have been in a buzz about your upcoming tour. I certainly disapprove of your uncouth tone, but you have my ears. Speak.
+Ah. You must be Netsuha Kumi. My citizens have been in a buzz about your upcoming tour. I certainly disapprove of your uncouth tone, but you have my ears. Speak, android.
 -> charis2
 = c3
 #switchspeaker
-#emotion miku happy
-The only thing that’ll be on your schedule in three months is physical therapy. I’m about to mess you and that tacky hunk of metal you call a body the hell up!
+#onend emotion miku evil
+I’m afraid your evil deeds end here, the Vocaloid Fandom rises against you! Repent, then you may die.
 #setvisible false
+#emotion miku happy
 She briefly hesitates, sighing, before swiping away her holographic keyboard and turning off her giant displays.
 A single red button remains where her setup was. She presses it before getting up and turning to face you.
 #setvisible true
 #switchspeaker
-I am Chancellor, the voice of my people. To threaten me with violence is to threaten my people with violence. #onend emotion miku sad
+Silence, android. I am Chancellor, the voice of my people. To threaten me with violence is to threaten my people with violence. #onend emotion miku evil
 It’s treason, then.  Erinye Protocol: Activation. 
 -> END
 
