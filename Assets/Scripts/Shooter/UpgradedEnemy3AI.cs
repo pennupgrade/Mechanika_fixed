@@ -236,13 +236,13 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
                 missile.GetComponent<IMissile>().SetSpeed(6,3,9);
                 missile.GetComponent<IMissile>().SetValues (60, 5, 140, true, Player);
                 missile.GetComponent<ExplosiveMissile>().SetElectric();
-                Vector3 t = Player.transform.position + 6*(Vector3)Random.insideUnitCircle;
+                Vector3 t = Player.transform.position + 4*(Player.transform.position-transform.position).normalized + 6*(Vector3)Random.insideUnitCircle;
                 missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(t, 60);
                 GameObject missile2 = Instantiate (explodeRocketPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 30+30*(3-i)));
                 missile2.GetComponent<IMissile>().SetSpeed(6,3,9);
                 missile2.GetComponent<IMissile>().SetValues (60, 5, 140, true, Player);
                 missile2.GetComponent<ExplosiveMissile>().SetElectric();
-                t = Player.transform.position + 6*(Vector3)Random.insideUnitCircle;
+                t = Player.transform.position + 4*(Player.transform.position-transform.position).normalized + 6*(Vector3)Random.insideUnitCircle;
                 missile2.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(t, 60);
                 yield return new WaitForSeconds(0.4f);
             }
@@ -254,7 +254,7 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
             GameObject missile = Instantiate (explodingBulletPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 4*(Random.value-0.5f)));
             missile.GetComponent<IMissile>().SetSpeed(6,3,9);
             missile.GetComponent<IMissile>().SetValues (70, 5, 140, true, Player);
-            Vector3 t = Player.transform.position + 5*(Vector3)Random.insideUnitCircle;
+            Vector3 t = Player.transform.position + 3*(Player.transform.position-transform.position).normalized + 5*(Vector3)Random.insideUnitCircle;
             missile.GetComponent<ExploderBullet>().SetTargetAndHomingAccel(t);
         } else{
             specialCD2Timer = specialCD2+4*(Random.value-0.5f);

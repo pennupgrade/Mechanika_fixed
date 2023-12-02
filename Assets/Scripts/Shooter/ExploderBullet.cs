@@ -44,7 +44,7 @@ public class ExploderBullet : MonoBehaviour, IMissile
                 turnTimer = 0.5f;
             }
         }
-        if(Vector3.Distance(Target,transform.position)<1) Destruction();
+        if(Vector3.Distance(Target,transform.position)<1.5f) Destruction();
     }
 
     void OnCollisionEnter2D(Collision2D c){
