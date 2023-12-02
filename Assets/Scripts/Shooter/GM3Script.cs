@@ -23,32 +23,50 @@ public class GM3Script : MonoBehaviour
         new int[] {2, 2, 0},
         new int[] {1, 1, 2, 2},
         new int[] {2, 2, 2, 3},
-        new int[] {5},
-        new int[] {5, 2, 2},
-        new int[] {1, 4}
+        new int[] {5, 5},
+        new int[] {2, 5, 2},
+        new int[] {4, 4}
     };
     private int[][] enemyComp3 = {
         new int[] {5, 4},
         new int[] {5, 5, 5},
         new int[] {6, 6},
         new int[] {4, 6, 6},
-        new int[] {5, 5, 4, 6},
-        new int[] {4, 4, 5, 6, 6}
+        new int[] {5, 4, 4, 6},
+        new int[] {4, 5, 5, 5, 6}
     };
-    private int roomNum, waveNum;
+    [SerializeField] private int roomNum, waveNum;
     private AudioSource AS;
-    private bool isSpawning;
+    [SerializeField] private bool isSpawning;
+
+    [SerializeField] private float zeroTimer;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        zeroTimer = -1;
         roomNum = 0; waveNum = 0;
         AS = GetComponent<AudioSource>();
         isSpawning = false;
+        SaveData.W3EnemyNum=0;
+    }
+    void Update(){
+        if(zeroTimer>=0 && SaveData.W3EnemyNum <= 0){
+            SaveData.W3EnemyNum=0;
+            zeroTimer+=Time.deltaTime;
+            if(zeroTimer>11 && !isSpawning){
+                StartCoroutine(SpawningCor());
+                zeroTimer = 0.001f;
+            }
+        }
     }
 
     public void lockDown (int room) {
+        zeroTimer = 0.001f;
+        if(SaveData.RoomsFinished[room]){
+            return;
+        }
         roomNum = room; waveNum = 0;
         lines.SetActive(false);
         doors.SetActive(true);
@@ -57,13 +75,17 @@ public class GM3Script : MonoBehaviour
     }
 
     private void roomCleared () {
+        zeroTimer = -1;
+        SaveData.RoomsFinished[roomNum] = true;
         lines.SetActive(true);
         doors.SetActive(false);
         StartCoroutine(FadeOut(AS, 2));
     }
     public void ReportDeath () {
         SaveData.W3EnemyNum--;
-        if (SaveData.W3EnemyNum == 0) {
+        Debug.Log("Sus: " + SaveData.W3EnemyNum);
+        if (SaveData.W3EnemyNum <= 0) {
+            SaveData.W3EnemyNum = 0;
             if ((roomNum == 1 && waveNum >= enemyComp1.Length) 
                 || (roomNum == 2 && waveNum >= enemyComp2.Length)
                 || (roomNum == 3 && waveNum >= enemyComp3.Length)
@@ -91,10 +113,15 @@ public class GM3Script : MonoBehaviour
             enemyComp = enemyComp3;
         }
         yield return new WaitForSeconds(4);
-        Spawn(enemyComp[wNum][0]);
         for (int i = 1; i < enemyComp[wNum].Length; i++) {
             yield return new WaitForSeconds(3);
+            if(i==1) Spawn(enemyComp[wNum][0]);
             Spawn(enemyComp[wNum][i]);
+            if(SaveData.W3EnemyNum>5){
+                waveNum--;
+                yield break;
+                isSpawning = false;
+            }
         }
         isSpawning = false;
     }
