@@ -67,14 +67,14 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
             maxHealth = 320;
             moveSpeed = 9.5f;
             turnSpeed = 90;
-            specialCD = 8;
+            specialCD = 9;
             minDistance = 2;
             maxDistance = 12;
         } else {
             maxHealth = 300;
             moveSpeed = 8.5f;
             turnSpeed = 70;
-            specialCD = 7;
+            specialCD = 8;
             specialCD2 = 12;
             minDistance = 7;
             maxDistance = 18;
@@ -301,6 +301,7 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
             }
         }
         Destroy(gameObject);
+        transform.parent.gameObject.GetComponent<GM3Script>().ReportDeath();
         if(Random.value>0.85) Instantiate (medkitPrefab, rb.position, Quaternion.identity);
     }
 

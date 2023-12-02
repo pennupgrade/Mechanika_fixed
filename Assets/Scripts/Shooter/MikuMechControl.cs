@@ -224,7 +224,7 @@ public class MikuMechControl : MonoBehaviour
         if(energy > 90) {count = 3;}
         else if (energy > 60) {count = 2;}
         else count = 1;
-        EnergyUpdate(-100);
+        EnergyUpdate(-energy+10);
         for(int i = 0; i<count; i++){
             GameObject bullet = Instantiate (MeteorPrefab, transform.position+0.15f*Vector3.up, Quaternion.identity);
             bullet.GetComponent<MeteorMissileScript>().SetValues (w5DMG-20+20*count, 4, 3, 10, 5, 95, gameObject);

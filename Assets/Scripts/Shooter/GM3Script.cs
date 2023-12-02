@@ -26,7 +26,7 @@ public class GM3Script : MonoBehaviour
         new int[] {2, 2, 3, 5, 5, 5},
         new int[] {5, 5, 5, 5, 6, 6},
         new int[] {5, 5, 4, 4, 6, 6},
-        new int[] {4, 4, 5, 5, 5, 6, 6, 6}
+        new int[] {4, 4, 5, 5, 5, 6, 6}
     };
     private int roomNum, waveNum;
     private AudioSource AS;
@@ -97,13 +97,17 @@ public class GM3Script : MonoBehaviour
         
         GameObject newEnemy;
         if (type == 0) {
-
+            GameObject npc = Instantiate (DefaultEnemy, spawnPos, Quaternion.identity);
+            npc.GetComponent<DefaultEnemy3AI>().SetState(0);
         } else if (type == 1) {
-
+            GameObject npc = Instantiate (DefaultEnemy, spawnPos, Quaternion.identity);
+            npc.GetComponent<DefaultEnemy3AI>().SetState(1);
         } else if (type == 2) {
-            
+            GameObject npc = Instantiate (DefaultEnemy, spawnPos, Quaternion.identity);
+            npc.GetComponent<DefaultEnemy3AI>().SetState(2);
         } else if (type == 3) {
-            
+            GameObject npc = Instantiate (DefaultEnemy, spawnPos, Quaternion.identity);
+            npc.GetComponent<DefaultEnemy3AI>().SetState(3);
         } else if (type == 4) {
             
         } else if (type == 5) {
