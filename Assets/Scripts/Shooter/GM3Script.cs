@@ -11,7 +11,7 @@ public class GM3Script : MonoBehaviour
     [SerializeField] private GameObject lines;
     [SerializeField] private GameObject doors;
     private int[][] enemyComp1 = {
-        new int[] {6},
+        new int[] {0, 0},
         new int[] {0, 1},
         new int[] {1, 1},
         new int[] {0, 1, 1},
