@@ -11,6 +11,7 @@ public class MagicBullet : MonoBehaviour, IMissile
     private float spd, duration, acc, max, homingStr, Cturn, turnTimer;
     private Rigidbody2D rb;
     private Vector3 Target, TargetDirection;
+    private bool upgraded;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,12 +32,12 @@ public class MagicBullet : MonoBehaviour, IMissile
             if(targetNum>1){
                 duration = 3;
                 targetNum--;
-                Target = player.transform.position+6*(Vector3)UnityEngine.Random.insideUnitCircle;
+                Target = player.transform.position+7*(Vector3)UnityEngine.Random.insideUnitCircle;
             } else if (targetNum==1){
                 duration = 5;
                 max=max+2;
                 targetNum--;
-                homingStr = 150;
+                homingStr += 40;
             } else {
                 Destruction();
             }
@@ -108,6 +109,7 @@ public class MagicBullet : MonoBehaviour, IMissile
         damage = dmg;
         duration = timer;
         homingStr = homingStrength;
+        upgraded = stun;
         Target = player.transform.position+8*(Vector3)UnityEngine.Random.insideUnitCircle;
     }
 

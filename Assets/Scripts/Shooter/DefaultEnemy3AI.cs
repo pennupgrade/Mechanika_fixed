@@ -193,7 +193,7 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
         if (enemyType == 1){
             GameObject missile = Instantiate (explodeRocketPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 16*(Random.value-0.5f)));
             missile.GetComponent<IMissile>().SetSpeed(6,5,10);
-            missile.GetComponent<IMissile>().SetValues (240, 3, 70, true, Player);
+            missile.GetComponent<IMissile>().SetValues (200, 3, 70, true, Player);
             Vector3 t = Player.transform.position + 4*(Vector3)Random.insideUnitCircle;
             missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(t, 50);
         }
@@ -212,7 +212,7 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
         if (enemyType == 3){
             GameObject missile = Instantiate (mageBulletPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 8*(Random.value-0.5f)));
             missile.GetComponent<IMissile>().SetSpeed(6,0.5f,10);
-            missile.GetComponent<IMissile>().SetValues (200, 5, 110, true, Player);
+            missile.GetComponent<IMissile>().SetValues (120, 5, 110, false, Player);
         }
         
     }
@@ -288,7 +288,7 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
         Hbar.SetHealth(health, maxHealth);
     }
     public void MeleeDamage (int dmg, bool stun){
-        dmg = dmg/2;
+        dmg = (int)(dmg/1.5f);
         if (meleeTimer>0.001) return;
         health-=dmg/2; if (health<1) Destruction();
         meleeTimer = 0.5f;
@@ -320,15 +320,16 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
     }
 
     private void Destruction(){
+        if(isDead) return;
         if(explosionPrefab!=null){
             GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
             Destroy(expl, 2);
         }
-        if (Vector3.Distance(Player.transform.position,transform.position)<2f) {
+        if (Vector3.Distance(Player.transform.position,transform.position)<1.6f) {
             if (enemyType==2) {
                 Player.GetComponent<MikuMechControl>().MeleeDamage(400, false);
             } else {
-                Player.GetComponent<MikuMechControl>().MeleeDamage(200, false);
+                Player.GetComponent<MikuMechControl>().MeleeDamage(140, false);
             }
         }
         Destroy(gameObject);

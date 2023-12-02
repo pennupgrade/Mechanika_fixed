@@ -148,6 +148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionPrefab: {fileID: 7737942028605508573, guid: 3ba46da2c5099fa4ca1f860cb92e2026, type: 3}
+  electricPrefab: {fileID: 2148934527464975955, guid: cea8c46aa3968814b98e20d9c0a1574f, type: 3}
 --- !u!1 &7475810415510821233
 GameObject:
   m_ObjectHideFlags: 0

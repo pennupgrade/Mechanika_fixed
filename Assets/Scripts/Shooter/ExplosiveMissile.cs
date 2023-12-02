@@ -5,11 +5,12 @@ using UnityEngine;
 public class ExplosiveMissile : MonoBehaviour, IMissile
 {
     private GameObject player;
-    public GameObject explosionPrefab;
-    private int damage, damage2, frameTimer;
+    public GameObject explosionPrefab, electricPrefab;
+    private int damage, frameTimer;
     private float spd, duration, acc, max, homingStr, homingAccel, Cturn, turnTimer;
     private Rigidbody2D rb;
     private Vector3 Target, TargetDirection;
+    private bool electric;
     // Start is called before the first frame update
     void Start()
     {
@@ -60,13 +61,21 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
     }
 
     private void Destruction(){
-        if(explosionPrefab!=null){
-            GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
-            Destroy(expl, 2);
-        }
-        var d = Vector3.Distance(player.transform.position,transform.position);
-        if (d<3) {
-            player.GetComponent<MikuMechControl>().MeleeDamage(50+(int)((3-d)*damage/3), false);
+        if (player!=null){
+            if (electric){
+                GameObject elect = Instantiate(electricPrefab, transform.position, Quaternion.identity);
+                elect.GetComponent<ElectricScript>().SetPlayer(player, damage);
+                Destroy(elect, 8+Random.value);
+            } else {
+                if(explosionPrefab!=null){
+                    GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
+                    Destroy(expl, 2);
+                }
+                var d = Vector3.Distance(player.transform.position,transform.position);
+                if (d<3) {
+                    player.GetComponent<MikuMechControl>().MeleeDamage(50+(int)((3-d)*damage/3), false);
+                }
+            }
         }
         
         Destroy(transform.GetChild(0).gameObject, 2);
@@ -83,6 +92,9 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
     public void SetTargetAndHomingAccel (Vector3 target, float hm) {
         Target = target;
         homingAccel = hm;
+    }
+    public void SetElectric(){
+        electric = true;
     }
     public void SetValues (int dmg, float timer, float homingStrength, bool stun, GameObject player){
         this.player = player;

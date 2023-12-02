@@ -11,33 +11,33 @@ public class GM3Script : MonoBehaviour
     [SerializeField] private GameObject lines;
     [SerializeField] private GameObject doors;
     private int[][] enemyComp1 = {
-        new int[] {0, 0},
+        new int[] {6},
         new int[] {0, 1},
         new int[] {1, 1},
         new int[] {0, 1, 1},
         new int[] {1, 3},
-        new int[] {0, 3, 3},
-        new int[] {0, 1, 1, 3}
+        new int[] {0, 3, 3}
     };
     private int[][] enemyComp2 = {
-        new int[] {0, 1, 3, 3},
-        new int[] {0, 2, 2, 0},
-        new int[] {0, 1, 1, 2, 2},
-        new int[] {0, 2, 2, 2, 3},
-        new int[] {1, 2, 2, 5},
-        new int[] {2, 1, 4, 4}
+        new int[] {0, 1, 1, 3},
+        new int[] {2, 2, 0},
+        new int[] {1, 1, 2, 2},
+        new int[] {2, 2, 2, 3},
+        new int[] {5},
+        new int[] {5, 2, 2},
+        new int[] {1, 4}
     };
     private int[][] enemyComp3 = {
-        new int[] {2, 2, 2, 4, 4, 6},
-        new int[] {2, 2, 3, 5, 5, 5},
-        new int[] {5, 5, 5, 5, 6, 6},
-        new int[] {5, 5, 4, 4, 6, 6},
-        new int[] {4, 4, 5, 5, 5, 6, 6}
+        new int[] {5, 4},
+        new int[] {5, 5, 5},
+        new int[] {6, 6},
+        new int[] {4, 6, 6},
+        new int[] {5, 5, 4, 6},
+        new int[] {4, 4, 5, 6, 6}
     };
     private int roomNum, waveNum;
     private AudioSource AS;
     private bool isSpawning;
-    private int stored;
 
 
     // Start is called before the first frame update
@@ -46,7 +46,6 @@ public class GM3Script : MonoBehaviour
         roomNum = 0; waveNum = 0;
         AS = GetComponent<AudioSource>();
         isSpawning = false;
-        stored = 0;
     }
 
     public void lockDown (int room) {
@@ -75,8 +74,6 @@ public class GM3Script : MonoBehaviour
             } else {
                 if(!isSpawning){
                     StartCoroutine(SpawningCor());
-                } else {
-                    stored++;
                 }
             }
         }
@@ -100,10 +97,6 @@ public class GM3Script : MonoBehaviour
             Spawn(enemyComp[wNum][i]);
         }
         isSpawning = false;
-        if(stored>0){
-            stored--;
-            StartCoroutine(SpawningCor());
-        }
     }
 
     private void Spawn (int type) {
@@ -130,17 +123,14 @@ public class GM3Script : MonoBehaviour
             newEnemy = Instantiate (DefaultEnemy, spawnPos, Quaternion.identity);
             newEnemy.GetComponent<DefaultEnemy3AI>().SetState(3);
         } else if (type == 4) {
-            //
-            newEnemy = Instantiate (DefaultEnemy, spawnPos, Quaternion.identity);
-            newEnemy.GetComponent<DefaultEnemy3AI>().SetState(3);
+            newEnemy = Instantiate (UpgradedEnemy, spawnPos, Quaternion.identity);
+            newEnemy.GetComponent<UpgradedEnemy3AI>().SetState(1);
         } else if (type == 5) {
-            //
-            newEnemy = Instantiate (DefaultEnemy, spawnPos, Quaternion.identity);
-            newEnemy.GetComponent<DefaultEnemy3AI>().SetState(3);
+            newEnemy = Instantiate (UpgradedEnemy, spawnPos, Quaternion.identity);
+            newEnemy.GetComponent<UpgradedEnemy3AI>().SetState(2);
         } else {
-            //
-            newEnemy = Instantiate (DefaultEnemy, spawnPos, Quaternion.identity);
-            newEnemy.GetComponent<DefaultEnemy3AI>().SetState(3);
+            newEnemy = Instantiate (UpgradedEnemy, spawnPos, Quaternion.identity);
+            newEnemy.GetComponent<UpgradedEnemy3AI>().SetState(3);
         }
         GameObject ptcl = Instantiate (SpawnParticles, spawnPos, Quaternion.Euler(new Vector3(0, 180, 0)));
         Destroy(ptcl,5);
