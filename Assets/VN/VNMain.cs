@@ -53,6 +53,9 @@ public partial class VNMain : MonoBehaviour
     public static void Deactivate()
     { currCallback?.Invoke(); currCallback = null; ins.VNFolder.SetActive(false); }
 
+    public static void SetVNVisible(bool visible)
+        => ins.VNFolder.SetActive(visible);
+
 }
 
 public partial class VNMain : MonoBehaviour

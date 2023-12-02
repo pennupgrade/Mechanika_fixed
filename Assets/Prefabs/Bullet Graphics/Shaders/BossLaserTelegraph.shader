@@ -94,7 +94,7 @@ Shader "Unlit/Bullet/BossLaserTelegraph"
                 float3 edgeCol = float3(0., 0.7, 0.9);
                 float3 insideCol = float3(1., 1., 1.);
 
-                float laserHeight = .1;
+                float laserHeight = -.1 + (.07 -.1) * smoothstep(0., 0.5, t);
                 float laserStepWidth = .03;
                 float laserEndStepCount = 3.;
 

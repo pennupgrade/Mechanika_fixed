@@ -1753,7 +1753,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LaserMaterial: {fileID: 2100000, guid: 13deea1fb70f5d9488ab5e90a0832ba7, type: 2}
-  LaserTelegraphMaterial: {fileID: 0}
+  LaserTelegraphMaterial: {fileID: 2100000, guid: 67d1f1eb489d97a4d8a14f44f955c0fc, type: 2}
   LaserParticleSystem: {fileID: 2448850102971734894, guid: da07eb37967334b43bd4cf35cf148461, type: 3}
 --- !u!1 &626516243
 GameObject:
@@ -53702,6 +53702,10 @@ PrefabInstance:
     - target: {fileID: 4681247693350026351, guid: 42f274c806d84ec43b290efa0ecb4b01, type: 3}
       propertyPath: m_Name
       value: FOL_VN
+      objectReference: {fileID: 0}
+    - target: {fileID: 4681247694067122470, guid: 42f274c806d84ec43b290efa0ecb4b01, type: 3}
+      propertyPath: TextQuickSpeed
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 4681247694067122470, guid: 42f274c806d84ec43b290efa0ecb4b01, type: 3}
       propertyPath: MikuCharisExchange
