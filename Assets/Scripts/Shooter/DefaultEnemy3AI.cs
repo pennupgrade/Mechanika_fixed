@@ -20,9 +20,9 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
     Seeker seeker;
     private int currentWaypoint;
     private float bulletCDTimer, specialCD, specialCDTimer, specialCD2, specialCD2Timer;
-    private float Cturn, meleeTimer, stunTimer, aimTimer, bounceTimer, wayPointTimer, dashTimer, dashCDTimer;
-    private bool stunned, bounce, dashing;
-    private Vector2 TargetDir, MoveDir, bounceVector, dashVector;
+    private float Cturn, meleeTimer, stunTimer, aimTimer, bounceTimer, wayPointTimer, dashTimer, dashCDTimer, freezeTimer;
+    private bool stunned, bounce, dashing, frozen;
+    private Vector2 TargetDir, MoveDir, bounceVector, dashVector, spawnPos;
     private Rigidbody2D rb;
     public Transform fp;
     private GameObject Player;
@@ -32,17 +32,18 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
     // Start is called before the first frame update
     void Start()
     {
+        spawnPos = (Vector2)transform.position;
         rb = GetComponent<Rigidbody2D>();
         seeker = GetComponent<Seeker>(); MoveDir=Vector2.zero;
         Player = GameObject.FindWithTag("Player");
         state = 1; frameTimer = 1;
         bulletDMG=80;
-        bulletCD=1.2f; bulletSpeed = 12;
-        stunned=false; dashing = false;
-        dashTimer = 0; dashCDTimer = 0;
+        bulletCD=1.2f; bulletSpeed = 10;
+        stunned=false; dashing = false; frozen = false;
+        dashTimer = 0; dashCDTimer = 0; freezeTimer = 0;
         bulletCDTimer = 0; meleeTimer = 0; stunTimer = 0; 
         aimTimer = 0; wayPointTimer = 0;
-        specialCDTimer = 5; specialCD2Timer = 5;
+        specialCDTimer = 5; specialCD2Timer = 10;
         bounceTimer = 0; bounce = false; bounceVector = Vector2.zero;
         nextWaypointDistance = 1;
     }
@@ -50,33 +51,33 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
         enemyType = state;
         GameObject trail;
         if(enemyType == 0) {
-            maxHealth = 300;
-            moveSpeed = 7;
+            maxHealth = 220;
+            moveSpeed = 6;
             turnSpeed = 60;
             specialCD = 10;
             minDistance = 2;
             maxDistance = 12;
         } else if (enemyType == 1) {
-            maxHealth = 440;
-            moveSpeed = 7;
+            maxHealth = 360;
+            moveSpeed = 6;
             turnSpeed = 60;
-            specialCD = 6;
-            minDistance = 6;
+            specialCD = 5;
+            minDistance = 5;
             maxDistance = 15;
         } else if (enemyType == 2) {
-            maxHealth = 320;
-            moveSpeed = 9.5f;
+            maxHealth = 240;
+            moveSpeed = 9;
             turnSpeed = 90;
-            specialCD = 9;
+            specialCD = 10;
             minDistance = 2;
             maxDistance = 12;
         } else {
             maxHealth = 300;
-            moveSpeed = 8.5f;
+            moveSpeed = 8;
             turnSpeed = 70;
-            specialCD = 8;
-            specialCD2 = 12;
-            minDistance = 7;
+            specialCD = 20;
+            specialCD2 = 14;
+            minDistance = 6;
             maxDistance = 18;
         }
         trail = Instantiate (trails[enemyType], transform.position, Quaternion.identity);
@@ -84,7 +85,7 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
         mspeed = moveSpeed;
         health = maxHealth;
         Hbar.SetHealth(health, maxHealth);
-        UpdatePath();
+        StartCoroutine(StartFinding());
     }
     // Update is called once per frame
     void Update()
@@ -96,12 +97,12 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
         }
         var s = Vector3.Dot(fp.up, TargetDir);
         if(state==2||(state==1 && aimTimer>0.01)){
+            FireSpecial2();
             if(state==2) {
                 aimTimer=5;
                 if(!stunned && s>0.85f){
                     FireBullet();
                     FireSpecial();
-                    FireSpecial2();
                 }
             }
             if(frameTimer==1){
@@ -123,6 +124,7 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
 
         if(bounce&&bounceTimer<0.01f){bounceVector=Vector2.zero; bounce = false;}
         if(dashing&&dashTimer<0.01f){dashVector=Vector2.zero; dashing = false;}
+        if(frozen&&freezeTimer<0.01f){frozen = false;}
 
         //pathfinding
         if(path!=null){
@@ -145,7 +147,7 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
         specialCDTimer=TimerF(specialCDTimer); specialCD2Timer=TimerF(specialCD2Timer);
         dashTimer=TimerF(dashTimer); dashCDTimer=TimerF(dashCDTimer);
         aimTimer=TimerF(aimTimer);
-        bounceTimer=TimerF(bounceTimer);
+        bounceTimer=TimerF(bounceTimer); freezeTimer=TimerF(freezeTimer);
     }
 
     void FixedUpdate()
@@ -156,7 +158,8 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
             if (stunTimer<0.001f) {moveSpeed = mspeed; stunned = false;}
         }
         if(!bounce && !dashing){
-            rb.MovePosition(rb.position + Time.fixedDeltaTime*moveSpeed*MoveDir);
+            if(!frozen)
+                rb.MovePosition(rb.position + Time.fixedDeltaTime*moveSpeed*MoveDir);
         }else if (dashing){
             if (enemyType == 2 && dashTimer <0.4f){
                 rb.MovePosition(rb.position + Time.fixedDeltaTime*20*dashVector);
@@ -182,29 +185,43 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
         if(specialCDTimer>0.001) return;
         specialCDTimer = specialCD+1+4*(Random.value-0.5f);
         if (enemyType == 0){
+            frozen = true; freezeTimer = 0.3f;
             GameObject missile = Instantiate (defaultRocketPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 8*(Random.value-0.5f)));
             missile.GetComponent<IMissile>().SetSpeed(5,20,24);
-            missile.GetComponent<IMissile>().SetValues (150, 0.8f, 90, true, Player);
+            missile.GetComponent<IMissile>().SetValues (120, 0.8f, 90, true, Player);
         }
         if (enemyType == 1){
-            GameObject missile = Instantiate (explodeRocketPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 8*(Random.value-0.5f)));
-            missile.GetComponent<IMissile>().SetSpeed(8,16,16);
-            missile.GetComponent<IMissile>().SetValues (250, 1, 70, true, Player);
-            Vector3 t = Player.transform.position + 5*(Vector3)Random.insideUnitCircle;
+            GameObject missile = Instantiate (explodeRocketPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 16*(Random.value-0.5f)));
+            missile.GetComponent<IMissile>().SetSpeed(6,5,10);
+            missile.GetComponent<IMissile>().SetValues (240, 3, 70, true, Player);
+            Vector3 t = Player.transform.position + 4*(Vector3)Random.insideUnitCircle;
             missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(t, 50);
         }
         if (enemyType == 2){
-            
+            for(int i = 0; i<2; i++){
+            GameObject missile = Instantiate (hybridMissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, -60-60*i));
+            missile.GetComponent<IMissile>().SetSpeed(5,50,26);
+            missile.GetComponent<IMissile>().SetValues (180, 1, 90, true, Player);
+            missile.GetComponent<HybridMissile>().SetVector (fp.up);
+            GameObject missile2 = Instantiate (hybridMissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 60+60*i));
+            missile2.GetComponent<IMissile>().SetSpeed(5,50,26);
+            missile2.GetComponent<IMissile>().SetValues (180, 1, 90, true, Player);
+            missile2.GetComponent<HybridMissile>().SetVector (fp.up);
+            }
         }
         if (enemyType == 3){
-            
+            GameObject missile = Instantiate (mageBulletPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 8*(Random.value-0.5f)));
+            missile.GetComponent<IMissile>().SetSpeed(6,0.5f,11);
+            missile.GetComponent<IMissile>().SetValues (200, 5, 120, true, Player);
         }
         
     }
     private void FireSpecial2(){
         if(enemyType != 3 || specialCD2Timer>0.001) return;
         specialCD2Timer = specialCD2+4*(Random.value-0.5f);
-        
+        frozen = true; freezeTimer = 0.5f;
+        GameObject center = Instantiate (ringCenterPrefab, transform.position, Quaternion.identity);
+        center.GetComponent<BulletCenter>().initFields(10, Player);
     }
     private void Dash (){
         if(enemyType != 2 && enemyType != 3) return;
@@ -213,11 +230,11 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
         if(enemyType == 3 && Vector3.Distance(Player.transform.position, transform.position) > 8) return;
         dashing = true;
         if (enemyType == 2) {
-            dashTimer = 0.8f;
+            dashTimer = 1;
             dashCDTimer = 6;
         } else {
             dashTimer = 0.25f;
-            dashCDTimer = 4+Random.value;
+            dashCDTimer = 5+Random.value;
             Vector3 v;
             if(Random.value>0.5f) v = fp.forward; else v = -fp.forward;
             dashVector = (Vector2)Vector3.Cross((Vector3)(Player.transform.position-(Vector3)rb.position).normalized, v);
@@ -259,6 +276,10 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
             wayPointTimer=0;
         }
     }
+    private IEnumerator StartFinding(){
+        yield return new WaitForSeconds(0.5f);
+        UpdatePath();
+    }
 
     public void Damage (int dmg, bool stun){
         if(enemyType==2) dmg -= 10;
@@ -281,15 +302,20 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
         do{
         point = (Vector2)Player.transform.position + Random.insideUnitCircle*maxDistance;
         iter++;
-        }while(iter<16
+        }while(iter<17
         &&(Physics2D.Raycast(point, (Vector2)(Player.transform.position-(Vector3)point), Vector3.Distance(Player.transform.position,(Vector3)point), 1<<11)
         ||Vector3.Distance(Player.transform.position,(Vector3)point) < minDistance
         || Vector3.Dot((Player.transform.position-transform.position).normalized, ((Vector3)point-transform.position).normalized) > 0.8f));
-        if(iter>15) {
+        if(iter>16) {
             wayPointTimer = 5;
-            return (Vector2) Player.transform.position;
+            if (Vector3.Distance(Player.transform.position, transform.position)>10){
+                return (Vector2)Player.transform.position;
+            }
+            else {
+                return spawnPos;
+            }
         }
-        else return point;
+        else {return point;}
     }
 
     private void Destruction(){
@@ -297,11 +323,11 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
             GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
             Destroy(expl, 2);
         }
-        if (Vector3.Distance(Player.transform.position,transform.position)<2.5f) {
+        if (Vector3.Distance(Player.transform.position,transform.position)<2f) {
             if (enemyType==2) {
-                Player.GetComponent<MikuMechControl>().Damage(400, false);
+                Player.GetComponent<MikuMechControl>().MeleeDamage(400, false);
             } else {
-                Player.GetComponent<MikuMechControl>().Damage(200, false);
+                Player.GetComponent<MikuMechControl>().MeleeDamage(200, false);
             }
         }
         Destroy(gameObject);

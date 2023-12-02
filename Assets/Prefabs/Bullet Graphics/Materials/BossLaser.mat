@@ -67,8 +67,8 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _LaserScale: 3
-    - _LaserXScale: 55.94848
-    - _LastStartTime: 53.695427
+    - _LaserXScale: 10.406578
+    - _LastStartTime: 156.0282
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1

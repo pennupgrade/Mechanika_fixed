@@ -339,7 +339,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
         }
 
         shieldRegenTimer = 16;
-        meleeTimer = 0.5f;
+        meleeTimer = 0.3f;
         if (stun){stunTimer = 0.5f; stunned = true;}
     }
 

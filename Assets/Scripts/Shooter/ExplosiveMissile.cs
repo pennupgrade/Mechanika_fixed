@@ -7,7 +7,7 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
     private GameObject player;
     public GameObject explosionPrefab;
     private int damage, damage2, frameTimer;
-    private float spd, duration, acc, max, homingStr, homingAccel, Cturn;
+    private float spd, duration, acc, max, homingStr, homingAccel, Cturn, turnTimer;
     private Rigidbody2D rb;
     private Vector3 Target, TargetDirection;
     // Start is called before the first frame update
@@ -15,6 +15,7 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
     {
         rb = GetComponent<Rigidbody2D>();
         frameTimer = 3;
+        turnTimer=0;
     }
 
     // Update is called once per frame
@@ -27,6 +28,7 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
         if(acc>180)acc=180;
         
         if (duration<0) Destruction();
+        turnTimer=TimerF(turnTimer);
     }
 
     void FixedUpdate()
@@ -38,10 +40,11 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
             frameTimer = 3;
             TargetDirection = (Target-(Vector3)rb.position).normalized;
             //if (homingStr != 0 && Vector2.Distance(player.MousePos,rb.position)<2) homingStr = 0;
-            if(homingStr!=0){
+            if(homingStr!=0 && turnTimer<0.001f){
                 if (Vector3.Dot(transform.right, TargetDirection)>0){
                     Cturn = -homingStr;
                 } else Cturn = homingStr;
+                turnTimer = 0.24f;
             }
         }
         if(Vector3.Distance(Target,transform.position)<1) Destruction();
@@ -50,8 +53,7 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
     void OnCollisionEnter2D(Collision2D c){
         if (c.gameObject.tag=="Environment"){
             Destruction();
-        }else if (c.gameObject.TryGetComponent<MikuMechControl>(out MikuMechControl miku)){
-            miku.Damage(damage, false);
+        }else if (c.gameObject.tag=="Player"){
             Destruction();
         }
         
@@ -64,7 +66,7 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
         }
         var d = Vector3.Distance(player.transform.position,transform.position);
         if (d<3) {
-            player.GetComponent<MikuMechControl>().Damage(50+(int)((3-d)*damage/3), false);
+            player.GetComponent<MikuMechControl>().MeleeDamage(50+(int)((3-d)*damage/3), false);
         }
         
         Destroy(transform.GetChild(0).gameObject, 2);
@@ -87,5 +89,13 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
         damage = dmg;
         duration = timer;
         homingStr = homingStrength;
+    }
+
+    private float TimerF( float val){
+        if(val>=0){
+            val-=Time.deltaTime;
+            if (val<0) val = 0;
+        }
+        return val;
     }
 }
