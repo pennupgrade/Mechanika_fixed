@@ -104,6 +104,8 @@ public struct BulletKinematicPolar : ITBullet, IBulletKinematic
     public float Radius { get; private set; }
     public float2 Direction => PolarToCartesian(polarCoords.x);
 
+    public float2 Origin => origin.p;
+
     float lifeTime;
 
     public bool Update(float dt)
@@ -159,15 +161,16 @@ public struct BulletPolarFunction : ITBullet //r(theta, time)
     }
 
 }
-/*
-public struct BulletKinematicBody : IBulletKinematic
+
+public struct BulletKinematicBody : ITBullet
 {
 
     IKinematicBody body;
     Timer timer;
+    float radius;
 
-    public BulletKinematicBody(IKinematicBody body, float lifeTime)
-    { this.body = body; timer = new(lifeTime); }
+    public BulletKinematicBody(IKinematicBody body, float lifeTime, float bulletRadius)
+    { this.body = body; timer = new(lifeTime); radius = bulletRadius; }
 
     public bool Update(float dt)
     {
@@ -176,6 +179,8 @@ public struct BulletKinematicBody : IBulletKinematic
     }
 
     public float2 Position { get => body.Position; set => body.Position = value; }
-    public float2 
 
-}*/
+    public float2 Direction => normalize(body.Velocity);
+    public float Radius => radius;
+
+}

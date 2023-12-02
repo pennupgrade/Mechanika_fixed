@@ -20,7 +20,7 @@ Shader "Unlit/BulletShaders/CirnoBullet"
             #pragma multi_compile_instancing
 
             #include "UnityCG.cginc"
-            #include "../Common.cginc"
+            #include "../../../../VN/Shaders/Common.hlsl"
             #include "BulletProps.hlsl"
 
             /*StructuredBuffer<float2> Positions;

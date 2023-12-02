@@ -20,7 +20,7 @@ Shader "Unlit/BulletShaders/PelletBullet"
             #pragma multi_compile_instancing
 
             #include "UnityCG.cginc"
-            #include "../Common.cginc"
+            #include "../../../../VN/Shaders/Common.hlsl"
 
             StructuredBuffer<float2> Positions;
             StructuredBuffer<float> Radiuses;

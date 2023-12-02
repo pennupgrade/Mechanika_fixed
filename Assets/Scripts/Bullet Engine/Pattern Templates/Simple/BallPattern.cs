@@ -7,7 +7,7 @@ using static Utilities.MathUtils;
 using Utilities;
 using System.Linq;
 
-[CreateAssetMenu(menuName = "ScriptableObject/Patterns/Ball", fileName = "BallPattern")]
+[CreateAssetMenu(menuName = "ScriptableObject/Patterns/Simple/Ball", fileName = "BallPattern")]
 public class BallPattern : APattern
 {
 
@@ -25,7 +25,7 @@ public class BallPattern : APattern
     public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction)
     {
         List<(string, BulletMaterial?)> groups = new();
-        foreach (Color c in Color) groups.Add((engine.UniqueGroup, new BulletMaterial(Shader, c)));
+        foreach (Color c in Colors) groups.Add((engine.UniqueGroup, new BulletMaterial(Shader, c)));
         GroupParameter group = new(engine, groups);
         float2 startPos = bossTransform.position.xy() + BeginOffset; float2 toPlayer = startPos - playerTransform.position.xy();
         startPos = playerTransform.position.xy() + math.normalize(toPlayer) * math.max(math.length(toPlayer), BallRadius * 3.05f+BulletRadius);

@@ -6,7 +6,7 @@ using static BulletCommandGradualAPI;
 using static Utilities.MathUtils;
 using Utilities;
 
-[CreateAssetMenu(menuName = "ScriptableObject/Patterns/Circle", fileName = "CirclePattern")]
+[CreateAssetMenu(menuName = "ScriptableObject/Patterns/Simple/Circle", fileName = "CirclePattern")]
 public class CirclePattern : APattern
 {
 
@@ -22,7 +22,7 @@ public class CirclePattern : APattern
     public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction)
     {
         List<(string, BulletMaterial?)> groups = new();
-        foreach (Color c in Color) groups.Add((engine.UniqueGroup, new BulletMaterial(Shader, c)));
+        foreach (Color c in Colors) groups.Add((engine.UniqueGroup, new BulletMaterial(Shader, c)));
         GroupParameter group = new(engine, groups);
         StartCommand(engine.CreateBulletCircleGradual(group, new PositionParameter(bossTransform), CircleRadius, Density, FormingTime, (polar, time) => new BulletKinematicPolar(0f, 0f, new(), AngularVelocity, polar + new float2(AngularVelocity * time, 0f), BulletRadius, Duration), TrigSize.xyz(UnityEngine.Random.Range(0f, 2f * math.PI))), () =>
         {
