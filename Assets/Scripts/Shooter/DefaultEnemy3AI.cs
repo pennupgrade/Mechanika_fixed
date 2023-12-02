@@ -67,7 +67,7 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
             maxHealth = 320;
             moveSpeed = 9.5f;
             turnSpeed = 90;
-            specialCD = 9;
+            specialCD = 10;
             minDistance = 2;
             maxDistance = 12;
         } else {
@@ -190,11 +190,20 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
             GameObject missile = Instantiate (explodeRocketPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 8*(Random.value-0.5f)));
             missile.GetComponent<IMissile>().SetSpeed(8,16,16);
             missile.GetComponent<IMissile>().SetValues (250, 1, 70, true, Player);
-            Vector3 t = Player.transform.position + 5*(Vector3)Random.insideUnitCircle;
+            Vector3 t = Player.transform.position + 4*(Vector3)Random.insideUnitCircle;
             missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(t, 50);
         }
         if (enemyType == 2){
-            
+            for(int i = 0; i<3; i++){
+            GameObject missile = Instantiate (hybridMissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, -60-60*i));
+            missile.GetComponent<IMissile>().SetSpeed(5,50,26);
+            missile.GetComponent<IMissile>().SetValues (160, 1, 90, true, Player);
+            missile.GetComponent<HybridMissile>().SetVector (fp.up);
+            GameObject missile2 = Instantiate (hybridMissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 60+60*i));
+            missile2.GetComponent<IMissile>().SetSpeed(5,50,26);
+            missile2.GetComponent<IMissile>().SetValues (160, 1, 90, true, Player);
+            missile2.GetComponent<HybridMissile>().SetVector (fp.up);
+            }
         }
         if (enemyType == 3){
             
