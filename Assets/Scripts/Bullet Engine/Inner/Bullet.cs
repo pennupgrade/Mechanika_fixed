@@ -94,7 +94,7 @@ public struct BulletKinematicPolar : ITBullet, IBulletKinematic
         
     }
 
-    KinematicBody origin;
+    KinematicBodyConstAcc origin;
     float2 polarCoords;
     float w;
 
@@ -159,13 +159,23 @@ public struct BulletPolarFunction : ITBullet //r(theta, time)
     }
 
 }
-
-public struct BulletKinematicElectrostatic //bad name - called electrostatic since it will be repulsed or attracted to a given point, if you've better name please rename
+/*
+public struct BulletKinematicBody : IBulletKinematic
 {
 
-}
+    IKinematicBody body;
+    Timer timer;
 
-/*public struct BulletFunction : IBullet
-{
+    public BulletKinematicBody(IKinematicBody body, float lifeTime)
+    { this.body = body; timer = new(lifeTime); }
+
+    public bool Update(float dt)
+    {
+        body.Update(dt);
+        return !timer.Check(dt);
+    }
+
+    public float2 Position { get => body.Position; set => body.Position = value; }
+    public float2 
 
 }*/

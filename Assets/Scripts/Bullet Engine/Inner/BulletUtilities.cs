@@ -1,6 +1,11 @@
 ﻿using System;
 using Unity.Mathematics;
 
+using static Unity.Mathematics.math;
+
+using Position = PositionParameter;
+using Group = BulletEngine.GroupAccessor;
+
 namespace BulletUtilities
 {
 
@@ -21,14 +26,14 @@ namespace BulletUtilities
 
     }
 
-    public struct KinematicBody
+    public struct KinematicBodyConstAcc
     {
 
         public float2 p;
         public float2 v;
         public float2 a;
 
-        public KinematicBody(float2 p = new(), float2 v = new(), float2 a = new())
+        public KinematicBodyConstAcc(float2 p = new(), float2 v = new(), float2 a = new())
         { this.p = p; this.v = v; this.a = a; }
 
         public void Update(float dt)
@@ -37,6 +42,75 @@ namespace BulletUtilities
             v += a * dt;
         }
 
+    }
+
+    public interface IKinematicBody
+    {
+        float2 Position { get; set; }
+        void Update(float dt);
+    }
+
+    public struct KinematicBodyPoint : IKinematicBody
+    {
+        
+        public float2 Position { get => pos; set => pos = value; }
+
+        public void Update(float dt)
+        {
+            float2 a = accMag * normalize(targetPoint.Pos - pos);
+
+            pos += vel * dt + 0.5f * dt * dt * a;
+            vel += dt * a;
+        }
+
+        float2 pos;
+        float2 vel;
+        float accMag;
+
+        Position targetPoint;
+
+        public KinematicBodyPoint(float2 initialPos, float2 initialVelocity, float accMag, Position targetPoint)
+        {
+            pos = initialPos;
+            vel = initialVelocity;
+            this.accMag = accMag;
+
+            this.targetPoint = targetPoint;
+        }
+
+    }
+    public struct KinematicBodyConstSpeed //but not constant velocity
+    {
+        
+    }
+    public struct KinematicBodyRecursive
+    {
+        public float2 Position => pos;
+
+        public void Update(float dt)
+        {
+            targetBody.Update(dt);
+
+            float2 a = accMag * normalize(targetBody.Position - pos);
+
+            pos += vel * dt + 0.5f * dt * dt * a;
+            vel += dt * a;
+        }
+
+        float2 pos;
+        float2 vel;
+        float accMag;
+
+        IKinematicBody targetBody;
+
+        public KinematicBodyRecursive(float2 initialPos, float2 initialVelocity, float accMag, IKinematicBody targetBody)
+        {
+            pos = initialPos;
+            vel = initialVelocity;
+            this.accMag = accMag;
+
+            this.targetBody = targetBody;
+        }
     }
 
     public struct Timer
