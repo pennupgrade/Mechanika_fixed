@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Utilities;
 
 public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
 {
@@ -433,9 +434,11 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
         throw new System.NotImplementedException();
     }
 
-    public bool CanBeHit => throw new System.NotImplementedException();
+    public bool CanBeHit => true;
 
-    public Unity.Mathematics.float2 Position => throw new System.NotImplementedException();
+    public Unity.Mathematics.float2 Position => transform.position.xy();
 
-    public float Radius => throw new System.NotImplementedException();
+    public float Radius => 0.8f; //TEMP
+
+    public Transform Transform => this.transform;
 }

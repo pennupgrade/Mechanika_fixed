@@ -84,7 +84,7 @@ Shader "Unlit/Bullet/BulletTextureGlow"
                 float emission = smoothstep(0.95, 0., r)*getGlow(r, _GlowStart, _GlowScale)*_GlowAmplitude;
                 emission *= (step(texCol.a, 0.) - 1.)*(1.-_GlowOverlap) + 1.;
 
-                return float4(texCol.rgb + emission*_GlowColor.rgb, max(texCol.a, emission));
+                return float4(texCol.rgb + emission*_GlowColor.rgb, max(texCol.a, pow(emission, 2.)));
             }
             ENDCG
         }

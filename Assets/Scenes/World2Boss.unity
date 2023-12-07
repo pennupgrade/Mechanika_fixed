@@ -53703,6 +53703,58 @@ PrefabInstance:
       propertyPath: m_Name
       value: FOL_VN
       objectReference: {fileID: 0}
+    - target: {fileID: 4681247694067122470, guid: 42f274c806d84ec43b290efa0ecb4b01, type: 3}
+      propertyPath: BossSpriteDictionary._serializedList.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4681247694067122470, guid: 42f274c806d84ec43b290efa0ecb4b01, type: 3}
+      propertyPath: BossSpriteDictionary._serializedList.Array.data[1].Key
+      value: venge
+      objectReference: {fileID: 0}
+    - target: {fileID: 4681247694067122470, guid: 42f274c806d84ec43b290efa0ecb4b01, type: 3}
+      propertyPath: BossSpriteDictionary._serializedList.Array.data[2].Key
+      value: charis
+      objectReference: {fileID: 0}
+    - target: {fileID: 4681247694067122470, guid: 42f274c806d84ec43b290efa0ecb4b01, type: 3}
+      propertyPath: BossSpriteDictionary._serializedList.Array.data[1].Value.SadCharacter
+      value: 
+      objectReference: {fileID: 21300000, guid: 6b4d4e25735f8af4885224cebb24c200, type: 3}
+    - target: {fileID: 4681247694067122470, guid: 42f274c806d84ec43b290efa0ecb4b01, type: 3}
+      propertyPath: BossSpriteDictionary._serializedList.Array.data[2].Value.SadCharacter
+      value: 
+      objectReference: {fileID: 21300000, guid: 5cd2fc3482004aa42a604880af0d2832, type: 3}
+    - target: {fileID: 4681247694067122470, guid: 42f274c806d84ec43b290efa0ecb4b01, type: 3}
+      propertyPath: BossSpriteDictionary._serializedList.Array.data[1].Value.EvilCharacter
+      value: 
+      objectReference: {fileID: 21300000, guid: 6b4d4e25735f8af4885224cebb24c200, type: 3}
+    - target: {fileID: 4681247694067122470, guid: 42f274c806d84ec43b290efa0ecb4b01, type: 3}
+      propertyPath: BossSpriteDictionary._serializedList.Array.data[2].Value.EvilCharacter
+      value: 
+      objectReference: {fileID: 21300000, guid: 5cd2fc3482004aa42a604880af0d2832, type: 3}
+    - target: {fileID: 4681247694067122470, guid: 42f274c806d84ec43b290efa0ecb4b01, type: 3}
+      propertyPath: BossSpriteDictionary._serializedList.Array.data[1].Value.HappyCharacter
+      value: 
+      objectReference: {fileID: 21300000, guid: 6b4d4e25735f8af4885224cebb24c200, type: 3}
+    - target: {fileID: 4681247694067122470, guid: 42f274c806d84ec43b290efa0ecb4b01, type: 3}
+      propertyPath: BossSpriteDictionary._serializedList.Array.data[2].Value.HappyCharacter
+      value: 
+      objectReference: {fileID: 21300000, guid: 5cd2fc3482004aa42a604880af0d2832, type: 3}
+    - target: {fileID: 4681247694067122470, guid: 42f274c806d84ec43b290efa0ecb4b01, type: 3}
+      propertyPath: BossSpriteDictionary._serializedList.Array.data[1].Value.ScaredCharacter
+      value: 
+      objectReference: {fileID: 21300000, guid: 6b4d4e25735f8af4885224cebb24c200, type: 3}
+    - target: {fileID: 4681247694067122470, guid: 42f274c806d84ec43b290efa0ecb4b01, type: 3}
+      propertyPath: BossSpriteDictionary._serializedList.Array.data[2].Value.ScaredCharacter
+      value: 
+      objectReference: {fileID: 21300000, guid: 5cd2fc3482004aa42a604880af0d2832, type: 3}
+    - target: {fileID: 4681247694067122470, guid: 42f274c806d84ec43b290efa0ecb4b01, type: 3}
+      propertyPath: BossSpriteDictionary._serializedList.Array.data[1].Value.CharacterMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: cc02d850c81559a48aa8f7cd7d95fa1d, type: 2}
+    - target: {fileID: 4681247694067122470, guid: 42f274c806d84ec43b290efa0ecb4b01, type: 3}
+      propertyPath: BossSpriteDictionary._serializedList.Array.data[2].Value.CharacterMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: de5329a64b4612641b6a2498da78d4b6, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42f274c806d84ec43b290efa0ecb4b01, type: 3}
 --- !u!1 &1839564873

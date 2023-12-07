@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CepheidBulletMaterial
-  m_Shader: {fileID: 4800000, guid: b1f887b7d2bf3f34d9253fc3b76dfc2d, type: 3}
+  m_Name: MikuGlowMaterial
+  m_Shader: {fileID: 4800000, guid: 5a83d4f62ca487e49b173a542004c558, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -65,15 +65,15 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _GlowAmplitude: 0.35
+    - _GlowAmplitude: 0.4
     - _GlowOverlap: 1
     - _GlowScale: 0.1
-    - _GlowStart: 0
+    - _GlowStart: 0.2
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Scale: 0.125
+    - _Scale: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -82,6 +82,7 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GlowColor: {r: 0.75, g: 0.9320988, b: 1, a: 1}
+    - _FinalGlowCut: {r: 0, g: 0.43, b: 0, a: 0}
+    - _GlowColor: {r: 0.09019607, g: 0.6369777, b: 1, a: 1}
     - _Tint: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

@@ -7,7 +7,7 @@ using static Utilities.MathUtils;
 using static Unity.Mathematics.math;
 using Unity.Mathematics;
 
-[CreateAssetMenu(menuName = "ScriptableObject/Patterns/Spike", fileName = "SpikePattern")]
+[CreateAssetMenu(menuName = "ScriptableObject/Patterns/Simple/Spike", fileName = "SpikePattern")]
 public class SpikePattern : APattern
 {
 
@@ -20,7 +20,7 @@ public class SpikePattern : APattern
     public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction)
     {
         List<(string, BulletMaterial?)> groups = new();
-        foreach (Color c in Color) groups.Add((engine.UniqueGroup, new BulletMaterial(Shader, c)));
+        foreach (Color c in Colors) groups.Add((engine.UniqueGroup, new BulletMaterial(Shader, c)));
         GroupParameter group = new(engine, groups);
         StartCommand(engine.CreateBulletSpikeBall(group, new PositionParameter(bossTransform.position.xy()), 16, SpikeRadiusRange, SpikeRadiusVariation, Density, FormingSpeed, (polar, time) => new BulletKinematicPolar(new(), 0f, 0f, AngularVelocity, polar + float2(time*AngularVelocity, 0f), BulletRadius, Duration), UnityEngine.Random.Range(0f, 2f * math.PI)), () =>
         {

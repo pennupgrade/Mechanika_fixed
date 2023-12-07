@@ -47,6 +47,8 @@ namespace BulletUtilities
     public interface IKinematicBody
     {
         float2 Position { get; set; }
+        float2 Velocity { get; }
+        float2 Acceleration { get; }
         void Update(float dt);
     }
 
@@ -54,10 +56,12 @@ namespace BulletUtilities
     {
         
         public float2 Position { get => pos; set => pos = value; }
+        public float2 Velocity => vel;
+        public float2 Acceleration => accMag * normalize(targetPoint.Pos - pos);
 
         public void Update(float dt)
         {
-            float2 a = accMag * normalize(targetPoint.Pos - pos);
+            float2 a = Acceleration;
 
             pos += vel * dt + 0.5f * dt * dt * a;
             vel += dt * a;

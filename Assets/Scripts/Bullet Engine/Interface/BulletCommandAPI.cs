@@ -24,6 +24,14 @@ public struct GroupParameter
     public GroupParameter(BulletEngine engine, (string, BulletMaterial?) group) : this(engine, new List<(string, BulletMaterial?)>() { group }) { }
     public GroupParameter(BulletEngine engine, string group) : this(engine, (group, null)) { }
     public GroupParameter(BulletEngine engine, List<(string, BulletMaterial?)> groups) { i = groups.Count; this.groups = StringsToGroups(engine, groups); }
+    public static GroupParameter CreateGroups(BulletEngine engine, Color[] colors, string shader)
+    {
+        List<(string, BulletMaterial?)> groups = new();
+        foreach(Color c in colors)
+            groups.Add((engine.UniqueGroup, new BulletMaterial(shader, c)));
+        
+        return new(engine, groups);
+    }
     public GroupParameter Merge(GroupParameter o) { foreach (var g in o.Groups) groups.Add(g); return this; }
 
     /// <summary>

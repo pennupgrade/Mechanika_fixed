@@ -137,7 +137,7 @@ Shader "Unlit/BulletShaders/OuterGlowBulletMenu" //will have cool stripes or som
             #pragma multi_compile_instancing
 
             #include "UnityCG.cginc"
-            #include "Assets/Graphics/Common.cginc"
+            #include "../../../../VN/Shaders/Common.hlsl"
 
             /*UNITY_INSTANCING_BUFFER_START(BulletProperties)
                 UNITY_DEFINE_INSTANCED_PROP(float4, Positions)
