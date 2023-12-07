@@ -9,6 +9,7 @@ public class MeteorMissileScript : MonoBehaviour
     private int damage, frameTimer;
     private float spd, duration, acc, max, homingStr, Cturn, turnTimer;
     private Rigidbody2D rb;
+    private bool destroyed;
     private Vector2 TargetDirection;
     // Start is called before the first frame update
     void Start()
@@ -58,6 +59,8 @@ public class MeteorMissileScript : MonoBehaviour
     }
 
     private void Destruction(){
+        if (destroyed) return;
+        destroyed = true;
         if(explosionPrefab!=null){
             GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
             Destroy(expl, 2);

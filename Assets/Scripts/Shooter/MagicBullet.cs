@@ -11,7 +11,7 @@ public class MagicBullet : MonoBehaviour, IMissile
     private float spd, duration, acc, max, homingStr, Cturn, turnTimer;
     private Rigidbody2D rb;
     private Vector3 Target, TargetDirection;
-    private bool upgraded;
+    private bool upgraded, destroyed;
     // Start is called before the first frame update
     void Start()
     {
@@ -87,6 +87,8 @@ public class MagicBullet : MonoBehaviour, IMissile
     }
 
     private void Destruction(){
+        if (destroyed) return;
+        destroyed = true;
         if(explosionPrefab!=null){
             GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
             Destroy(expl, 2);

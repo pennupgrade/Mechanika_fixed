@@ -10,7 +10,7 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
     private float spd, duration, acc, max, homingStr, homingAccel, Cturn, turnTimer;
     private Rigidbody2D rb;
     private Vector3 Target, TargetDirection;
-    private bool electric;
+    private bool electric, destroyed;
     // Start is called before the first frame update
     void Start()
     {
@@ -61,11 +61,13 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
     }
 
     private void Destruction(){
+        if (destroyed) return;
+        destroyed = true;
         if (player!=null){
             if (electric){
                 GameObject elect = Instantiate(electricPrefab, transform.position, Quaternion.identity);
                 elect.GetComponent<ElectricScript>().SetPlayer(player, damage);
-                Destroy(elect, 8+Random.value);
+                Destroy(elect, 10+Random.value);
             } else {
                 if(explosionPrefab!=null){
                     GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));

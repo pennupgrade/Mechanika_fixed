@@ -7,7 +7,7 @@ public class HybridMissile : MonoBehaviour, IMissile
     public GameObject explosionPrefab;
     private int damage, frameTimer;
     private float spd, duration, acc, max, homingStr, Cturn;
-    private bool stun;
+    private bool stun, destroyed;
     private Rigidbody2D rb;
     private Vector3 TargetVector;
     // Start is called before the first frame update
@@ -55,6 +55,8 @@ public class HybridMissile : MonoBehaviour, IMissile
     }
 
     private void Destruction(){
+        if (destroyed) return;
+        destroyed = true;
         if(explosionPrefab!=null){
             GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
             Destroy(expl, 2);

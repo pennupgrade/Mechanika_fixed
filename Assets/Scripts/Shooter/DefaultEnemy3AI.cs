@@ -212,7 +212,7 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
         if (enemyType == 3){
             GameObject missile = Instantiate (mageBulletPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 8*(Random.value-0.5f)));
             missile.GetComponent<IMissile>().SetSpeed(6,0.5f,10);
-            missile.GetComponent<IMissile>().SetValues (120, 5, 110, false, Player);
+            missile.GetComponent<IMissile>().SetValues (140, 5, 110, false, Player);
         }
         
     }

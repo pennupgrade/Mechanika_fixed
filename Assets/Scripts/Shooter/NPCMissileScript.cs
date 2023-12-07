@@ -8,7 +8,7 @@ public class NPCMissileScript : MonoBehaviour, IMissile
     public GameObject explosionPrefab;
     private int damage, frameTimer;
     private float spd, duration, acc, max, homingStr, Cturn, turnTimer;
-    private bool stun, disabled;
+    private bool stun, disabled, destroyed;
     private Rigidbody2D rb;
     private Vector3 TargetDirection;
     // Start is called before the first frame update
@@ -64,6 +64,8 @@ public class NPCMissileScript : MonoBehaviour, IMissile
     }
 
     private void Destruction(){
+        if (destroyed) return;
+        destroyed = true;
         if(explosionPrefab!=null){
             GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
             Destroy(expl, 2);

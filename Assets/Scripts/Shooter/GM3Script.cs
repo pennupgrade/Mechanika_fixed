@@ -19,10 +19,10 @@ public class GM3Script : MonoBehaviour
         new int[] {0, 3, 3}
     };
     private int[][] enemyComp2 = {
-        new int[] {0, 1, 1, 3},
-        new int[] {2, 2, 0},
-        new int[] {1, 1, 2, 2},
-        new int[] {2, 2, 2, 3},
+        new int[] {0, 1, 1, -1, 3},
+        new int[] {2, 2, -1, 0},
+        new int[] {1, 1, -1, 2, -1, 2},
+        new int[] {2, 2, 2, -2, 3},
         new int[] {5, 5},
         new int[] {2, 5, 2},
         new int[] {4, 4}
@@ -31,9 +31,9 @@ public class GM3Script : MonoBehaviour
         new int[] {5, 4},
         new int[] {5, 5, 5},
         new int[] {6, 6},
-        new int[] {4, 6, 6},
-        new int[] {5, 4, 4, 6},
-        new int[] {4, 5, 5, 5, 6}
+        new int[] {4, 6, -1, 6},
+        new int[] {5, 4, 4, -1, 6},
+        new int[] {4, 5, 5, -1, 5, -1, 6}
     };
     [SerializeField] private int roomNum, waveNum;
     private AudioSource AS;
@@ -119,14 +119,15 @@ public class GM3Script : MonoBehaviour
             Spawn(enemyComp[wNum][i]);
             if(SaveData.W3EnemyNum>5){
                 waveNum--;
-                yield break;
                 isSpawning = false;
+                yield break;
             }
         }
         isSpawning = false;
     }
 
     private void Spawn (int type) {
+        if (type == -1) return;
         Vector3 spawnPos;
         if (roomNum == 1) {
             spawnPos = Room1SpwnPts[Random.Range(0, Room1SpwnPts.Length)].transform.position;

@@ -52,7 +52,7 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
         enemyType = state;
         GameObject trail;
         if (enemyType == 1) {
-            maxHealth = 440;
+            maxHealth = 460;
             moveSpeed = 6.5f;
             turnSpeed = 90;
             specialCD = 17;
@@ -120,7 +120,7 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
         if(bounce&&bounceTimer<0.01f){bounceVector=Vector2.zero; bounce = false;}
         if(dashing&&dashTimer<0.01f){dashVector=Vector2.zero; dashing = false;}
         if(frozen&&freezeTimer<0.01f){frozen = false;}
-        if(enemyType==2 && !cloaked && uncloakTimer<0.1f && !dashing){
+        if(enemyType==2 && !cloaked && uncloakTimer<0.1f && !dashing && health > 80){
             Cloak();
         }
 
@@ -272,7 +272,7 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
         if (enemyType == 2) {
             Decloak();
             dashTimer = 1.2f;
-            dashCDTimer = 7;
+            dashCDTimer = 9;
         } else {
             dashTimer = 0.2f;
             dashCDTimer = 3.6f+Random.value;
@@ -360,6 +360,7 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
         GetComponent<SpriteRenderer>().color = temp;
         transform.GetChild(2).gameObject.GetComponent<TrailRenderer>().emitting = true;
         transform.GetChild(1).gameObject.SetActive(true);
+        
     }
     private Vector2 GetValidPoint(){
         if(Player==null) return (Vector2)transform.position;
