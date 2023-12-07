@@ -47,7 +47,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
         bulletDMG=80; maxBullets=25; missileDMG=180; shotgunDMG = 40;
         moveSpeed=6; turnSpeed=80;
         bulletCD=0.4f; bulletSpeed = 9; bulletReload=2; missileCD=12;
-        maxHealth = 700; health=maxHealth; bulletsLeft = maxBullets;
+        maxHealth = 640; health=maxHealth; bulletsLeft = maxBullets;
         pfound=false; stunned=false;
         if(Random.value>0.4f) enemyType = 1; else {enemyType = 2; moveSpeed=8;}
         mspeed=moveSpeed;

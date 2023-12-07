@@ -51,9 +51,9 @@ public class Boss2AI : MonoBehaviour, IEnemy
         maxHealth = 12500; health=maxHealth;
         moveState = 0; mode = -1;
         frameTimer = 1;
-        bulletDMG=60; bulletCD=0.24f; bulletSpeed = 10; rocketDMG = 160; missileDMG = 120;
+        bulletDMG=60; bulletCD=0.24f; bulletSpeed = 10; rocketDMG = 150; missileDMG = 100;
         trackingBspd = bulletSpeed;
-        cqDMG = 60; laserDMG = 360; chargedShotDMG = 400; chargedShotSpeed = 20; bounceBulletDMG = 240; 
+        cqDMG = 60; laserDMG = 360; chargedShotDMG = 380; chargedShotSpeed = 19; bounceBulletDMG = 240; 
         bounceBulletSpeed = 9;
         Cturn = 0;
         mspeed = 0; moveSpeed=5; moveSpeed2 = 8; turnSpeed=70; turnSpeed2 = 120; tspeed = turnSpeed;

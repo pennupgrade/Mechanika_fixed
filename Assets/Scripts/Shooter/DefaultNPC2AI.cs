@@ -41,7 +41,7 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
         bulletDMG=80; maxBullets=10; missileDMG=160;
         moveSpeed=8; turnSpeed=60;
         bulletCD=0.7f; bulletSpeed = 9.5f; bulletReload=3; missileCD=10;
-        maxHealth = 250; health=maxHealth; bulletsLeft = maxBullets;
+        maxHealth = 220; health=maxHealth; bulletsLeft = maxBullets;
         pfound=false; stunned=false;
         if(Random.value>0.4f) enemyType = 1; else {enemyType = 2; moveSpeed=9.5f;}
         mspeed=moveSpeed;

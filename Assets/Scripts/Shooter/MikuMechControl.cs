@@ -29,7 +29,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     private float dashTimer, dashCDTimer; private float dashCD = 0.75f;
 
     private int w1DMG = 20, w1Energy = 3, cepheidMode = 1; private float w1CD = 0.18f;
-    private int w2DMG = 72, w2Energy = 20; private float w2CD = 0.7f;
+    private int w2DMG = 92, w2Energy = 20; private float w2CD = 1f;
     private int w3DMG = 24, w3Energy = 22; private float w3CD = 0.4f;
     private int w4DMG = 200, w4Energy = 20; private float w4CD = 0.1f;
     private int w5DMG = 200, w5Energy = 26; private float w5CD = 2.6f;

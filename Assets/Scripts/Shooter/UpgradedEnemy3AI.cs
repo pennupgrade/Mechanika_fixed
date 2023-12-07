@@ -44,7 +44,7 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
         dashTimer = 2; dashCDTimer = 0; freezeTimer = 0; uncloakTimer = 0;
         bulletCDTimer = 0; meleeTimer = 0; stunTimer = 0; 
         aimTimer = 0; wayPointTimer = 0;
-        specialCDTimer = 5+4*Random.value; specialCD2Timer = 9+5*Random.value;
+        specialCDTimer = 5+4*Random.value; specialCD2Timer = 8+5*Random.value;
         bounceTimer = 0; bounce = false; bounceVector = Vector2.zero;
         nextWaypointDistance = 1;
     }
@@ -52,11 +52,11 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
         enemyType = state;
         GameObject trail;
         if (enemyType == 1) {
-            maxHealth = 460;
+            maxHealth = 440;
             moveSpeed = 6.5f;
             turnSpeed = 90;
-            specialCD = 17;
-            specialCD2 = 15;
+            specialCD = 12;
+            specialCD2 = 14;
             minDistance = 5;
             maxDistance = 15;
         } else if (enemyType == 2) {
