@@ -7,8 +7,11 @@ using System.Linq;
 using System.Collections;
 
 using static Utilities.Utils;
+using System;
 
-public class BulletEngine
+using static Unity.Mathematics.math;
+
+public partial class BulletEngine
 {
 
     //
@@ -18,6 +21,7 @@ public class BulletEngine
     static List<BulletEngine> Engines = new();
     public static void UpdateAll(float dt) => Engines.ForEach(m => m.Update(dt));
     public static void CheckAll() => Engines.ForEach(m => m.Check());
+    public static void CheckAllWall() => Engines.ForEach(m => m.CheckWall()); // could be way more optimized if iterate through group of the wall interactable bullets
     public static void DrawAll() => Engines.ForEach(m => m.Draw());
     public static void DisposeAll() { Engines.ForEach(m => m.Dispose()); Engines.Clear(); }
 
@@ -49,6 +53,7 @@ public class BulletEngine
     //
     public BulletEngine() => Engines.Add(this);
     public BulletEngine(List<IBulletEngineInteractable> interactables) : this() => this.interactables = interactables;
+    public BulletEngine(List<IBulletEngineInteractable> interactables, float2 boundSize) : this(interactables) => this.boundSize = boundSize;
 
     //
     public void Update(float dt)
@@ -85,7 +90,6 @@ public class BulletEngine
         if (!allowCreation) return;
         group.bullets.Add(b);
         group.drawer.Add(b);
-        //return group.bullets.Count - 1; 
     }
     public void RemoveAt(GroupAccessor group, int i)
     {
@@ -97,6 +101,11 @@ public class BulletEngine
         group.bullets[i] = b;
         group.drawer.Set(b, i);
     }
+    public void TransformBullets(GroupAccessor group, Func<ITBullet, ITBullet> transformFunc)
+    {
+        for(int i=0; i<group.bullets.Count; i++)
+            group.bullets[i] = transformFunc(group.bullets[i]);
+    }
 
     //
     public void Dispose()
@@ -106,6 +115,50 @@ public class BulletEngine
     {
         bullets.ForEach(bullets => bullets.Clear());
         drawers.ForEach(drawer => drawer.Clear());
+    }
+
+}
+
+public partial class BulletEngine
+{
+
+    float2 boundSize;
+
+    public void CheckWall() 
+    {
+
+        ITBullet b;
+
+        float2 wallNormal;
+
+        foreach(var kvp in bullets)
+        {
+            for(int i=0; i<kvp.Value.Count; i++)
+            {
+                b = kvp.Value[i];
+
+                float2 p = b.Position;
+                float r = b.Radius;
+
+                float2 lp = p;
+                lp = abs(lp);
+                lp = boundSize*.5f - lp;
+
+                float minDist = min(lp.x, lp.y) - r;
+
+                if(minDist <= 0)
+                {
+                    bool isXWall = lp.x < lp.y;
+
+                    wallNormal =  isXWall ? float2(-1f, 0f) : float2(0f, -1f);
+                    wallNormal *= isXWall ? step(0f, p.x)*2f-1f : step(0f, p.y)*2f-1f;
+
+                    b.OnHitWall(wallNormal);
+
+                    kvp.Value[i] = b;
+                }
+            }
+        }
     }
 
 }

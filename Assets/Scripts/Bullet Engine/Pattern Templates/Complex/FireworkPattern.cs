@@ -13,14 +13,38 @@ using static Unity.Mathematics.math;
 using Position = PositionParameter;
 using BulletUtilities;
 
-[CreateAssetMenu(menuName = "ScriptableObject/Patterns/Complex/Firework", fileName = "CirclePattern")] //also make homing circle
+[CreateAssetMenu(menuName = "ScriptableObject/Patterns/Complex/Firework", fileName = "FireworkPattern")] //also make homing circle
 public class FireworkPattern : APattern
 {
 
-    public float InitialSpeed;
-    public float InitialSpeedVariation;
+    [Space(10f)]
+    public float InitialVelocityVariation;
 
-    public float Magnetism;
+    [Space(10f)]
+    public float MagnetismBeforeExplosion;
+    public float MagnetismAfterExplosion;
+
+    [Space(10f)]
+    public float CircleRadius;
+    public float FireworkThickness;
+    
+    [Space(10f)]
+    public float AngularVelocity;
+
+    [Space(10f)]
+    public float TimeUntilFireworkExplosion;
+    public float TimeAfterFireworkExplosion;
+    public float ChaseTime;
+
+    [Space(10f)]
+    public float AdditionalExplosionVelocity;
+
+    [Space(10f)]
+    public float2 BulletRadiusOffsetTrig;
+
+    [Space(10f)]
+    public float StartOffsetAmount;
+    public float StartOffsetVariation;
 
     public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction)
     {
@@ -29,14 +53,47 @@ public class FireworkPattern : APattern
         Position playerPoint = new (playerTransform);
         Position bossPoint = new (bossTransform);
 
-        KinematicBodyPoint body = new KinematicBodyPoint(bossTransform.position.xy(), 
-            (float2) (InitialSpeedVariation * UnityEngine.Random.insideUnitCircle) + InitialSpeed * normalize(bossPoint.Pos - playerPoint.Pos), 
-            Magnetism, playerPoint);
-        List<ITBullet> bullets = new();
+        float2 toPlayer = normalize(playerPoint.Pos - bossPoint.Pos);
 
-        StartCommand(engine.CreateBulletCircleGradual(groups, new Position(bossTransform), -1f, -1f, -1f, (polar, t) => 
+        float2 startPos = bossTransform.position.xy() + StartOffsetAmount * (-toPlayer) + StartOffsetVariation * normalize(UnityEngine.Random.insideUnitCircle);
+
+        KinematicBodyPoint body = new KinematicBodyPoint(startPos, 
+            Speed * normalize((float2) (InitialVelocityVariation * UnityEngine.Random.insideUnitCircle) - toPlayer), 
+            MagnetismBeforeExplosion, playerPoint);
+
+        StartCommand(engine.CreateBulletCircleGradual(groups, new Position(startPos), CircleRadius, Density, Duration, (polar, tt) => 
         {
-            return new BulletKinematicPolar(); //IMPLEMENT
-        }), null);
+            return new BulletPolarFunction(new KinematicBodyStatic(startPos), (float o, float t) => CircleRadius + 0.5f * FireworkThickness * sin(o*10f) - (CircleRadius * 0.6f*t/(TimeUntilFireworkExplosion+Duration)), 
+                polar.x + AngularVelocity * tt, r => AngularVelocity, BulletRadius + BulletRadiusOffsetTrig.y*(.5f+.5f*sin(polar.x*BulletRadiusOffsetTrig.x)), tt, TimeUntilFireworkExplosion+10f);
+        }, new float3(), false, false), () =>
+        {
+            IEnumerator Coro() 
+            {
+                groups.TransformAllBullets(engine, b =>
+                {
+                    BulletPolarFunction cb = (BulletPolarFunction) b;
+                    cb.origin = body;
+                    return cb;
+                });
+                yield return new WaitForSeconds(TimeUntilFireworkExplosion);
+                groups.TransformAllBullets(engine, b => 
+                {
+                    BulletPolarFunction cb = (BulletPolarFunction) b;
+                    return new BulletKinematicBody(new KinematicBodyPoint(cb.Position, cb.Velocity + AdditionalExplosionVelocity * normalize(cb.Position - cb.origin.Position), MagnetismAfterExplosion, playerPoint), TimeAfterFireworkExplosion, BulletRadius);
+                });
+                yield return new WaitForSeconds(ChaseTime);
+                groups.TransformAllBullets(engine, b => 
+                {
+                    BulletKinematicBody cb = (BulletKinematicBody) b;
+                    KinematicBodyPoint body = (KinematicBodyPoint) cb.body;
+                    body.Magnetism = 0f;
+                    cb.body = body;
+                    return cb;
+                });
+            }
+            StartCommand(Coro());
+            finishAction();
+        });
+
     }
 }

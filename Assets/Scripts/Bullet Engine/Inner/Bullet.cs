@@ -1,6 +1,8 @@
 ﻿using BulletUtilities;
 using System;
+using System.Diagnostics;
 using Unity.Mathematics;
+using UnityEngine;
 using Utilities;
 
 using static Unity.Mathematics.math;
@@ -14,6 +16,8 @@ public interface ITBullet
     float2 Direction { get; }
 
     bool Update(float dt);
+
+    void OnHitWall(float2 wallNormal) {}
 
 }
 
@@ -47,10 +51,11 @@ public struct BulletDeath<T> : ITBullet where T : struct, ITBullet
 public struct BulletKinematic : ITBullet, IBulletKinematic
 {
 
-    public BulletKinematic(float2 p = new(), float2 v = new(), float2 a = new(), float r = 1.0f, float lifeTime = 10f)
+    public BulletKinematic(float2 p = new(), float2 v = new(), float2 a = new(), float r = 1.0f, float lifeTime = 10f, bool wallInteract = false)
     {
         this.p = p; this.v = v; this.a = a; time = new float2(0f, lifeTime);
         this.r = r;
+        this.wallInteract = wallInteract;
     }
 
     public float2 p;
@@ -66,6 +71,8 @@ public struct BulletKinematic : ITBullet, IBulletKinematic
 
     float2 time;
 
+    bool wallInteract;
+
     public bool Update(float dt)
     {
 
@@ -75,6 +82,12 @@ public struct BulletKinematic : ITBullet, IBulletKinematic
 
         return time.x <= time.y;
 
+    }
+
+    public void OnHitWall(float2 wallNormal)
+    {
+        if(!wallInteract) return;
+        v -= 2f * wallNormal * dot(wallNormal, v);
     }
 
 }
@@ -102,7 +115,7 @@ public struct BulletKinematicPolar : ITBullet, IBulletKinematic
     public float2 Velocity { get => origin.v; set => origin.v = value; }
     public float2 Acceleration { get => origin.a; set => origin.a = value; }
     public float Radius { get; private set; }
-    public float2 Direction => PolarToCartesian(polarCoords.x);
+    public float2 Direction => new(5f, 5f);//PolarToCartesian(polarCoords.x);
 
     public float2 Origin => origin.p;
 
@@ -124,9 +137,9 @@ public struct BulletPolarFunction : ITBullet //r(theta, time)
 
     //
     public BulletPolarFunction(float2 origin, Func<float, float, float> function, float theta, float r = 1.0f, float angularVelocity = 1f, float timeStart = 0f, float lifeTime = 10f)
-        : this(origin, function, theta, f => angularVelocity, r, timeStart, lifeTime) { }
+        : this(new KinematicBodyConstAcc(origin), function, theta, f => angularVelocity, r, timeStart, lifeTime) { }
 
-    public BulletPolarFunction(float2 origin, Func<float, float, float> function, float theta, Func<float, float> angularVelocity, float r = 1.0f, float timeStart = 0f, float lifeTime = 10f)
+    public BulletPolarFunction(IKinematicBody origin, Func<float, float, float> function, float theta, Func<float, float> angularVelocity, float r = 1.0f, float timeStart = 0f, float lifeTime = 10f)
     {
         this.function = function; this.origin = origin; this.angularVelocity = angularVelocity;
         this.theta = theta; time = timeStart; this.lifeTime = lifeTime;
@@ -134,7 +147,7 @@ public struct BulletPolarFunction : ITBullet //r(theta, time)
         Position = float2(0f); Update(0f);
     }
 
-    float2 origin;
+    public IKinematicBody origin;
     float lifeTime;
 
     Func<float, float, float> function;
@@ -149,10 +162,20 @@ public struct BulletPolarFunction : ITBullet //r(theta, time)
     public float2 Direction => PolarToCartesian(theta);
     public float Radius { get; private set; }
 
+    public float2 Velocity { get 
+    {
+        float r = function(theta, time);
+        float w = angularVelocity(r);
+
+        return origin.Velocity + Utils.toCartesian(new(w*r, theta+PI*.5f));
+    }}
+
     public bool Update(float dt)
     {
         float r = function(theta, time);
-        Position = origin + r * PolarToCartesian(theta);
+        origin.Update(dt);
+
+        Position = origin.Position + r * PolarToCartesian(theta);
 
         time += dt;
         theta += angularVelocity(r)*dt;
@@ -165,7 +188,7 @@ public struct BulletPolarFunction : ITBullet //r(theta, time)
 public struct BulletKinematicBody : ITBullet
 {
 
-    IKinematicBody body;
+    public IKinematicBody body;
     Timer timer;
     float radius;
 

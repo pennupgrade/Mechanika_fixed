@@ -7,7 +7,7 @@ public class BulletEngineManager : MonoBehaviour
     public static BulletEngine bossEngine;
 
     public static void InitializeBossManager()
-    { if (bossEngine == null) bossEngine = new(new() { Ins.Player }); }
+    { if (bossEngine == null) bossEngine = new(new() { Ins.Player }, new float2(10f)); }
 
     public DebugMiku Player;
     public Transform Boss;
@@ -21,6 +21,7 @@ public class BulletEngineManager : MonoBehaviour
     private void Update()
     {
         BulletEngine.CheckAll();
+        BulletEngine.CheckAllWall();
         BulletEngine.DrawAll();
         BulletEngine.UpdateAll(Time.deltaTime);
     }
