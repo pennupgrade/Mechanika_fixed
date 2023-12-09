@@ -32,8 +32,8 @@ public class GM3Script : MonoBehaviour
         new int[] {5, 5, 5},
         new int[] {6, 6},
         new int[] {4, 6, -1, 6},
-        new int[] {5, 4, 4, -1, 6},
-        new int[] {4, 5, 5, -1, 5, -1, 6}
+        new int[] {5, 4, 4, -1, -1, -1, -1, 6},
+        new int[] {4, 5, -1, 5, -1, -1, -1, 5, -1, -1, -1, 6}
     };
     [SerializeField] private int roomNum, waveNum;
     private AudioSource AS;
