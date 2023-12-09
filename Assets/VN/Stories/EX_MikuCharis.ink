@@ -16,7 +16,7 @@ Her back is turned towards you as you enter.
 #setvisible true
 #setspeaker charis
 <i>without looking</i>   I apologize, but I’m terribly busy at the moment. Let’s see... I don’t have any appointments scheduled for this time slot, so I’d be more than happy to speak with you once you’ve scheduled a tentative appointment and had it vetted by my secretary. The next available slot should be in around three months. #onend emotion miku sad
-* [I wouldn’t have burst in if this wasn’t an emergency, Chancellor.] -> c1
+* [I wouldn’t have burst in if this wasn’t an emergency, Chancellor. huk] -> c1
 * [I’m about to go on a tour and decided this was worth my while.] -> c2
 * [I’m afraid your evil deeds end here, the Vocaloid Fandom rises against you! Repent, then you may die.] -> c3
 
