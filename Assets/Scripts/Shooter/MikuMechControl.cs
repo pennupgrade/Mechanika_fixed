@@ -191,7 +191,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     }
     private void FireDISC(){
         GameObject bullet = Instantiate (DISCPrefab, transform.position+0.15f*Vector3.up, Quaternion.identity);
-        bullet.GetComponent<IBullet>().SetValues (w2DMG, 7, 4, -1.5f, velocity);
+        bullet.GetComponent<IBullet>().SetValues (w2DMG, 6.4f, 4, -1.5f, velocity);
         var a = 1;
         if(lookDir.y<0) a = -1;
         bullet.transform.eulerAngles = (a*Vector2.Angle(new Vector2(1,0), lookDir)-90+6*(Random.value-0.5f))* Vector3.forward;

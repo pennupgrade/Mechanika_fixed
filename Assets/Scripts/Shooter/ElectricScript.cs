@@ -14,7 +14,7 @@ public class ElectricScript : MonoBehaviour
     void Update()
     {
         if(frameTimer==0){
-            if(Vector3.Distance(player.transform.position, transform.position)<1.7f){
+            if(Vector3.Distance(player.transform.position, transform.position)<2.2f){
                 player.GetComponent<MikuMechControl>().MeleeDamage(dmg, false);
             }
             frameTimer=5;

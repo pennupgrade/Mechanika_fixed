@@ -72,11 +72,15 @@ public class MagicBullet : MonoBehaviour, IMissile
     void OnCollisionEnter2D(Collision2D c){
         if (c.gameObject.tag=="Environment"){
             Vector3 newDir;
-            try{
-                newDir=Vector3.Reflect(transform.up, c.contacts[0].normal+c.contacts[1].normal);
-            }catch (Exception e) {
-                newDir = Vector3.Reflect(transform.up, c.contacts[0].normal);
-            } 
+            if (upgraded) {
+                newDir = (player.transform.position-transform.position).normalized;
+            } else {
+                try{
+                    newDir=Vector3.Reflect(transform.up, c.contacts[0].normal+c.contacts[1].normal);
+                }catch (Exception e) {
+                    newDir = Vector3.Reflect(transform.up, c.contacts[0].normal);
+                } 
+            }
             var a = 1;
             if(newDir.y<0) a = -1;
             transform.eulerAngles = (a*Vector2.Angle(new Vector2(1,0), (Vector2)newDir)-90)* Vector3.forward;

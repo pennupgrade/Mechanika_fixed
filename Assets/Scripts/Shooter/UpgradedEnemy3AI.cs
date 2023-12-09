@@ -68,7 +68,7 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
             maxDistance = 12;
         } else {
             maxHealth = 320;
-            moveSpeed = 9;
+            moveSpeed = 9.5f;
             turnSpeed = 75;
             specialCD = 18;
             specialCD2 = 18;
@@ -202,11 +202,11 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
             for(int i = 0; i<count; i++){
             GameObject missile = Instantiate (hybridMissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, -deg-deg*i));
             missile.GetComponent<IMissile>().SetSpeed(5,50,26);
-            missile.GetComponent<IMissile>().SetValues (180, 0.85f, 90, true, Player);
+            missile.GetComponent<IMissile>().SetValues (180, 1.2f, 90, true, Player);
             missile.GetComponent<HybridMissile>().SetVector (fp.up);
             GameObject missile2 = Instantiate (hybridMissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, deg+deg*i));
             missile2.GetComponent<IMissile>().SetSpeed(5,50,26);
-            missile2.GetComponent<IMissile>().SetValues (180, 0.85f, 90, true, Player);
+            missile2.GetComponent<IMissile>().SetValues (180, 1.2f, 90, true, Player);
             missile2.GetComponent<HybridMissile>().SetVector (fp.up);
             }
         }
@@ -215,7 +215,7 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
                 specialCDTimer = specialCD-4+4*(Random.value-0.5f);
                 GameObject missile = Instantiate (mageBulletPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 8*(Random.value-0.5f)));
                 missile.GetComponent<IMissile>().SetSpeed(6,2,10);
-                missile.GetComponent<IMissile>().SetValues (90, 5, 240, true, Player);
+                missile.GetComponent<IMissile>().SetValues (90, 5, 240, false, Player);
             } else {
                 specialCDTimer = specialCD+4*(Random.value-0.5f);
                 StartCoroutine(Mage2());
@@ -226,7 +226,7 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
         for(int i = 0; i<3; i++){
             GameObject missile = Instantiate (mageBulletPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 8*(Random.value-0.5f)));
             missile.GetComponent<IMissile>().SetSpeed(6,3,15);
-            missile.GetComponent<IMissile>().SetValues (150, 10, 20, true, Player);
+            missile.GetComponent<IMissile>().SetValues (150, 10, 20, false, Player);
             yield return new WaitForSeconds(0.6f);
         }
     }

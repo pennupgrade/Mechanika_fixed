@@ -201,11 +201,11 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
             for(int i = 0; i<2; i++){
             GameObject missile = Instantiate (hybridMissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, -60-60*i));
             missile.GetComponent<IMissile>().SetSpeed(5,50,26);
-            missile.GetComponent<IMissile>().SetValues (180, 1, 90, true, Player);
+            missile.GetComponent<IMissile>().SetValues (180, 1.4f, 90, true, Player);
             missile.GetComponent<HybridMissile>().SetVector (fp.up);
             GameObject missile2 = Instantiate (hybridMissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 60+60*i));
             missile2.GetComponent<IMissile>().SetSpeed(5,50,26);
-            missile2.GetComponent<IMissile>().SetValues (180, 1, 90, true, Player);
+            missile2.GetComponent<IMissile>().SetValues (180, 1.4f, 90, true, Player);
             missile2.GetComponent<HybridMissile>().SetVector (fp.up);
             }
         }
