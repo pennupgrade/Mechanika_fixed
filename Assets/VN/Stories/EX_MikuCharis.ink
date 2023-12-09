@@ -60,7 +60,7 @@ It’s treason, then.  Erinye Protocol: Activation.
 
 ===charis2===
 * [Try negotiate] -> charis2c1
-* [<i>flirt</i>] -> charis2c2
+* [<i>flirt</i> (\/\/∇\/\/)] -> charis2c2
 
 
 ===charis2c1===
