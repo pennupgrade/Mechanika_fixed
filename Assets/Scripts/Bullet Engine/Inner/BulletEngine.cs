@@ -122,6 +122,7 @@ public partial class BulletEngine
 public partial class BulletEngine
 {
 
+    public float2 BoundSize => boundSize;
     float2 boundSize;
 
     public void CheckWall() 
@@ -129,7 +130,7 @@ public partial class BulletEngine
 
         ITBullet b;
 
-        float2 wallNormal;
+        float2? wallNormal;
 
         foreach(var kvp in bullets)
         {
@@ -140,7 +141,7 @@ public partial class BulletEngine
                 float2 p = b.Position;
                 float r = b.Radius;
 
-                float2 lp = p;
+                /*float2 lp = p;
                 lp = abs(lp);
                 lp = boundSize*.5f - lp;
 
@@ -155,6 +156,13 @@ public partial class BulletEngine
 
                     b.OnHitWall(wallNormal);
 
+                    kvp.Value[i] = b;
+                }*/
+
+                wallNormal = Utilities.Collision.PointCollideArena(this, p, r);
+                if(wallNormal != null) 
+                {
+                    b.OnHitWall((float2) wallNormal);
                     kvp.Value[i] = b;
                 }
             }

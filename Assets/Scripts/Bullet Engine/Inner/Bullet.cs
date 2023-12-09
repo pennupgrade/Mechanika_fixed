@@ -88,6 +88,7 @@ public struct BulletKinematic : ITBullet, IBulletKinematic
     {
         if(!wallInteract) return;
         v -= 2f * wallNormal * dot(wallNormal, v);
+        p += wallNormal*0.005f;
     }
 
 }

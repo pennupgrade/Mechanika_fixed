@@ -71,6 +71,16 @@ namespace BulletUtilities
 
             pos += vel * dt + 0.5f * dt * dt * a;
             vel += dt * a;
+
+            if(boundSize != null)
+            {
+                float2? wallNormal = Utilities.Collision.PointCollideArena((float2) boundSize, pos, 0.3f);
+                if(wallNormal != null)
+                {
+                    float2 n = (float2) wallNormal;
+                    vel -= 2f * n * dot(vel, n);
+                }
+            }
         }
 
         float2 pos;
@@ -79,13 +89,17 @@ namespace BulletUtilities
 
         Position targetPoint;
 
-        public KinematicBodyPoint(float2 initialPos, float2 initialVelocity, float accMag, Position targetPoint)
+        float2? boundSize;
+
+        public KinematicBodyPoint(float2 initialPos, float2 initialVelocity, float accMag, Position targetPoint, float2? boundSize = null)
         {
             pos = initialPos;
             vel = initialVelocity;
             this.accMag = accMag;
 
             this.targetPoint = targetPoint;
+
+            this.boundSize = boundSize;
         }
 
     }
