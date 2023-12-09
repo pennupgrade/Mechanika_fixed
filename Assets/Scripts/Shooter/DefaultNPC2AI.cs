@@ -39,7 +39,7 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
         fp = gameObject.transform.GetChild(0);
         state = 0; frameTimer = 1;
         bulletDMG=80; maxBullets=10; missileDMG=160;
-        moveSpeed=8; turnSpeed=60;
+        moveSpeed=8; turnSpeed=80;
         bulletCD=0.7f; bulletSpeed = 9.5f; bulletReload=3; missileCD=10;
         maxHealth = 220; health=maxHealth; bulletsLeft = maxBullets;
         pfound=false; stunned=false;
@@ -156,7 +156,7 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
     }
     private void PlayerSearch(){
         searchTimer=2;
-        if(Vector3.Distance(Player.transform.position,transform.position)<18){
+        if(Vector3.Distance(Player.transform.position,transform.position)<19){
             state = 1;
             InvokeRepeating("UpdatePath",0,(enemyType==1) ? 2 : 1.5f);
         }
