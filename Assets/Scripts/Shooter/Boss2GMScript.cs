@@ -57,7 +57,7 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
             DefaultSong.GetComponent<AudioSource>().Pause();
         }
         if(Boss.health==0&&!hpDialogue){
-            Dialogue("Charis", "Core compromised? I've miscalculated...But no matter. I might go down, but I'm not letting you win.");
+            Dialogue("Charis", "Core compromised? I've miscalculated...But no matter. Systems are still functional. I'm not letting you win.");
             hpDialogue=true;
         }
     }
@@ -154,7 +154,7 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
         yield return new WaitForSeconds(2);
         yield return StartCoroutine(FadeInText(MissionComplete));
         SaveData.SceneNum = 4;
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(5);
         SceneManager.LoadSceneAsync("MainMenu");
     }
 
