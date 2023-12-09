@@ -1,8 +1,9 @@
-Shader "Unlit/BulletShaders/OuterGlowBullet"
+Shader "Unlit/BulletShaders/FireyGlowBullet"
 {
     Properties
     {
         [HideInInspector] _Color("Color", Color) = (.949, .074, .557, 1.)
+        [HideInInspector] _FireNoise ("Fire Noise", 2D) = "black" {}
     }
     SubShader
     {

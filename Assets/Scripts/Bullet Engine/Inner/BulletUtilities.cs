@@ -26,8 +26,12 @@ namespace BulletUtilities
 
     }
 
-    public struct KinematicBodyConstAcc
+    public struct KinematicBodyConstAcc : IKinematicBody
     {
+
+        public float2 Position { get => p; set => p = value; }
+        public float2 Velocity => v;
+        public float2 Acceleration => a;
 
         public float2 p;
         public float2 v;
@@ -58,6 +62,8 @@ namespace BulletUtilities
         public float2 Position { get => pos; set => pos = value; }
         public float2 Velocity => vel;
         public float2 Acceleration => accMag * normalize(targetPoint.Pos - pos);
+
+        public float Magnetism { get => accMag; set => accMag = value; }
 
         public void Update(float dt)
         {
@@ -115,6 +121,18 @@ namespace BulletUtilities
 
             this.targetBody = targetBody;
         }
+    }
+
+    public struct KinematicBodyStatic : IKinematicBody
+    {
+        public KinematicBodyStatic(float2 p) 
+            => Position = p;
+
+        public float2 Position { get; set; }
+        public float2 Velocity => new();
+        public float2 Acceleration => new();
+
+        public void Update(float dt) {}
     }
 
     public struct Timer

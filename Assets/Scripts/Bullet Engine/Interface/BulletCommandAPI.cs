@@ -29,7 +29,6 @@ public struct GroupParameter
         List<(string, BulletMaterial?)> groups = new();
         foreach(Color c in colors)
             groups.Add((engine.UniqueGroup, new BulletMaterial(shader, c)));
-        
         return new(engine, groups);
     }
     public GroupParameter Merge(GroupParameter o) { foreach (var g in o.Groups) groups.Add(g); return this; }
@@ -46,6 +45,13 @@ public struct GroupParameter
     int i;
     public Group Get(int i) => groups[i];
     public Group GetNext() { i = (i + 1) % groups.Count; return Get(i); }
+
+    //
+    public void TransformAllBullets(BulletEngine engine, Func<ITBullet, ITBullet> bulletFunc)
+    {
+        foreach(Group g in groups)
+            engine.TransformBullets(g, bulletFunc);
+    }
 
 }
 
@@ -144,7 +150,7 @@ public static class BulletCommandGradualAPI
     /// <param name="time"></param>
     /// <param name="generatorFunction"></param>
     /// <returns></returns>
-    public static IEnumerator CreateBulletCircleGradual(this BulletEngine engine, GroupParameter groups, Position pos, float radius, float distDensity, float time, Func<float2, float, ITBullet> generatorFunction, float3 trigParams = new(), bool posOrigin = true)
+    public static IEnumerator CreateBulletCircleGradual(this BulletEngine engine, GroupParameter groups, Position pos, float radius, float distDensity, float time, Func<float2, float, ITBullet> generatorFunction, float3 trigParams = new(), bool posOrigin = true, bool overridePosition = true)
     {
         float theta = 0f;
         float dTheta = 1f / (distDensity * radius);
@@ -155,7 +161,7 @@ public static class BulletCommandGradualAPI
         while(theta < 2f * PI)
         {
             float r = radius + trigParams.y * sin(theta * trigParams.x + trigParams.z);
-            ITBullet b = generatorFunction(float2(theta, r), Time.timeSinceLevelLoad/*(theta/dTheta) * time / (distDensity * radius * 2f * PI)*/); b.Position = pos.Pos + posOriginFloat * r * new float2(cos(theta), sin(theta));
+            ITBullet b = generatorFunction(float2(theta, r), Time.timeSinceLevelLoad-startTime/*(theta/dTheta) * time / (distDensity * radius * 2f * PI)*/); if(overridePosition) b.Position = pos.Pos + posOriginFloat * r * new float2(cos(theta), sin(theta));
             engine.Add(groups.GetNext(), b);
             theta += dTheta;
             yield return new WaitForSeconds(time / (distDensity * radius * 2f * PI));
