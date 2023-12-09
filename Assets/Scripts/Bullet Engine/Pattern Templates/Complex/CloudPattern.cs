@@ -30,23 +30,25 @@ public class CloudPattern : APattern
     [Space(10f)]
     public float InitialVelocity = 0.1f;
 
-    public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction)
+    public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction, float2? position = null)
     {
     
         GroupParameter groups = GroupParameter.CreateGroups(engine, Colors, Shader);
 
         float delayTime = 1f/BulletSpawnFrequency;
 
+        float2 startPos = position == null ? bossTransform.position.xy() : (float2) position;
+
         IEnumerator Coro()
         {
             for(int i=0; i<BulletCount; i++)
             {
-                float2 p = UnityEngine.Random.insideUnitCircle * Radius;
+                float2 p = startPos + (float2) UnityEngine.Random.insideUnitCircle * Radius;
                 engine.Add(groups.GetNext(), new BulletKinematic(p, UnityEngine.Random.insideUnitCircle * InitialVelocity, 0f, BulletRadius + UnityEngine.Random.Range(0f, 1f) * AddedBulletRadiusVariation, 10f, true));
                 yield return new WaitForSeconds(delayTime);
             }
 
-            float2 toPlayer = normalize(playerTransform.position.xy());
+            float2 toPlayer = normalize(playerTransform.position.xy() - startPos);
             float2 toRandom = normalize(UnityEngine.Random.insideUnitCircle);
 
             float2 flingDir = normalize(toPlayer + (toRandom - toPlayer) * RandomWeighting);

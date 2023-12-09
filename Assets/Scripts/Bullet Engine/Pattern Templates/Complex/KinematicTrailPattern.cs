@@ -19,7 +19,7 @@ public class KinematicTrailPattern : APattern
 
     //kinematic body interacts with bullet wall bounds
 
-    public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction)
+    public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction, float2? position = null)
     {
     
 

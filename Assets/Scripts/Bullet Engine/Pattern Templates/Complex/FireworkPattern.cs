@@ -46,16 +46,18 @@ public class FireworkPattern : APattern
     public float StartOffsetAmount;
     public float StartOffsetVariation;
 
-    public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction)
+    public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction, float2? position = null)
     {
         GroupParameter groups = GroupParameter.CreateGroups(engine, Colors, Shader);
         
         Position playerPoint = new (playerTransform);
         Position bossPoint = new (bossTransform);
 
-        float2 toPlayer = normalize(playerPoint.Pos - bossPoint.Pos);
+        float2 startPos = position == null ? 
+            bossTransform.position.xy() + StartOffsetAmount * normalize(bossPoint.Pos - playerPoint.Pos) + StartOffsetVariation * normalize(UnityEngine.Random.insideUnitCircle)
+            : (float2) position;
 
-        float2 startPos = bossTransform.position.xy() + StartOffsetAmount * (-toPlayer) + StartOffsetVariation * normalize(UnityEngine.Random.insideUnitCircle);
+        float2 toPlayer = normalize(playerPoint.Pos - startPos);
 
         KinematicBodyPoint body = new KinematicBodyPoint(startPos, 
             Speed * normalize((float2) (InitialVelocityVariation * UnityEngine.Random.insideUnitCircle) - toPlayer), 

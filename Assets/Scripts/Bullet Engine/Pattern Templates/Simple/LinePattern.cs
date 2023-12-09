@@ -20,12 +20,15 @@ public class LinePattern : APattern
 
     public int Count = 1;
 
-    public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction)
+    public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction, float2? position = null)
     {
         List<(string, BulletMaterial?)> groups = new();
         foreach (Color c in Colors) groups.Add((engine.UniqueGroup, new BulletMaterial(Shader, c)));
         GroupParameter groupParam = new(engine, groups);
-        for(int i=0; i<Count; i++) StartCommand(engine.CreateBulletLine(groupParam, new PositionParameter(bossTransform.position.xy() + StartDistance * math.normalize(Rand.insideUnitCircle)), new PositionParameter(playerTransform.position.xy() + EndDistance * math.normalize(Rand.insideUnitCircle)), Density * 0.5f, Speed, d => new BulletKinematic(0f, math.normalize(Rand.insideUnitCircle), new(), BulletRadius + d*RadiusEndDifference, Duration)), i == Count - 1 ? finishAction : () => { }); //last one may not be the finisher but whatever
+
+        PositionParameter positionParm = position == null ? new PositionParameter(bossTransform.position.xy() + StartDistance * math.normalize(Rand.insideUnitCircle)) : new PositionParameter((float2) position);
+        
+        for(int i=0; i<Count; i++) StartCommand(engine.CreateBulletLine(groupParam, positionParm, new PositionParameter(playerTransform.position.xy() + EndDistance * math.normalize(Rand.insideUnitCircle)), Density * 0.5f, Speed, d => new BulletKinematic(0f, math.normalize(Rand.insideUnitCircle), new(), BulletRadius + d*RadiusEndDifference, Duration)), i == Count - 1 ? finishAction : () => { }); //last one may not be the finisher but whatever
     }
 
 }

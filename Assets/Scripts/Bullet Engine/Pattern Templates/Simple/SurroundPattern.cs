@@ -15,13 +15,13 @@ public class SurroundPattern : APattern
     public float FormingTime = 0.5f;
     public float BulletAcceleration = 0.1f;
 
-    public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction)
+    public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction, float2? position = null)
     {
         List<(string, BulletMaterial?)> groups = new();
         foreach (Color c in Colors) groups.Add((engine.UniqueGroup, new BulletMaterial(Shader, c)));
         GroupParameter group = new(engine, groups);
 
-        StartCommand(engine.CreateBulletCircleGradual(group, new PositionParameter(playerTransform.position.xy()), CircleRadius, Density, FormingTime, (polar, time) => new BulletKinematic(0f, 0f, -PolarToCartesian(polar.x) * BulletAcceleration*(1f+0f*polar.x*.5f/math.PI), BulletRadius, Duration), new float3(2f, 0.5f, UnityEngine.Random.Range(0f, math.PI*2f)), false), finishAction);
+        StartCommand(engine.CreateBulletCircleGradual(group, new PositionParameter(position == null ? playerTransform.position.xy() : (float2) position), CircleRadius, Density, FormingTime, (polar, time) => new BulletKinematic(0f, 0f, -PolarToCartesian(polar.x) * BulletAcceleration*(1f+0f*polar.x*.5f/math.PI), BulletRadius, Duration), new float3(2f, 0.5f, UnityEngine.Random.Range(0f, math.PI*2f)), false), finishAction);
 
     }
 
