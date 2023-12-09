@@ -203,6 +203,11 @@ namespace Utilities
     {
         public static bool CircleCircle(float2 c1, float r1, float2 c2, float r2)
             => length(c2 - c1) - r1 - r2 <= 0f;
+
+        public static float2? PointCollideArena(BulletEngine engine, float2 p, float r)
+        {
+            return null;
+        }
     }
 
     public static class MathUtils

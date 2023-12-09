@@ -6,6 +6,8 @@ using static BulletCommandGradualAPI;
 using static Utilities.MathUtils;
 using Utilities;
 
+using static Unity.Mathematics.math;
+
 [CreateAssetMenu(menuName = "ScriptableObject/Patterns/Simple/Circle", fileName = "CirclePattern")]
 public class CirclePattern : APattern
 {
@@ -19,14 +21,17 @@ public class CirclePattern : APattern
 
     public float AngularVelocity = 0f;
 
-    public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction)
+    public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction, float2? position = null)
     {
         List<(string, BulletMaterial?)> groups = new();
         foreach (Color c in Colors) groups.Add((engine.UniqueGroup, new BulletMaterial(Shader, c)));
         GroupParameter group = new(engine, groups);
-        StartCommand(engine.CreateBulletCircleGradual(group, new PositionParameter(bossTransform), CircleRadius, Density, FormingTime, (polar, time) => new BulletKinematicPolar(0f, 0f, new(), AngularVelocity, polar + new float2(AngularVelocity * time, 0f), BulletRadius, Duration), TrigSize.xyz(UnityEngine.Random.Range(0f, 2f * math.PI))), () =>
+
+        float2 startPos = position == null ? bossTransform.position.xy() : (float2) position;
+
+        StartCommand(engine.CreateBulletCircleGradual(group, position == null ? new PositionParameter(bossTransform) : new PositionParameter(startPos), CircleRadius, Density, FormingTime, (polar, time) => new BulletKinematicPolar(0f, 0f, new(), AngularVelocity, polar + new float2(AngularVelocity * time, 0f), BulletRadius, Duration), TrigSize.xyz(UnityEngine.Random.Range(0f, 2f * math.PI))), () =>
         {
-            BulletCommandInstantAPI.SetBulletVelocity(engine, group, (Vector2) (playerTransform.position - bossTransform.position).normalized * Speed);
+            BulletCommandInstantAPI.SetBulletVelocity(engine, group, normalize(playerTransform.position.xy() - startPos) * Speed);
             finishAction();
         });
     }

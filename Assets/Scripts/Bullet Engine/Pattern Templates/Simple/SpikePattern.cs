@@ -17,14 +17,17 @@ public class SpikePattern : APattern
     public float ThrowSpeed = 5.0f;
     public float AngularVelocity = 0f;
 
-    public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction)
+    public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction, float2? position = null)
     {
         List<(string, BulletMaterial?)> groups = new();
         foreach (Color c in Colors) groups.Add((engine.UniqueGroup, new BulletMaterial(Shader, c)));
         GroupParameter group = new(engine, groups);
-        StartCommand(engine.CreateBulletSpikeBall(group, new PositionParameter(bossTransform.position.xy()), 16, SpikeRadiusRange, SpikeRadiusVariation, Density, FormingSpeed, (polar, time) => new BulletKinematicPolar(new(), 0f, 0f, AngularVelocity, polar + float2(time*AngularVelocity, 0f), BulletRadius, Duration), UnityEngine.Random.Range(0f, 2f * math.PI)), () =>
+
+        float2 startPos = position == null ? bossTransform.position.xy() : (float2) position;
+
+        StartCommand(engine.CreateBulletSpikeBall(group, new PositionParameter(startPos), 16, SpikeRadiusRange, SpikeRadiusVariation, Density, FormingSpeed, (polar, time) => new BulletKinematicPolar(new(), 0f, 0f, AngularVelocity, polar + float2(time*AngularVelocity, 0f), BulletRadius, Duration), UnityEngine.Random.Range(0f, 2f * math.PI)), () =>
         {
-            engine.SetBulletVelocity(group, normalize((playerTransform.position - bossTransform.position).xy()) * ThrowSpeed);
+            engine.SetBulletVelocity(group, normalize(playerTransform.position.xy() - startPos) * ThrowSpeed);
             finishAction();
         });
     }
