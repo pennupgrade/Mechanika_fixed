@@ -45,7 +45,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
         fp = gameObject.transform.GetChild(0);
         state = 0; frameTimer = 1;
         bulletDMG=80; maxBullets=25; missileDMG=180; shotgunDMG = 40;
-        moveSpeed=6; turnSpeed=80;
+        moveSpeed=6; turnSpeed=85;
         bulletCD=0.4f; bulletSpeed = 9; bulletReload=2; missileCD=12;
         maxHealth = 640; health=maxHealth; bulletsLeft = maxBullets;
         pfound=false; stunned=false;

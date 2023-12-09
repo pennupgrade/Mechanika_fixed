@@ -37,6 +37,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
 
     [Header("Misc")]
     [SerializeField] Animator Animator;
+    [SerializeField] SpriteRenderer sr;
 
     // Start is called before the first frame update
     void Awake(){
@@ -146,7 +147,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
             yield return new WaitForSeconds(.08f);
             }
         }else if (mType==2){
-            for(int i = 0; i<8; i++){
+            for(int i = 1; i<8; i++){
             GameObject missile = Instantiate (MissilePrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -10*i));
             missile.GetComponent<IMissile>().SetSpeed(4,8,18);
             missile.GetComponent<IMissile>().SetValues (missileDMG, 4, 110, false, Player);
@@ -409,6 +410,15 @@ public class Boss2AI : MonoBehaviour, IEnemy
         LaserController.DisableParticles();
         cam.GetComponent<CamShake>().Shake();
         for (int i = 0; i<8; i++){
+            if(i==3){
+                var temp = sr.color;
+                temp.a = 0.7f;
+                sr.color = temp;
+            } else if (i==6){
+                var temp = sr.color;
+                temp.a = 0.4f;
+                sr.color = temp;
+            }
             var a = Random.value*3-1.5f;
             var b = Random.value*3-1.5f;
             Instantiate(explosionPrefab, transform.position+transform.up*a+transform.right*b, Quaternion.Euler(new Vector3(0, 180, 0)));

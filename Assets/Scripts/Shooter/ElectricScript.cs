@@ -13,13 +13,15 @@ public class ElectricScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(frameTimer==0){
-            if(Vector3.Distance(player.transform.position, transform.position)<2.2f){
-                player.GetComponent<MikuMechControl>().MeleeDamage(dmg, false);
+        if (player != null){
+            if(frameTimer==0){
+                if(Vector3.Distance(player.transform.position, transform.position)<2.2f){
+                    player.GetComponent<MikuMechControl>().MeleeDamage(dmg, false);
+                }
+                frameTimer=5;
             }
-            frameTimer=5;
+            frameTimer--;
         }
-        frameTimer--;
     }
 
     public void SetPlayer(GameObject player, int dmg){

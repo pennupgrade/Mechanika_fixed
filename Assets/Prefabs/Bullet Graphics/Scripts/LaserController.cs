@@ -27,7 +27,7 @@ public class LaserController : MonoBehaviour
         // Laser Body
         ins.LaserMaterial.SetFloat("_UVYMult", quadHeight);
         ins.LaserMaterial.SetFloat("_LaserXScale", math.length(end - start));
-        Matrix4x4 mat = Matrix4x4.TRS(start.xyz(2f), Quaternion.FromToRotation(Vector3.right, ((Vector3)(end - start).xyz()).normalized), new Vector3(math.length(start - end), quadHeight, 1f));
+        Matrix4x4 mat = Matrix4x4.TRS(start.xyz(-1f), Quaternion.FromToRotation(Vector3.right, ((Vector3)(end - start).xyz()).normalized), new Vector3(math.length(start - end), quadHeight, 1f));
         Graphics.DrawMesh(Utils.Quad, mat, ins.LaserMaterial, LayerMask.NameToLayer("Default"), Camera.main, 0, null, false, false);
 
         // Laser Particle

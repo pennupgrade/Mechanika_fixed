@@ -16,12 +16,12 @@ Her back is turned towards you as you enter.
 #setvisible true
 #setspeaker charis
 <i>without looking</i>   I apologize, but I’m terribly busy at the moment. Let’s see... I don’t have any appointments scheduled for this time slot, so I’d be more than happy to speak with you once you’ve scheduled a tentative appointment and had it vetted by my secretary. The next available slot should be in around three months. #onend emotion miku sad
-* [I wouldn’t have burst in if this wasn’t an emergency, Chancellor.] -> c1
-* [I’m about to go on a tour and decided this was worth my while.] -> c2
-* [I’m afraid your evil deeds end here, the Vocaloid Fandom rises against you! Repent, then you may die.] -> c3
+* [This is an emergency] -> c1
+* [I’m going on a tour!] -> c2
+* ['Threaten'] -> c3
 
 = c1
-I wouldn’t have burst in if this wasn’t an emergency, Chancellor. #switchspeaker
+I wouldn’t have burst in if this wasn’t an emergency, Chancellor. #switchspeaker #playsound miku1
 #setvisible false
 This gets her attention, and she turns around in her seat to face you.
 #setvisible true
@@ -30,13 +30,13 @@ I suppose this can wait, I’ve been a little ahead of schedule today. What is t
 Wait a minute–blue twintails–red eyes–you’re Netsuha Kumi. You’re very popular amongst my citizens. Strange. All of my security drones have been incapacitated, but no alarms were triggered. How could this be? 
 #switchspeaker
 #emotion miku happy
-I am hiding in your WIFI. 
+I am hiding in your WIFI. #onend playsound miku2
 #switchspeaker
-Of course. So what could possibly have brought you here?
+Seems I would need to doule check my security procedure then. So what could possibly have brought you here?
 -> charis2c1
 = c2
 #emotion miku happy
-I’m about to go on a tour and decided this was worth my while. And if it’s worth my while, it sure is worth yours, too, <i>miss</i>. #switchspeaker
+I’m about to go on a tour and decided this was worth my while. And if it’s worth my while, it sure is worth yours, too, <i>miss</i>. #switchspeaker #playsound miku3
 #setvisible false
 She pauses, her hands hovering above her holographic keyboard. You certainly have her attention, if not reluctantly. She still has her back to you.
 #setvisible true
@@ -46,6 +46,7 @@ Ah. You must be Netsuha Kumi. My citizens have been in a buzz about your upcomin
 = c3
 #switchspeaker
 #onend emotion miku evil
+#playsound miku4
 I’m afraid your evil deeds end here, the Vocaloid Fandom rises against you! Repent, then you may die.
 #setvisible false
 #emotion miku happy
@@ -54,23 +55,24 @@ A single red button remains where her setup was. She presses it before getting u
 #setvisible true
 #switchspeaker
 Silence, android. I am Chancellor, the voice of my people. To threaten me with violence is to threaten my people with violence. #onend emotion miku evil
-It’s treason, then.  Erinye Protocol: Activation. 
+It’s treason, then.  Erinye Protocol: Activation.
 -> END
 
 ===charis2===
-* [We can negotiate, but only if you cooperate.] -> charis2c1
-* [\*flirt\* I don’t like sand. It’s course and rough and irritating, and it gets everywhere] -> charis2c2
+* [Try negotiate] -> charis2c1
+* [<i>flirt</i>] -> charis2c2
 
 
 ===charis2c1===
 #emotion miku sad
 #switchspeaker
+#playsound miku8
 Your faction is one of three raging for control over the moon. M.I.K.U. has asked me to step in and end this strife, and I’ve obliged.  We can negotiate some sort of peace, but only if you cooperate.
 #switchspeaker
 26,439. That’s how many of my citizens have died in this bloodshed. 11,571 of them were noncombatants, honest and fair people. I’m sorry, but I cannot.
 If I were to stop, I know their spirits would haunt me every night, for failing to stand up for them when it mattered. What could you possibly offer to atone for that?
 * [Tickets to my concert!] -> c1
-* [When we negotiate peace, I promise you’ll get a fair say.] -> c2
+* [Try negotiate] -> c2
 * [Do you know who I am?] -> c3
 * [Flirt] -> charis2c2
 
@@ -78,6 +80,7 @@ If I were to stop, I know their spirits would haunt me every night, for failing 
 = c1
 #switchspeaker
 #emotion miku happy
+#playsound miku6
 Front row seats to my upcoming tour, with travel and food costs included. Oh, and a 50% discount on Kumi merch, lifetime!
 #setvisible false
 Charis is stunned, sitting there for a few moments, clearly collecting her thoughts.
@@ -91,6 +94,7 @@ Perhaps I ought to beat some civility and manners into you, with force.
 = c2
 #switchspeaker
 #emotion miku sad
+#playsound miku7
 When we negotiate peace, I promise you’ll get a fair say.
 #setvisible false
 Charis pauses, considering your words.
@@ -101,8 +105,9 @@ You talk of big promises. Can you back them up?
 = c3
 #switchspeaker
 #emotion miku happy
-Sorry this is just kind of funny. 
-I’m kind of laughing right now looking at your face because you clearly don’t know who you’re speaking to.  
+Sorry this is just kind of funny.
+#playsound miku8
+I’m kind of laughing right now looking at your face because you clearly don’t know who you’re speaking to.
 #emotion miku sad
 Let me clue you in.  
 #switchspeaker
@@ -114,6 +119,7 @@ I look forward to ascertaining whether the great Netsuha Kumi lives up to her re
 ===charis2c2===
 #switchspeaker
 #emotion miku happy
+#playsound miku5
 I don’t like sand. It’s course and rough and irritating, and it gets everywhere. Not like here. Here everything is <i>pauses, looking at her</i> soft and…smooth.
 #setvisible false
 Charis is visibly taken aback, and pauses for a time, unsure of what to say and blushing somewhat.
@@ -122,13 +128,14 @@ Charis is visibly taken aback, and pauses for a time, unsure of what to say and 
 If I didn’t know any better…I would say that that was a feeble attempt at flirtation. I…why?
 #setvisible false
 The cool office building suddenly feels hotter.
-* [What do you say to talking over a couple of nice ice cream sundaes?] -> c1
-* [I could do with a hearty, hot meal right about now. What say you?] -> c2
+* [I want ice-creamm (´･ω･`)] -> c1
+* [I'm hungry (~_~;)] -> c2
 
 = c1
 #emotion miku happy
 #setvisible true
 #switchspeaker
+#playsound miku9
 What do you say to talking over a couple of nice ice cream sundaes, Chancellor? This office of yours is awfully stuffy.
 #switchspeaker
 A-as it happens, my personal chef makes excellent sundaes. I-I’m unsure how you would know that…perhaps it comes with the charisma required of a renowned idol. I’ll order us some…
@@ -138,7 +145,7 @@ She blushes slightly
 But afterwards we’ll have to return strictly to business matters, a-alright?
 -> charisSundaeChoice
 = c2 
-I could do with a hearty, hot meal right about now. What say you? Would you like to join me? We can talk as we eat.
+I could do with a hearty, hot meal right about now. What say you? Would you like to join me? We can talk as we eat. #playsound miku10
 #switchspeaker
 It’s incredibly stuffy in my office right now. That new artificial environment system must have broken down again. B-besides, this distraction has already persisted much too long. #onend emotion miku sad
 Let us return to our formal business. If you’ve nothing productive to discuss, I’ll have to ask you to leave.
@@ -152,6 +159,7 @@ What sort of sundae would you like, Kumi-san?
 
 = c1
 #switchspeaker
+#playsound miku11
 Chocolate, of course.
 #switchspeaker
 Chocolate is a beloved staple of this society, but recently a genetically engineered cocoa breed created by the military scientists of the Crimson Neon Legion has silently infiltrated cocoa farms across the moon, making all the cocoa fruit harbor tasteless, odorless, and colorless poisons. 
@@ -165,6 +173,7 @@ I'll make you wish the poison got you.
 -> END
 = c2 
 #switchspeaker
+#playsound miku12
 Vanilla, of course.
 #setvisible false
 Charis visibly recomposes herself.
@@ -181,6 +190,7 @@ She was right. The sundae is excellent.
 -> charis3
 = c3
 #switchspeaker
+#playsound miku13
 Banana Mango, of course.
 It’s my favorite, after all. There’s a place in Neo-Philadelphia that’s pretty good. Though I’m sure your chef can make a pretty mean one as well.
 #setvisible false
