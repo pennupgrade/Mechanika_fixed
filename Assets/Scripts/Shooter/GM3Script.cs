@@ -45,8 +45,6 @@ public class GM3Script : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SaveData.RoomsFinished[1] = true;
-        SaveData.RoomsFinished[2] = true;
         zeroTimer = -1;
         roomNum = 0; waveNum = 0;
         AS = GetComponent<AudioSource>();
