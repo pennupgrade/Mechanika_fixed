@@ -22,12 +22,13 @@ public class BallPattern : APattern
     public Color BeginColor;
     public Color OutlineColor;
 
-    public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction)
+    public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction, float2? position = null)
     {
         List<(string, BulletMaterial?)> groups = new();
         foreach (Color c in Colors) groups.Add((engine.UniqueGroup, new BulletMaterial(Shader, c)));
         GroupParameter group = new(engine, groups);
-        float2 startPos = bossTransform.position.xy() + BeginOffset; float2 toPlayer = startPos - playerTransform.position.xy();
+        float2 startPos = position == null ? bossTransform.position.xy() + BeginOffset : (float2) position;
+        float2 toPlayer = startPos - playerTransform.position.xy();
         startPos = playerTransform.position.xy() + math.normalize(toPlayer) * math.max(math.length(toPlayer), BallRadius * 3.05f+BulletRadius);
 
         GroupParameter beginGroup = new(engine, (engine.UniqueGroup, new BulletMaterial(Shader, BeginColor)));

@@ -659,6 +659,32 @@ MonoBehaviour:
   AudioPlayer: {fileID: 4681247694067122467}
   Sounds:
     _serializedList:
+    - Key: miku1
+      Value: {fileID: 8300000, guid: 8bed75d1b2493784e8282498caaa06e3, type: 3}
+    - Key: miku2
+      Value: {fileID: 8300000, guid: 6269ba5394099a74b9d7d024908f8884, type: 3}
+    - Key: miku3
+      Value: {fileID: 8300000, guid: bbaec0ef6f0d38f4e85da146cabf93f6, type: 3}
+    - Key: miku4
+      Value: {fileID: 8300000, guid: 68c4b89afd2c3114c8cee84892dec370, type: 3}
+    - Key: miku5
+      Value: {fileID: 8300000, guid: 67468b5184061974ea915cbf59136cd1, type: 3}
+    - Key: miku6
+      Value: {fileID: 8300000, guid: 53478ec0504f54746bb68279515efc92, type: 3}
+    - Key: miku7
+      Value: {fileID: 8300000, guid: 87923526ffc3305418d5c14b2bdce02f, type: 3}
+    - Key: miku8
+      Value: {fileID: 8300000, guid: 48c6d42ddb1997748a51c5dc105bbd16, type: 3}
+    - Key: miku9
+      Value: {fileID: 8300000, guid: 5655b94384d3134439a082a9120dd407, type: 3}
+    - Key: miku10
+      Value: {fileID: 8300000, guid: acb67f48df635274bb6429eb047d3a00, type: 3}
+    - Key: miku11
+      Value: {fileID: 8300000, guid: f24798cc053aee846a8e6cad21c5a5dd, type: 3}
+    - Key: miku12
+      Value: {fileID: 8300000, guid: 75e50b0d39443144db856c8786f863d9, type: 3}
+    - Key: miku13
+      Value: {fileID: 8300000, guid: f8b49aaf606fc3641b2014a3281b0199, type: 3}
     - Key: herewego
       Value: {fileID: 8300000, guid: 02a657dc88aa83c4a9fb2d26785b6376, type: 3}
     - Key: okie
