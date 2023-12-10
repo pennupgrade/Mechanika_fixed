@@ -232,20 +232,20 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
     }
     private IEnumerator Bomber2(){
         for (int i = 0; i<3; i++){ 
-                GameObject missile = Instantiate (explodeRocketPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, -30-30*(3-i)));
-                missile.GetComponent<IMissile>().SetSpeed(6,3,9);
-                missile.GetComponent<IMissile>().SetValues (60, 5, 140, true, Player);
-                missile.GetComponent<ExplosiveMissile>().SetElectric();
-                Vector3 t = Player.transform.position + 4*(Player.transform.position-transform.position).normalized + 6*(Vector3)Random.insideUnitCircle;
-                missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(t, 60);
-                GameObject missile2 = Instantiate (explodeRocketPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 30+30*(3-i)));
-                missile2.GetComponent<IMissile>().SetSpeed(6,3,9);
-                missile2.GetComponent<IMissile>().SetValues (60, 5, 140, true, Player);
-                missile2.GetComponent<ExplosiveMissile>().SetElectric();
-                t = Player.transform.position + 4*(Player.transform.position-transform.position).normalized + 6*(Vector3)Random.insideUnitCircle;
-                missile2.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(t, 60);
-                yield return new WaitForSeconds(0.4f);
-            }
+            GameObject missile = Instantiate (explodeRocketPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, -30-30*(3-i)));
+            missile.GetComponent<IMissile>().SetSpeed(6,3,9);
+            missile.GetComponent<IMissile>().SetValues (60, 5, 80, true, Player);
+            missile.GetComponent<ExplosiveMissile>().SetElectric();
+            Vector3 t = Player.transform.position + 4*(Player.transform.position-transform.position).normalized + 6*(Vector3)Random.insideUnitCircle;
+            missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(t, 60);
+            GameObject missile2 = Instantiate (explodeRocketPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 30+30*(3-i)));
+            missile2.GetComponent<IMissile>().SetSpeed(6,3,9);
+            missile2.GetComponent<IMissile>().SetValues (60, 5, 80, true, Player);
+            missile2.GetComponent<ExplosiveMissile>().SetElectric();
+            t = Player.transform.position + 4*(Player.transform.position-transform.position).normalized + 6*(Vector3)Random.insideUnitCircle;
+            missile2.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(t, 60);
+            yield return new WaitForSeconds(0.4f);
+        }
     }
     private void FireSpecial2(){
         if((enemyType != 3 && enemyType != 1) || specialCD2Timer>0.001) return;

@@ -45,6 +45,8 @@ public class GM3Script : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SaveData.RoomsFinished[1] = true;
+        SaveData.RoomsFinished[2] = true;
         zeroTimer = -1;
         roomNum = 0; waveNum = 0;
         AS = GetComponent<AudioSource>();
@@ -63,10 +65,10 @@ public class GM3Script : MonoBehaviour
     }
 
     public void lockDown (int room) {
-        zeroTimer = 0.001f;
         if(SaveData.RoomsFinished[room]){
             return;
         }
+        zeroTimer = 0.001f;
         roomNum = room; waveNum = 0;
         lines.SetActive(false);
         doors.SetActive(true);
@@ -112,6 +114,7 @@ public class GM3Script : MonoBehaviour
             enemyComp = enemyComp3;
         }
         yield return new WaitForSeconds(4);
+        zeroTimer = 0.001f;
         for (int i = 1; i < enemyComp[wNum].Length; i++) {
             yield return new WaitForSeconds(3);
             if(i==1) Spawn(enemyComp[wNum][0]);

@@ -10,7 +10,7 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
     private float spd, duration, acc, max, homingStr, homingAccel, Cturn, turnTimer;
     private Rigidbody2D rb;
     private Vector3 Target, TargetDirection;
-    private bool electric, destroyed;
+    private bool electric, destroyed, homing;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,8 +25,8 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
         duration -=Time.deltaTime;
         spd += acc*Time.deltaTime;
         if (spd>max) spd = max;
-        acc += homingAccel*Time.deltaTime;
-        if(acc>180)acc=180;
+        homingStr += homingAccel*Time.deltaTime;
+        if(homingStr>150) homingStr=150;
         
         if (duration<0) Destruction();
         turnTimer=TimerF(turnTimer);
@@ -34,6 +34,7 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
 
     void FixedUpdate()
     {   
+        if (homing) Target = player.transform.position;
         transform.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward;
         rb.MovePosition(rb.position+(Vector2)(Time.fixedDeltaTime*spd*transform.up));
         frameTimer--;
@@ -48,7 +49,7 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
                 turnTimer = 0.24f;
             }
         }
-        if(Vector3.Distance(Target,transform.position)<1) Destruction();
+        if(Vector3.Distance(Target,transform.position)<0.8f) Destruction();
     }
 
     void OnCollisionEnter2D(Collision2D c){
@@ -74,7 +75,8 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
                     Destroy(expl, 2);
                 }
                 var d = Vector3.Distance(player.transform.position,transform.position);
-                if (d<3) {
+                float radius = homing ? 1.4f : 3;
+                if (d<radius) {
                     player.GetComponent<MikuMechControl>().MeleeDamage(50+(int)((3-d)*damage/3), false);
                 }
             }
@@ -97,6 +99,9 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
     }
     public void SetElectric(){
         electric = true;
+    }
+    public void SetHoming(){
+        homing = true;
     }
     public void SetValues (int dmg, float timer, float homingStrength, bool stun, GameObject player){
         this.player = player;

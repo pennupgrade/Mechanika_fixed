@@ -431,14 +431,10 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     // Bullet Engine Interface for Boss 2
     public void Hit()
     {
-        throw new System.NotImplementedException();
+        Damage(40, false); // to be changed
     }
-
-    public bool CanBeHit => true;
-
+    public bool CanBeHit => !dashing;
     public Unity.Mathematics.float2 Position => transform.position.xy();
-
-    public float Radius => 0.8f; //TEMP
-
+    public float Radius => 0.5f; //TEMP
     public Transform Transform => this.transform;
 }

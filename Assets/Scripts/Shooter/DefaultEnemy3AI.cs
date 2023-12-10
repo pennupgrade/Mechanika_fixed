@@ -193,7 +193,7 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
         if (enemyType == 1){
             GameObject missile = Instantiate (explodeRocketPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 16*(Random.value-0.5f)));
             missile.GetComponent<IMissile>().SetSpeed(6,5,10);
-            missile.GetComponent<IMissile>().SetValues (200, 3, 70, true, Player);
+            missile.GetComponent<IMissile>().SetValues (200, 3, 60, true, Player);
             Vector3 t = Player.transform.position + 3*(Player.transform.position-transform.position).normalized + 4*(Vector3)Random.insideUnitCircle;
             missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(t, 50);
         }
