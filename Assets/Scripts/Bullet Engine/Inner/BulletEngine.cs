@@ -53,7 +53,7 @@ public partial class BulletEngine
     //
     public BulletEngine() => Engines.Add(this);
     public BulletEngine(List<IBulletEngineInteractable> interactables) : this() => this.interactables = interactables;
-    public BulletEngine(List<IBulletEngineInteractable> interactables, float2 boundSize) : this(interactables) => this.boundSize = boundSize;
+    public BulletEngine(List<IBulletEngineInteractable> interactables, float2 boundSize, float2 boundOrigin) : this(interactables) { this.boundSize = boundSize; this.boundOrigin = boundOrigin; }
 
     //
     public void Update(float dt)
@@ -124,6 +124,7 @@ public partial class BulletEngine
 
     public float2 BoundSize => boundSize;
     float2 boundSize;
+    float2 boundOrigin;
 
     public void CheckWall() 
     {
@@ -159,7 +160,7 @@ public partial class BulletEngine
                     kvp.Value[i] = b;
                 }*/
 
-                wallNormal = Utilities.Collision.PointCollideArena(this, p, r);
+                wallNormal = Utilities.Collision.PointCollideArena(this, p - boundOrigin, r);
                 if(wallNormal != null) 
                 {
                     b.OnHitWall((float2) wallNormal);
