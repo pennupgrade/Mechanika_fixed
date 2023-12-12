@@ -82,7 +82,9 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
         if(!commands[0]&&songPosition>0){ commands[0] = true;
             Boss.SetMode(-10); Dialogue("Objectives:", "1. Overload V53-A's core by depleting its shields\n2. Survive");
         } else if(!commands[1]&&songPosition>17){ commands[1] = true;
-            Dialogue("Venge", "First sound of the future? Let this be your last.");
+            if(SaveData.Deaths[SceneManager.GetActiveScene().buildIndex]<4)
+                Dialogue("Venge", "Hmm... Should I go easy on you?");
+            else Dialogue("Venge", "Don't think I'm about to go easy on you.");
         } else if(!commands[2]&&songPosition>60){ commands[2] = true;
             Boss.SetMode(1); Dialogue("Venge", "It's time for me to show you your limits.");
         } else if(!commands[3]&&songPosition>110){ commands[3] = true;
@@ -90,7 +92,9 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
         } else if(!commands[4]&&songPosition>140){ commands[4] = true;
             Boss.SetMode(1); SpawnHeal();
         } else if(!commands[5]&&songPosition>165){ commands[5] = true;
-            Boss.SetMode(0); Dialogue("Venge", "Wow, you're really stretching my limits, huh. I'm not quite done yet, miss.");
+            if(SaveData.Deaths[SceneManager.GetActiveScene().buildIndex]<5)
+                Dialogue("Venge", "Well you're pretty good. I'm surprised.");
+            else Dialogue("Venge", "Wow, you're really stretching my limits, huh. I'm not quite done yet, miss.");
         } else if(!commands[6]&&songPosition>208){ commands[6] = true;
             Boss.SetMode(1); Dialogue("Venge", "You ready?"); SpawnHeal();
         } else if (!commands[7]&&songPosition>292){ commands[7] = true;
@@ -105,13 +109,13 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
 
     private IEnumerator Win(){
         yield return new WaitForSeconds(2);
-        //go to VN
+        //go to VN?
         yield return StartCoroutine(SetPanelTrue());
         yield return new WaitForSeconds(2);
         yield return StartCoroutine(FadeInText(MissionComplete));
-        SaveData.SceneNum = 4; // change to end screen later
         yield return new WaitForSeconds(5);
-        SceneManager.LoadSceneAsync("MainMenu");
+        SaveData.SceneNum = -1;
+        SceneManager.LoadSceneAsync("WinScreen");
     }
 
     private IEnumerator SetPanelFalse(){

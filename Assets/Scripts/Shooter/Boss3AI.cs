@@ -48,11 +48,11 @@ public class Boss3AI : MonoBehaviour, IEnemy
     void Start()
     {
         MoveDir=Vector2.zero;
-        maxHealth = 13000; health=maxHealth;
+        maxHealth = 13900; health=maxHealth;
         moveState = 0;
         frameTimer = 1;
         trackingBspd = 16;
-        bulletDMG = 72; rocketDMG = 160; missileDMG = 130;
+        bulletDMG = 72; rocketDMG = 180; missileDMG = 140;
         electricDMG = 40; magicDMG = 100;
         Cturn = 0;
         moveSpeed=6; mspeed = moveSpeed; turnSpeed=100; tspeed = turnSpeed;
@@ -290,12 +290,12 @@ public class Boss3AI : MonoBehaviour, IEnemy
             for (int i = 0; i<5; i++){ 
                 GameObject missile = Instantiate (MissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, -20-25*(5-i)));
                 missile.GetComponent<IMissile>().SetSpeed(13, 1, 14);
-                missile.GetComponent<IMissile>().SetValues (missileDMG, 3.6f, 20, true, Player);
+                missile.GetComponent<IMissile>().SetValues (missileDMG, 3.9f, 20, true, Player);
                 missile.GetComponent<ExplosiveMissile>().SetHoming();
                 missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 40);
                 GameObject missile2 = Instantiate (MissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 20+25*(5-i)));
                 missile2.GetComponent<IMissile>().SetSpeed(13, 1, 14);
-                missile2.GetComponent<IMissile>().SetValues (missileDMG, 3.6f, 20, true, Player);
+                missile2.GetComponent<IMissile>().SetValues (missileDMG, 3.9f, 20, true, Player);
                 missile2.GetComponent<ExplosiveMissile>().SetHoming();
                 missile2.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 40);
                 yield return new WaitForSeconds(0.117647f);
