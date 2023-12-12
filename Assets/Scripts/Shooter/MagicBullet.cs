@@ -37,7 +37,8 @@ public class MagicBullet : MonoBehaviour, IMissile
                 duration = 5;
                 max=max+2;
                 targetNum--;
-                homingStr += 40;
+                if (homingStr > 10)
+                    homingStr += 40;
             } else {
                 Destruction();
             }

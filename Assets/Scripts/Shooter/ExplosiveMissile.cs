@@ -33,8 +33,8 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
     }
 
     void FixedUpdate()
-    {   
-        if (homing) Target = player.transform.position;
+    {  
+        if (player != null && homing) Target = player.transform.position;
         transform.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward;
         rb.MovePosition(rb.position+(Vector2)(Time.fixedDeltaTime*spd*transform.up));
         frameTimer--;

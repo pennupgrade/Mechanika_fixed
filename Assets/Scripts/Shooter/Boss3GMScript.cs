@@ -43,8 +43,8 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
         if(!started) return;
         songPosition = (float) (AudioSettings.dspTime - dsptimesong);
         songPosInBeats = songPosition / secPerBeat;
-        minLeft = (294-(int)songPosition)/60; if(minLeft<0) minLeft=0;
-        secLeft = (294-(int)songPosition)%60; if(secLeft<0) secLeft=0;
+        minLeft = (293-(int)songPosition)/60; if(minLeft<0) minLeft=0;
+        secLeft = (293-(int)songPosition)%60; if(secLeft<0) secLeft=0;
         CountDown.text="Time Remaining:\n" + minLeft.ToString().PadLeft(1,'0')+":"+secLeft.ToString().PadLeft(2,'0');
 
         Commander();
@@ -52,6 +52,10 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
         if (nextIndexR < rAttacks.Length && rAttacks[nextIndexR].Item1 < songPosInBeats){
             Boss.SetAttack(rAttacks[nextIndexR].Item2);
             nextIndexR++;
+        }
+        if (nextIndexB < bAttacks.Length && bAttacks[nextIndexB].Item1 < songPosInBeats){
+            Boss.SetBulletEngine(bAttacks[nextIndexB].Item2);
+            nextIndexB++;
         }
 
         if(Boss.health==0&&!hpDialogue){
@@ -89,7 +93,7 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
             Boss.SetMode(0); Dialogue("Venge", "Wow, you're really stretching my limits, huh. I'm not quite done yet, miss.");
         } else if(!commands[6]&&songPosition>208){ commands[6] = true;
             Boss.SetMode(1); Dialogue("Venge", "You ready?"); SpawnHeal();
-        } else if (!commands[7]&&songPosition>294){ commands[7] = true;
+        } else if (!commands[7]&&songPosition>292){ commands[7] = true;
             bool a = Boss.CheckDefeated();
             if(a) {
                 StartCoroutine(Win());
