@@ -17,7 +17,7 @@ using BulletUtilities;
 public class KinematicTrailPattern : APattern
 {
 
-    [Min(0.001f)] [Tooltip("Lower parameter means more precise kinematic body simulation, that's all.")] public float TimeStep = 0.015f;
+    [Min(0.001f)] [Tooltip("The 'framerate' of the trail.")] public float TimeStep = 0.015f;
     [Tooltip("How much time between bullet spawns?")] public float SpawnRate = 0.1f;
 
     [Space(10f)]
