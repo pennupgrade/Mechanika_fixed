@@ -226,7 +226,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
         EnergyUpdate(-energy+10);
         for(int i = 0; i<count; i++){
             GameObject bullet = Instantiate (MeteorPrefab, transform.position+0.15f*Vector3.up, Quaternion.identity);
-            bullet.GetComponent<MeteorMissileScript>().SetValues (w5DMG-20+20*count, 4, 3, 10, 5, 95, gameObject);
+            bullet.GetComponent<MeteorMissileScript>().SetValues (w5DMG-20+20*count, 4, 3, 10, 5, 110, gameObject);
             var a = 1;
             if(d.y<0) a = -1;
             bullet.transform.eulerAngles = (a*Vector2.Angle(new Vector2(1,0), d)-140+10*i)* Vector3.forward;

@@ -101,7 +101,7 @@ public class Boss3AI : MonoBehaviour, IEnemy
     }
     private void Dash(){
         dashing = true; dashTimer= 0.588235f;
-        mspeed = 4*moveSpeed;
+        mspeed = 5*moveSpeed;
         int iter = 0;
         if (Vector3.Distance(new Vector3(0,36,0), transform.position)>10){
             do{
@@ -159,11 +159,11 @@ public class Boss3AI : MonoBehaviour, IEnemy
     private IEnumerator DashRockets(){
         if(Player==null) {StopAllCoroutines(); yield break;}
         // create ring of bullets
-        for(int i = 0; i<6; i++){
+        for(int i = 0; i<11; i++){
             GameObject missile = Instantiate (RocketPrefab, transform.position, fp.rotation);
-            missile.GetComponent<IMissile>().SetSpeed(1,20,26);
-            missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.70588f, 5, true, Player);
-            yield return new WaitForSeconds(0.117647f);
+            missile.GetComponent<IMissile>().SetSpeed(2,20,26);
+            missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.70588f + 0.17647f*i - 0.058823f*i, 20, true, Player);
+            yield return new WaitForSeconds(0.058823f);
         }
     }
     private void SingleRocket(){
