@@ -123,6 +123,7 @@ public partial class BulletEngine
 {
 
     public float2 BoundSize => boundSize;
+    public float2 BoundOrigin => boundOrigin;
     float2 boundSize;
     float2 boundOrigin;
 
@@ -130,7 +131,6 @@ public partial class BulletEngine
     {
 
         ITBullet b;
-
         float2? wallNormal;
 
         foreach(var kvp in bullets)
@@ -141,24 +141,6 @@ public partial class BulletEngine
 
                 float2 p = b.Position;
                 float r = b.Radius;
-
-                /*float2 lp = p;
-                lp = abs(lp);
-                lp = boundSize*.5f - lp;
-
-                float minDist = min(lp.x, lp.y) - r;
-
-                if(minDist <= 0)
-                {
-                    bool isXWall = lp.x < lp.y;
-
-                    wallNormal =  isXWall ? float2(-1f, 0f) : float2(0f, -1f);
-                    wallNormal *= isXWall ? step(0f, p.x)*2f-1f : step(0f, p.y)*2f-1f;
-
-                    b.OnHitWall(wallNormal);
-
-                    kvp.Value[i] = b;
-                }*/
 
                 wallNormal = Utilities.Collision.PointCollideArena(this, p - boundOrigin, r);
                 if(wallNormal != null) 
