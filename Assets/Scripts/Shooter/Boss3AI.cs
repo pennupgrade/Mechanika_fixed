@@ -153,16 +153,18 @@ public class Boss3AI : MonoBehaviour, IEnemy
         }
     }
     public void SetBulletEngine(int a){
-        if (a == 0) {
-            CQRing();
-        } else if (a == 1) {
-            Ring();
-        } else if (a == 2) {
-            FireRing();
-        } else if (a == 3) {
-            BouncingTrail();
-        } else if (a == 4) {
-            DrawCircle();
+        switch(a) 
+        {
+            case 0:
+            CQRing(); break;
+            case 1:
+            Ring(); break;
+            case 2:
+            FireRing(); break;
+            case 3:
+            BouncingTrail(); break;
+            case 4:
+            DrawCircle(); break;
         }
     }    
     // engine attacks

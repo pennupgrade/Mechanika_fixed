@@ -24,16 +24,6 @@ Shader "Unlit/BulletShaders/FireyGlowBullet"
             #include "../../../../VN/Shaders/Common.hlsl"
             #include "BulletProps.hlsl"
 
-            /*StructuredBuffer<float2> Positions;
-            StructuredBuffer<float> Radiuses;
-            StructuredBuffer<float2> Directions;
-
-            struct vIn
-            {
-                float4 vertex : POSITION;
-                float2 uv : TEXCOORD0;
-            };*/
-
             struct vOut
             {
                 float4 vertex : SV_POSITION;
