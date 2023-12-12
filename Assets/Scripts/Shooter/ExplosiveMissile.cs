@@ -5,7 +5,7 @@ using UnityEngine;
 public class ExplosiveMissile : MonoBehaviour, IMissile
 {
     private GameObject player;
-    public GameObject explosionPrefab, electricPrefab;
+    public GameObject explosionPrefab, electricPrefab, explosionPrefab2;
     private int damage, frameTimer;
     private float spd, duration, acc, max, homingStr, homingAccel, Cturn, turnTimer;
     private Rigidbody2D rb;
@@ -70,12 +70,14 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
                 elect.GetComponent<ElectricScript>().SetPlayer(player, damage);
                 Destroy(elect, 10+Random.value);
             } else {
-                if(explosionPrefab!=null){
-                    GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
-                    Destroy(expl, 2);
-                }
+                GameObject expl;
+                if(homing){
+                    expl = Instantiate(explosionPrefab2, transform.position, Quaternion.Euler(new Vector3(0, 180, 0))); 
+                } else {
+                    expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0))); 
+                } Destroy(expl, 2);
                 var d = Vector3.Distance(player.transform.position,transform.position);
-                float radius = homing ? 1.4f : 3;
+                float radius = homing ? 1 : 3;
                 if (d<radius) {
                     player.GetComponent<MikuMechControl>().MeleeDamage(50+(int)((3-d)*damage/3), false);
                 }

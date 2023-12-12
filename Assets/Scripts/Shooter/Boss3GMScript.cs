@@ -16,22 +16,25 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
     public Boss3AI Boss;
     public float songPosInBeats;
     private float secPerBeat, dsptimesong, bpm;
-    private bool started, hpDialogue, mikuSong;
+    private bool started, hpDialogue, dialoguePlaying;
     private bool[] commands;
-    private float[] beats = {};
-    private int nextIndex, minLeft, secLeft;
+    private (float X, int Y) [] rAttacks;
+    private (float X, int Y) [] bAttacks;
+    private int nextIndexR, nextIndexB, minLeft, secLeft;
     private AudioSource AS;
 
     void Start(){
         SaveData.SceneNum = SceneManager.GetActiveScene().buildIndex;
         Player = GameObject.FindWithTag("Player");
         StartCoroutine(SetPanelFalse());
-        started = false; hpDialogue = false; mikuSong = false;
+        started = false; hpDialogue = false; dialoguePlaying = false;
         bpm = 85;
         secPerBeat = 60f / bpm;
         AS = GetComponent<AudioSource>();
-        commands = new bool[24];
-        nextIndex = 0;
+        rAttacks = SaveData.rAttacks3;
+        bAttacks = SaveData.bAttacks3;
+        commands = new bool[9];
+        nextIndexB = 0; nextIndexR = 0; 
     }
 
     // Update is called once per frame
@@ -40,15 +43,15 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
         if(!started) return;
         songPosition = (float) (AudioSettings.dspTime - dsptimesong);
         songPosInBeats = songPosition / secPerBeat;
-        minLeft = (299-(int)songPosition)/60; if(minLeft<0) minLeft=0;
-        secLeft = (299-(int)songPosition)%60; if(secLeft<0) secLeft=0;
+        minLeft = (294-(int)songPosition)/60; if(minLeft<0) minLeft=0;
+        secLeft = (294-(int)songPosition)%60; if(secLeft<0) secLeft=0;
         CountDown.text="Time Remaining:\n" + minLeft.ToString().PadLeft(1,'0')+":"+secLeft.ToString().PadLeft(2,'0');
 
         Commander();
-        if (nextIndex < beats.Length && beats[nextIndex] < songPosInBeats){
-            
 
-            nextIndex++;
+        if (nextIndexR < rAttacks.Length && rAttacks[nextIndexR].Item1 < songPosInBeats){
+            Boss.SetAttack(rAttacks[nextIndexR].Item2);
+            nextIndexR++;
         }
 
         if(Boss.health==0&&!hpDialogue){
@@ -72,7 +75,28 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
     }
 
     private void Commander(){
-        
+        if(!commands[0]&&songPosition>0){ commands[0] = true;
+            Boss.SetMode(-10); Dialogue("Objectives:", "1. Overload V53-A's core by depleting its shields\n2. Survive");
+        } else if(!commands[1]&&songPosition>17){ commands[1] = true;
+            Dialogue("Venge", "First sound of the future? Let this be your last.");
+        } else if(!commands[2]&&songPosition>60){ commands[2] = true;
+            Boss.SetMode(1); Dialogue("Venge", "It's time for me to show you your limits.");
+        } else if(!commands[3]&&songPosition>110){ commands[3] = true;
+            Boss.SetMode(0); 
+        } else if(!commands[4]&&songPosition>140){ commands[4] = true;
+            Boss.SetMode(1); SpawnHeal();
+        } else if(!commands[5]&&songPosition>165){ commands[5] = true;
+            Boss.SetMode(0); Dialogue("Venge", "Wow, you're really stretching my limits, huh. I'm not quite done yet, miss.");
+        } else if(!commands[6]&&songPosition>208){ commands[6] = true;
+            Boss.SetMode(1); Dialogue("Venge", "You ready?"); SpawnHeal();
+        } else if (!commands[7]&&songPosition>294){ commands[7] = true;
+            bool a = Boss.CheckDefeated();
+            if(a) {
+                StartCoroutine(Win());
+                Dialogue("Venge","Damn it...");
+            }
+            else Dialogue("Venge","Might wanna up your game.");
+        }
     }
 
     private IEnumerator Win(){
@@ -130,11 +154,11 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
         if(Time.timeScale > 0.9f){
             PausePanel.SetActive(true);
             Time.timeScale = 0;
-            if (mikuSong) AudioListener.pause = true;
+            AudioListener.pause = true;
         } else {
             PausePanel.SetActive(false);
             Time.timeScale = 1;
-            if (mikuSong) AudioListener.pause = false;
+            AudioListener.pause = false;
         }
     }
     public void RestartButton(){
@@ -149,9 +173,11 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
     }
 
     public void Dialogue(string n, string s){
-        StartCoroutine(DialogueCor(n, s));
+        if (!dialoguePlaying)
+            StartCoroutine(DialogueCor(n, s));
     }
     private IEnumerator DialogueCor(string n, string s){
+        dialoguePlaying = true;
         DialogueName.gameObject.SetActive(true);
         DialogueText.gameObject.SetActive(true);
         DialogueName.text = n; 
@@ -163,6 +189,7 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
         yield return FadeOutText(DialogueName);
         DialogueName.gameObject.SetActive(false);
         DialogueText.gameObject.SetActive(false);
+        dialoguePlaying = false;
     }
 
     private IEnumerator FadeInText(TextMeshProUGUI t){

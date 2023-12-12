@@ -48,14 +48,14 @@ public class Boss3AI : MonoBehaviour, IEnemy
     void Start()
     {
         MoveDir=Vector2.zero;
-        maxHealth = 14000; health=maxHealth;
+        maxHealth = 13500; health=maxHealth;
         moveState = 0;
         frameTimer = 1;
         trackingBspd = 16;
-        bulletDMG = 72; rocketDMG = 180; missileDMG = 160;
+        bulletDMG = 72; rocketDMG = 180; missileDMG = 130;
         electricDMG = 40; magicDMG = 100;
         Cturn = 0;
-        mspeed = 5.5f; moveSpeed=5.5f; turnSpeed=100; tspeed = turnSpeed;
+        moveSpeed=6.5f; mspeed = moveSpeed; turnSpeed=100; tspeed = turnSpeed;
         meleeTimer = 0; dashTimer = 0;
     }
 
@@ -120,6 +120,7 @@ public class Boss3AI : MonoBehaviour, IEnemy
         moveState = m;
         if (moveState == -10){
             moveState = 0 ; health = maxHealth;
+            Waypoint = new Vector2(0,36);
             StartCoroutine(BarAnimation());
         }
 
@@ -161,33 +162,33 @@ public class Boss3AI : MonoBehaviour, IEnemy
         // create ring of bullets
         for(int i = 0; i<11; i++){
             GameObject missile = Instantiate (RocketPrefab, transform.position, fp.rotation);
-            missile.GetComponent<IMissile>().SetSpeed(2,20,26);
-            missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.70588f + 0.17647f*i - 0.058823f*i, 20, true, Player);
+            missile.GetComponent<IMissile>().SetSpeed(2,80,32);
+            missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.70588f + 0.088235f*i - 0.058823f*i, 40, true, Player);
             yield return new WaitForSeconds(0.058823f);
         }
     }
     private void SingleRocket(){
         if(Player==null) return;
         GameObject missile = Instantiate (RocketPrefab, transform.position, fp.rotation);
-        missile.GetComponent<IMissile>().SetSpeed(4,20,26);
-        missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.70588f, 120, true, Player);
+        missile.GetComponent<IMissile>().SetSpeed(4,36,26);
+        missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.70588f, 110, true, Player);
     }
     private IEnumerator RocketBarrage(){
         if(Player==null) {StopAllCoroutines(); yield break;}
-        for(int i = 0; i<3; i++){
-            GameObject missile = Instantiate (RocketPrefab, fp.position+fp.right, transform.rotation*Quaternion.Euler(0, 0, -130+35*i));
-            missile.GetComponent<IMissile>().SetSpeed(8,50,28);
+        for(int i = 0; i<4; i++){
+            GameObject missile = Instantiate (RocketPrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -130+35*i));
+            missile.GetComponent<IMissile>().SetSpeed(8,40,28);
             missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.35294f * (2 - i) + 0.70588f, 92, true, Player);
-            GameObject missile2 = Instantiate (RocketPrefab, fp.position-fp.right, transform.rotation*Quaternion.Euler(0, 0, 130-35*i));
-            missile2.GetComponent<IMissile>().SetSpeed(8,50,28);
+            GameObject missile2 = Instantiate (RocketPrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 130-35*i));
+            missile2.GetComponent<IMissile>().SetSpeed(8,40,28);
             missile2.GetComponent<IMissile>().SetValues (rocketDMG, 0.35294f * (2 - i) + 0.70588f, 92, true, Player);
             yield return new WaitForSeconds(0.35294f);
         }
     }
     private IEnumerator MagicBullets(){
         for (int i = 0; i<4; i++){
-            FireMagicBullet( transform.rotation*Quaternion.Euler(0, 0, -60-20*(3-i)));
-            FireMagicBullet( transform.rotation*Quaternion.Euler(0, 0, 60+20*(3-i)));
+            FireMagicBullet( transform.rotation*Quaternion.Euler(0, 0, 120-20*(3-i)));
+            FireMagicBullet( transform.rotation*Quaternion.Euler(0, 0, -120+20*(3-i)));
             yield return new WaitForSeconds(0.70588f);
         }
 
@@ -195,26 +196,26 @@ public class Boss3AI : MonoBehaviour, IEnemy
     private void FireMagicBullet(Quaternion q){
         if(Player==null) return;
         GameObject missile = Instantiate (MagicBullet, fp.position, q);
-        missile.GetComponent<IMissile>().SetSpeed(6,3,13);
+        missile.GetComponent<IMissile>().SetSpeed(6,3,12);
         missile.GetComponent<IMissile>().SetValues (magicDMG, 4, 1, true, Player);
     }
     private void FireHybridMissiles(bool straight, int? c = null){
         if(Player==null) return;
-        int count = (c == null) ? 3 : (int) c;
+        int count = (c == null) ? 4 : (int) c;
         for(int i = 1; i<count + 1; i++){
-            GameObject missile = Instantiate (HybridMissile, fp.position, fp.rotation*Quaternion.Euler(0, 0, -40-40*i));
+            GameObject missile = Instantiate (HybridMissile, fp.position, fp.rotation*Quaternion.Euler(0, 0, -12-42*i));
             missile.GetComponent<IMissile>().SetSpeed(5,50,26);
             missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.70588f * i, 80, true, Player);
-            GameObject missile2 = Instantiate (HybridMissile, fp.position, fp.rotation*Quaternion.Euler(0, 0, 40+40*i));
+            GameObject missile2 = Instantiate (HybridMissile, fp.position, fp.rotation*Quaternion.Euler(0, 0, 12+42*i));
             missile2.GetComponent<IMissile>().SetSpeed(5,50,26);
             missile2.GetComponent<IMissile>().SetValues (rocketDMG, 0.70588f * i, 80, true, Player);
             if (straight) {
                 missile.GetComponent<HybridMissile>().SetVector (fp.up);
                 missile2.GetComponent<HybridMissile>().SetVector (fp.up);
             } else {
-                float rnd = 70*Random.value;
+                float rnd = 60*Random.value;
                 missile.GetComponent<HybridMissile>().SetVector ((Quaternion.AngleAxis(rnd,Vector3.forward)*fp.up));
-                missile.GetComponent<HybridMissile>().SetVector ((Quaternion.AngleAxis(-rnd,Vector3.forward)*fp.up));
+                missile2.GetComponent<HybridMissile>().SetVector ((Quaternion.AngleAxis(-rnd,Vector3.forward)*fp.up));
             }
         }
     }
@@ -228,18 +229,18 @@ public class Boss3AI : MonoBehaviour, IEnemy
     }
     private IEnumerator ElectricBarrage(){
         if(Player==null) {StopAllCoroutines(); yield break;}
-        for (int i = 0; i<4; i++){ 
-            GameObject missile = Instantiate (MissilePrefab, fp.position, transform.rotation*Quaternion.Euler(0, 0, -40-30*(3-i)));
+        for (int i = 0; i<5; i++){ 
+            GameObject missile = Instantiate (MissilePrefab, fp.position, transform.rotation*Quaternion.Euler(0, 0, -40-24*(3-i)));
             missile.GetComponent<IMissile>().SetSpeed(6,3,9);
             missile.GetComponent<IMissile>().SetValues (electricDMG, 5, 60, true, Player);
             missile.GetComponent<ExplosiveMissile>().SetElectric();
-            Vector3 t = Player.transform.position + 2*(Player.transform.position-transform.position).normalized + 6*(Vector3)Random.insideUnitCircle;
+            Vector3 t = Player.transform.position + 2*(Player.transform.position-transform.position).normalized + 9*(Vector3)Random.insideUnitCircle;
             missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(t, 60);
-            GameObject missile2 = Instantiate (MissilePrefab, fp.position, transform.rotation*Quaternion.Euler(0, 0, 40+30*(3-i)));
+            GameObject missile2 = Instantiate (MissilePrefab, fp.position, transform.rotation*Quaternion.Euler(0, 0, 40+24*(3-i)));
             missile2.GetComponent<IMissile>().SetSpeed(6,3,9);
             missile2.GetComponent<IMissile>().SetValues (electricDMG, 5, 60, true, Player);
             missile2.GetComponent<ExplosiveMissile>().SetElectric();
-            t = Player.transform.position + 2*(Player.transform.position-transform.position).normalized + 6*(Vector3)Random.insideUnitCircle;
+            t = Player.transform.position + 2*(Player.transform.position-transform.position).normalized + 9*(Vector3)Random.insideUnitCircle;
             missile2.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(t, 60);
             yield return new WaitForSeconds(0.35294f);
         }
@@ -247,31 +248,45 @@ public class Boss3AI : MonoBehaviour, IEnemy
     private IEnumerator MissileBarrage(int num){
         if(Player==null) {StopAllCoroutines(); yield break;}
         if (num == 1){
-            for (int i = 0; i<6; i++){ 
+            for (int i = 0; i<5; i++){ 
                 GameObject missile = Instantiate (MissilePrefab, fp.position, transform.rotation*Quaternion.Euler(0, 0, -30-25*(5-i)));
-                missile.GetComponent<IMissile>().SetSpeed(8, 3, 14);
+                missile.GetComponent<IMissile>().SetSpeed(8, 2.2f, 12);
                 missile.GetComponent<IMissile>().SetValues (missileDMG, 4, 85, true, Player);
                 missile.GetComponent<ExplosiveMissile>().SetHoming();
-                missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 20);
+                missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 6);
                 GameObject missile2 = Instantiate (MissilePrefab, fp.position, transform.rotation*Quaternion.Euler(0, 0, 30+25*(5-i)));
-                missile2.GetComponent<IMissile>().SetSpeed(8, 3, 14);
+                missile2.GetComponent<IMissile>().SetSpeed(8, 2.2f, 12);
                 missile2.GetComponent<IMissile>().SetValues (missileDMG, 4, 85, true, Player);
                 missile2.GetComponent<ExplosiveMissile>().SetHoming();
-                missile2.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 20);
+                missile2.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 6);
                 yield return new WaitForSeconds(0.117647f);
             }
         } else if (num == 2){
             for (int i = 0; i<5; i++){ 
                 GameObject missile = Instantiate (MissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, -20-25*(5-i)));
-                missile.GetComponent<IMissile>().SetSpeed(15, 1, 16);
+                missile.GetComponent<IMissile>().SetSpeed(13, 1, 15);
                 missile.GetComponent<IMissile>().SetValues (missileDMG, 3.6f, 20, true, Player);
                 missile.GetComponent<ExplosiveMissile>().SetHoming();
-                missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 90);
+                missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 80);
                 GameObject missile2 = Instantiate (MissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 20+25*(5-i)));
-                missile2.GetComponent<IMissile>().SetSpeed(15, 1, 16);
+                missile2.GetComponent<IMissile>().SetSpeed(13, 1, 15);
                 missile2.GetComponent<IMissile>().SetValues (missileDMG, 3.6f, 20, true, Player);
                 missile2.GetComponent<ExplosiveMissile>().SetHoming();
-                missile2.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 90);
+                missile2.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 80);
+                yield return new WaitForSeconds(0.117647f);
+            }
+        } else {
+            for (int i = 0; i<6; i++){ 
+                GameObject missile = Instantiate (MissilePrefab, fp.position, transform.rotation*Quaternion.Euler(0, 0, -30-25*(5-i)));
+                missile.GetComponent<IMissile>().SetSpeed(8, 3, 15);
+                missile.GetComponent<IMissile>().SetValues (rocketDMG, 4, 85, true, Player);
+                missile.GetComponent<ExplosiveMissile>().SetHoming();
+                missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 50);
+                GameObject missile2 = Instantiate (MissilePrefab, fp.position, transform.rotation*Quaternion.Euler(0, 0, 30+25*(5-i)));
+                missile2.GetComponent<IMissile>().SetSpeed(8, 3, 15);
+                missile2.GetComponent<IMissile>().SetValues (rocketDMG, 4, 85, true, Player);
+                missile2.GetComponent<ExplosiveMissile>().SetHoming();
+                missile2.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 50);
                 yield return new WaitForSeconds(0.117647f);
             }
         }
@@ -284,7 +299,6 @@ public class Boss3AI : MonoBehaviour, IEnemy
 
     private void SetWaypoint(){
         if (Player==null) return;
-        if (moveState==0) return;
         if ((Waypoint.x==0 && Waypoint.y==0) || Vector2.Distance(Waypoint, rb.position)<1){
             if(moveState==0) {
                 Waypoint = new Vector2(0,36) + 6*Random.insideUnitCircle;
@@ -297,7 +311,7 @@ public class Boss3AI : MonoBehaviour, IEnemy
         if (health == 0) {StartCoroutine(Destruction()); return true;}
         else{
             //shoot ??? at miku
-            StopAllCoroutines();
+            StartCoroutine(MissileBarrage(3));
             mspeed=0;
             return false;
         }
@@ -331,7 +345,7 @@ public class Boss3AI : MonoBehaviour, IEnemy
             point = new Vector2(Random.Range(-23.0f, 23.0f),20+Random.Range(1.0f, 30.0f));
             iter++;
             dist = Vector3.Distance(Player.transform.position,(Vector3)point);
-        }while(iter < 13 && !(dist > d && ((d>12)?(true):(dist<20)) ));
+        }while(iter < 13 && !(dist > d && dist < 20) );
         if (iter > 12) return new Vector2(0,36);
         else return point;
     }

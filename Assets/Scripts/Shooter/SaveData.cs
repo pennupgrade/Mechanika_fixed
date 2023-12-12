@@ -17,7 +17,12 @@ public static class SaveData
         "High damage. Missiles track cursor. Missile count and damage depend on energy. High energy cost and long cooldown."
     };
 
-    
+    public static (float X, int Y) [] rAttacks3 = {(5, 4), (9, 4), (13, 4), (17, 4), (21, 4), (25, 4), (29, 4),
+    (51, 1), (55, 0), (59, 0), (63, 0), (65, 1), (84, 3), (88, 3), (92, 33), (99, 6), (103, 6), (107, 0), (111, 6),
+    (115, 5), (119, 6), (123, 6), (127, 5), (128, 1), (131, 3), (139, 3), (147, 33), (155, 4), (163, 3), 
+    (168, 2), (172, 2), (182, 0), (186, 0), (190, 1), (195, 3), (199, 5), 
+    (204, 0), (206, 0), (208, 0), (210, 0), (212, 0), (214, 1), (219, 4), (223, 4), (227, 2)};
+    public static (float X, int Y) [] bAttacks3 = {};
 
 
 }
