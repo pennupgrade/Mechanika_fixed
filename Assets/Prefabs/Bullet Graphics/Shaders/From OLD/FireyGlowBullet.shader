@@ -3,7 +3,7 @@ Shader "Unlit/BulletShaders/FireyGlowBullet"
     Properties
     {
         [HideInInspector] _Color("Color", Color) = (.949, .074, .557, 1.)
-        [HideInInspector] _FireNoise ("Fire Noise", 2D) = "black" {}
+        [HideInInspector] _FireNoise ("Fire Noise", 2D) = "black" {} //or just use procedural has smth
     }
     SubShader
     {

@@ -153,6 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   patterns:
+  - {fileID: 11400000, guid: 1be83fb99a451e644ad1c52af1a5f662, type: 2}
   - {fileID: 11400000, guid: 4391cdd94ba289f4385f655385d9b136, type: 2}
   - {fileID: 11400000, guid: 85fa0a7a62827f3499becf7ddf3bd84b, type: 2}
   - {fileID: 11400000, guid: f5d2b027ba42acd47ae9e887eca3a356, type: 2}
@@ -363,6 +364,12 @@ MonoBehaviour:
   Player: {fileID: 484939382}
   Boss: {fileID: 1263072809}
   ArenaCamera: {fileID: 830521544}
+  ArenaBoundSize:
+    x: 10
+    y: 10
+  ArenaBoundOrigin:
+    x: 0
+    y: 0
 --- !u!4 &1343407830
 Transform:
   m_ObjectHideFlags: 0
