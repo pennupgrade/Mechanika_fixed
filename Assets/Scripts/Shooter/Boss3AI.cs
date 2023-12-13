@@ -100,7 +100,7 @@ public class Boss3AI : MonoBehaviour, IEnemy
 
     }
     private void Dash(){
-        dashing = true; dashTimer= 0.588235f;
+        dashing = true; dashTimer= 0.668235f;
         mspeed = 5*moveSpeed;
         int iter = 0;
         if (Vector3.Distance(new Vector3(0,36,0), transform.position)>10){
