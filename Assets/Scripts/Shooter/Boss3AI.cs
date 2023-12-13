@@ -48,7 +48,7 @@ public class Boss3AI : MonoBehaviour, IEnemy
     void Start()
     {
         MoveDir=Vector2.zero;
-        maxHealth = 13900; health=maxHealth;
+        maxHealth = 14800; health=maxHealth;
         moveState = 0;
         frameTimer = 1;
         trackingBspd = 16;
