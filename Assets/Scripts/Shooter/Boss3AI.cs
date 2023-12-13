@@ -48,7 +48,7 @@ public class Boss3AI : MonoBehaviour, IEnemy
     void Start()
     {
         MoveDir=Vector2.zero;
-        maxHealth = 14800; health=maxHealth;
+        maxHealth = 13600; health=maxHealth;
         moveState = 0;
         frameTimer = 1;
         trackingBspd = 16;
@@ -175,7 +175,7 @@ public class Boss3AI : MonoBehaviour, IEnemy
     // Bullet Engine Attacks
     void ExecuteCQRing(int count = 4, float delaySeconds = 2) 
     {
-
+        if (Player == null) return;
         Debug.Log("tested in the test scene but not in the actual boss scene");
         // instead of spawning multiple on a delay, use a method to spawn a single one on a beat, like how ill do the SpawnRandomArena (but away from player) with boxbullet
         // but it'll just be a random single which can still be done using a pattern, just gotta manually call it to the beat (or just get the bpm and a start time for inbetween beat spawns (frequent))
@@ -193,9 +193,11 @@ public class Boss3AI : MonoBehaviour, IEnemy
     private IEnumerator DashRockets(){
         if(Player==null) {StopAllCoroutines(); yield break;}
         for(int i = 0; i<11; i++){
-            GameObject missile = Instantiate (RocketPrefab, transform.position, fp.rotation);
-            missile.GetComponent<IMissile>().SetSpeed(2,80,32);
-            missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.70588f + 0.17647f*(i+1) - 0.058823f*i, 36, true, Player);
+            if (i != 4) {
+                GameObject missile = Instantiate (RocketPrefab, transform.position, fp.rotation);
+                missile.GetComponent<IMissile>().SetSpeed(2,80,40);
+                missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.70588f + 0.17647f*(i+1) - 0.058823f*i, 36, true, Player);
+            }
             yield return new WaitForSeconds(0.058823f);
         }
     }
@@ -296,7 +298,7 @@ public class Boss3AI : MonoBehaviour, IEnemy
         } else if (num == 2){
             for (int i = 0; i<5; i++){ 
                 GameObject missile = Instantiate (MissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, -20-25*(5-i)));
-                missile.GetComponent<IMissile>().SetSpeed(13, 1, 14);
+                missile.GetComponent<IMissile>().SetSpeed(12, 1, 14);
                 missile.GetComponent<IMissile>().SetValues (missileDMG, 3.9f, 20, true, Player);
                 missile.GetComponent<ExplosiveMissile>().SetHoming();
                 missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 40);

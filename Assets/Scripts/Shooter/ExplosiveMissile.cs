@@ -72,15 +72,18 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
             } else {
                 GameObject expl;
                 if(homing){
-                    expl = Instantiate(explosionPrefab2, transform.position, Quaternion.Euler(new Vector3(0, 180, 0))); 
+                    expl = Instantiate(explosionPrefab2, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
+                    var d = Vector3.Distance(player.transform.position,transform.position);
+                    if (d<3) {
+                        player.GetComponent<MikuMechControl>().Damage(50+(int)((3-d)*damage/3), false);
+                    } 
                 } else {
-                    expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0))); 
+                    expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
+                    var d = Vector3.Distance(player.transform.position,transform.position);
+                    if (d<1) {
+                        player.GetComponent<MikuMechControl>().Damage(damage, false);
+                    }
                 } Destroy(expl, 2);
-                var d = Vector3.Distance(player.transform.position,transform.position);
-                float radius = homing ? 1 : 3;
-                if (d<radius) {
-                    player.GetComponent<MikuMechControl>().MeleeDamage(50+(int)((3-d)*damage/3), false);
-                }
             }
         }
         

@@ -51,10 +51,11 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
             nextIndex++;
         }
 
-        if (Input.GetKeyUp(KeyCode.M) && !mikuSong && Time.timeScale > 0.9f){
+        if (!mikuSong && (SaveData.MikuSong || (Input.GetKeyUp(KeyCode.M) && Time.timeScale > 0.9f))){
             mikuSong = true;
             AS.mute = !AS.mute;
             DefaultSong.GetComponent<AudioSource>().Pause();
+            SaveData.MikuSong = true;
         }
         if(Boss.health==0&&!hpDialogue){
             Dialogue("Charis", "Core compromised? I've miscalculated...But no matter. Systems are still functional. I'm not letting you win.");
