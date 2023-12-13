@@ -73,7 +73,7 @@ public class MagicBullet : MonoBehaviour, IMissile
     void OnCollisionEnter2D(Collision2D c){
         if (c.gameObject.tag=="Environment"){
             Vector3 newDir;
-            if (upgraded) {
+            if (upgraded && player != null) {
                 newDir = (player.transform.position-transform.position).normalized;
             } else {
                 try{
