@@ -71,6 +71,7 @@ public class KinematicTrailPattern : APattern
                 body.Update(TimeStep);
                 timePassed += TimeStep;
 
+                timeUntilBulletSpawn -= TimeStep;
                 if(timeUntilBulletSpawn <= 0f)
                 {
                     engine.Add(groups.GetNext(), 
@@ -81,6 +82,7 @@ public class KinematicTrailPattern : APattern
                             BulletRadius + BulletRadiusTimeSlope*timePassed, 
                             BulletLifeTime, 
                             BounceOffWalls));
+                    timeUntilBulletSpawn = SpawnRate;
                 }
             }
 

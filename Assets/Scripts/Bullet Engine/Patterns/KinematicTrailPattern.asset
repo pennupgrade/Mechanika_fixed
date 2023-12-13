@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69e9afeea91e40845adade3a961e749f, type: 3}
   m_Name: KinematicTrailPattern
   m_EditorClassIdentifier: 
-  Shader: OuterGlowBullet
+  Shader: BombBullet
   Colors:
   - {r: 0, g: 0.07796383, b: 1, a: 0}
   - {r: 1, g: 0, b: 0.17842817, a: 0}
@@ -22,7 +22,7 @@ MonoBehaviour:
   BulletRadius: 0.4
   Density: 0
   TimeStep: 0.009
-  SpawnRate: 0.05
+  SpawnRate: 3
   StartSpeedRandomRange:
     x: 5
     y: 7

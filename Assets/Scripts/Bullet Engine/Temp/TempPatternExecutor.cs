@@ -15,7 +15,7 @@ public class TempPatternExecutor : MonoBehaviour
         {
             playingPattern = true;
             patterns[i].Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, 
-                BulletEngineManager.Ins.Player.transform, () => {i++; playingPattern = false;});
+                BulletEngineManager.UsedPlayerTransform, () => {i++; playingPattern = false;});
         }
     }
 
