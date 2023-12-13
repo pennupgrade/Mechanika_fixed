@@ -74,7 +74,7 @@ namespace BulletUtilities
 
             if(boundSize != null)
             {
-                float2? wallNormal = Utilities.Collision.PointCollideArena((float2) boundSize*10f, pos - boundOrigin, 0.3f);
+                float2? wallNormal = Utilities.Collision.PointCollideArena((float2) boundSize, pos - boundOrigin, 0.3f);
                 if(wallNormal != null)
                 {
                     float2 n = (float2) wallNormal;

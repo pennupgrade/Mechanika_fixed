@@ -156,33 +156,38 @@ public class Boss3AI : MonoBehaviour, IEnemy
         switch(a) 
         {
             case 0:
-            CQRing(); break;
+            ExecuteCQRing(); break;
             case 1:
-            Ring(); break;
+            ExecuteRing(); break;
             case 2:
-            FireRing(); break;
+            ExecuteFireRing(); break;
             case 3:
-            BouncingTrail(); break;
+            ExecuteBouncingTrail(); break;
             case 4:
-            DrawCircle(); break;
+            ExecuteBouncingCircle(); break;
         }
     }    
-    // engine attacks
-    private void CQRing() {
 
-    }
-    private void Ring() {
+    // Bullet Engine Patterns
+    [Header("Patterns")]
+    [SerializeField] APattern CQRing;
 
-    }
-    private void FireRing() {
+    // Bullet Engine Attacks
+    void ExecuteCQRing(int count = 4, float delaySeconds = 2) 
+    {
 
+        Debug.Log("tested in the test scene but not in the actual boss scene");
+        // instead of spawning multiple on a delay, use a method to spawn a single one on a beat, like how ill do the SpawnRandomArena (but away from player) with boxbullet
+        // but it'll just be a random single which can still be done using a pattern, just gotta manually call it to the beat (or just get the bpm and a start time for inbetween beat spawns (frequent))
+        if(count <= 0) return;
+        CQRing.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.Ins.Player.transform, 
+            () => StartCoroutine(Utils.WaitThenAction(4, () => ExecuteCQRing(count-1))));
+        
     }
-    private void BouncingTrail() {
-
-    }
-    private void DrawCircle() {
-
-    }
+    void ExecuteRing() {}
+    void ExecuteFireRing() {}
+    void ExecuteBouncingTrail() {}
+    void ExecuteBouncingCircle() {}
     
     // attacks
     private IEnumerator DashRockets(){

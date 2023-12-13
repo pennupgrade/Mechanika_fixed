@@ -17,7 +17,6 @@ using BulletUtilities;
 public class KinematicTrailPattern : APattern
 {
 
-    [Min(0.001f)] [Tooltip("The 'framerate' of the trail.")] public float TimeStep = 0.015f;
     [Tooltip("How much time between bullet spawns?")] public float SpawnRate = 0.1f;
 
     [Space(10f)]
@@ -61,17 +60,19 @@ public class KinematicTrailPattern : APattern
 
         float timePassed = 0;
         float timeUntilBulletSpawn = 0f;
+        float timeStep;
 
         IEnumerator Coro() 
         {
 
             while(timePassed <= Duration)
             {
-                yield return new WaitForSeconds(TimeStep);
-                body.Update(TimeStep);
-                timePassed += TimeStep;
+                yield return null;
+                timeStep = Time.deltaTime;
+                body.Update(timeStep);
+                timePassed += timeStep;
 
-                timeUntilBulletSpawn -= TimeStep;
+                timeUntilBulletSpawn -= timeStep;
                 if(timeUntilBulletSpawn <= 0f)
                 {
                     engine.Add(groups.GetNext(), 

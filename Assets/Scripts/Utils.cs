@@ -10,6 +10,7 @@ using Utilities;
 using static Utilities.Utils;
 
 using static Utilities.MathUtils;
+using System.Collections;
 
 namespace Utilities
 {
@@ -182,6 +183,17 @@ namespace Utilities
             => float2(length(cart), amod(atan2(cart.y, cart.x), TAU));
         public static float2 toCartesian(float2 polar)
             => polar.x * float2(cos(polar.y), sin(polar.y));
+    }
+
+    public static partial class Utils
+    {
+
+        public static IEnumerator WaitThenAction(float seconds, Action action)
+        {
+            yield return new WaitForSeconds(seconds);
+            action();
+        }
+
     }
 
     public static class EnemyUtils

@@ -57,10 +57,39 @@ Shader "Unlit/BulletShaders/BoxBullet"
                 i.uv = pixelate(i.uv);
 
                 //
-                float size = i.radius*2.;
-                float t = _Time.y + 100.*hash11(float(i.InstanceID) * 20.);
+                float2 p = i.uv;
+                i.radius *= .88;
 
-                return float4(1., 1., 1., 1.);
+                //
+                float size = i.radius*2.;
+                float outlineSize = i.radius*0.2;
+
+                //
+                float t = randLinear(_Time.y, float(i.InstanceID), float2(1., .4));
+                p = rot(p, t);
+
+                // Inner
+                float2 lp = abs(p);
+                float innerExists = step(lp.x, size*.5) * step(lp.y, size*.5);
+                float outlineExists = innerExists * (1.-(step(lp.x, size*.5-outlineSize)*step(lp.y, size*.5-outlineSize)));
+                float4 innerCol = float4(float3(1.,1.,1.) * (1.-outlineExists) + _Color.rgb * outlineExists, innerExists);
+
+                // Outer
+                float repSize = i.radius*0.4;
+                float stripeSize = i.radius*0.2;
+                float2 stripeIntensityRange = float2(i.radius*1.4, i.radius*1.8);
+
+                float sr = max(lp.x, lp.y);
+                float lsr = amod(sr+t, repSize) - repSize*.5; float sid = sr - lsr;
+                float stripeExists = step(abs(lsr), stripeSize*.5);
+                float4 outerCol = float4(_Color.rgb, stripeExists * (1.-innerExists)) * smoothstep(stripeIntensityRange.y, stripeIntensityRange.x, sid);
+
+                // Glow
+                float glow = getGlow(sr, i.radius*.7, 0.2);
+                float4 emission = float4(_Color.rgb * glow, glow);
+                outerCol.a += emission.a;
+
+                return outerCol + (innerCol - outerCol) * innerCol.a;
             }
             ENDCG
         }
