@@ -300,12 +300,12 @@ public class Boss3AI : MonoBehaviour, IEnemy
         } else if (num == 2){
             for (int i = 0; i<5; i++){ 
                 GameObject missile = Instantiate (MissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, -20-25*(5-i)));
-                missile.GetComponent<IMissile>().SetSpeed(12, 1, 14);
+                missile.GetComponent<IMissile>().SetSpeed(11, 1, 14);
                 missile.GetComponent<IMissile>().SetValues (missileDMG, 3.9f, 20, true, Player);
                 missile.GetComponent<ExplosiveMissile>().SetHoming();
                 missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 40);
                 GameObject missile2 = Instantiate (MissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 20+25*(5-i)));
-                missile2.GetComponent<IMissile>().SetSpeed(13, 1, 14);
+                missile2.GetComponent<IMissile>().SetSpeed(11, 1, 14);
                 missile2.GetComponent<IMissile>().SetValues (missileDMG, 3.9f, 20, true, Player);
                 missile2.GetComponent<ExplosiveMissile>().SetHoming();
                 missile2.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 40);
@@ -314,15 +314,15 @@ public class Boss3AI : MonoBehaviour, IEnemy
         } else {
             for (int i = 0; i<10; i++){ 
                 GameObject missile = Instantiate (MissilePrefab, fp.position, transform.rotation*Quaternion.Euler(0, 0, -30-25*(5-i)));
-                missile.GetComponent<IMissile>().SetSpeed(8, 4, 17);
+                missile.GetComponent<IMissile>().SetSpeed(8, 4, 16);
                 missile.GetComponent<IMissile>().SetValues (400, 4, 85, true, Player);
                 missile.GetComponent<ExplosiveMissile>().SetHoming();
-                missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 50);
+                missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 60);
                 GameObject missile2 = Instantiate (MissilePrefab, fp.position, transform.rotation*Quaternion.Euler(0, 0, 30+25*(5-i)));
-                missile2.GetComponent<IMissile>().SetSpeed(8, 4, 17);
+                missile2.GetComponent<IMissile>().SetSpeed(8, 4, 16);
                 missile2.GetComponent<IMissile>().SetValues (400, 4, 85, true, Player);
                 missile2.GetComponent<ExplosiveMissile>().SetHoming();
-                missile2.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 50);
+                missile2.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 60);
                 yield return new WaitForSeconds(0.117647f);
             }
         }
