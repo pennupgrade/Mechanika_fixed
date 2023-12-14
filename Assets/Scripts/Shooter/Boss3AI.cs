@@ -18,7 +18,7 @@ public class Boss3AI : MonoBehaviour, IEnemy
     [Header("Prefabs")]
 
     public GameObject explosionPrefab, RocketPrefab, MissilePrefab,
-        MagicBullet, HybridMissile, ExplodingBullet;
+        MagicBullet, HybridMissile, ExplodingBullet, BulletPrefab;
     [Header("Enemy Values")]
     public int health;
     [SerializeField] private int maxHealth;
@@ -48,12 +48,12 @@ public class Boss3AI : MonoBehaviour, IEnemy
     void Start()
     {
         MoveDir=Vector2.zero;
-        maxHealth = 13600; health=maxHealth;
+        maxHealth = 12666; health=maxHealth;
         moveState = 0;
         frameTimer = 1;
         trackingBspd = 16;
         bulletDMG = 72; rocketDMG = 180; missileDMG = 140;
-        electricDMG = 40; magicDMG = 100;
+        electricDMG = 60; magicDMG = 100;
         Cturn = 0;
         moveSpeed=6; mspeed = moveSpeed; turnSpeed=100; tspeed = turnSpeed;
         meleeTimer = 0; dashTimer = 0;
@@ -150,6 +150,7 @@ public class Boss3AI : MonoBehaviour, IEnemy
         } else if (a == 7) {
             Dash();
             StartCoroutine(DashRockets());
+            ExecuteRing();
         }
     }
     public void SetBulletEngine(int a){
@@ -173,14 +174,19 @@ public class Boss3AI : MonoBehaviour, IEnemy
     [SerializeField] APattern CQRing;
 
     // Bullet Engine Attacks
-    void ExecuteCQRing(int count = 1, float delaySeconds = 2) 
-    {
+    void ExecuteCQRing() 
+    { //not bullet engine sry
+        int count = 18;
+        for (int i = 0; i<count; i++){
+            GameObject bullet = Instantiate (BulletPrefab, transform.position, transform.rotation*Quaternion.Euler(0, 0, i*360/count));
+            bullet.GetComponent<IBullet>().SetValues (bulletDMG, 9, 0.65f+0.2f*Random.value, 9, Vector2.zero);
+        }
+    }
+    void ExecuteRing(int count = 1, float delaySeconds = 2) {
         if(count <= 0) return;
         CQRing.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, 
-            () => StartCoroutine(Utils.WaitThenAction(4, () => ExecuteCQRing(count-1))));
-        
+            () => StartCoroutine(Utils.WaitThenAction(4, () => ExecuteRing(count-1))));
     }
-    void ExecuteRing() {}
     void ExecuteFireRing() {}
     void ExecuteBouncingTrail() {}
     void ExecuteBouncingCircle() {}
@@ -188,7 +194,7 @@ public class Boss3AI : MonoBehaviour, IEnemy
     // attacks
     private IEnumerator DashRockets(){
         if(Player==null) {StopAllCoroutines(); yield break;}
-        for(int i = 0; i<11; i++){
+        for(int i = 0; i<10; i++){
             if (i != 4) {
                 GameObject missile = Instantiate (RocketPrefab, transform.position, fp.rotation);
                 missile.GetComponent<IMissile>().SetSpeed(2,80,40);
@@ -308,12 +314,12 @@ public class Boss3AI : MonoBehaviour, IEnemy
         } else {
             for (int i = 0; i<10; i++){ 
                 GameObject missile = Instantiate (MissilePrefab, fp.position, transform.rotation*Quaternion.Euler(0, 0, -30-25*(5-i)));
-                missile.GetComponent<IMissile>().SetSpeed(8, 3, 15);
+                missile.GetComponent<IMissile>().SetSpeed(8, 4, 17);
                 missile.GetComponent<IMissile>().SetValues (400, 4, 85, true, Player);
                 missile.GetComponent<ExplosiveMissile>().SetHoming();
                 missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 50);
                 GameObject missile2 = Instantiate (MissilePrefab, fp.position, transform.rotation*Quaternion.Euler(0, 0, 30+25*(5-i)));
-                missile2.GetComponent<IMissile>().SetSpeed(8, 3, 15);
+                missile2.GetComponent<IMissile>().SetSpeed(8, 4, 17);
                 missile2.GetComponent<IMissile>().SetValues (400, 4, 85, true, Player);
                 missile2.GetComponent<ExplosiveMissile>().SetHoming();
                 missile2.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 50);

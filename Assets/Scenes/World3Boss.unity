@@ -976,6 +976,7 @@ MonoBehaviour:
   MagicBullet: {fileID: 452850481069924787, guid: 849c9c1a90d0acc4a932833dcc080cae, type: 3}
   HybridMissile: {fileID: 7426500325276408725, guid: 39b26330787309345b6c818b8a8114b5, type: 3}
   ExplodingBullet: {fileID: 947311162588572843, guid: 72942bc55ac997d4694e8c09b1bf9f5c, type: 3}
+  BulletPrefab: {fileID: 296282417513036775, guid: 2019f8ec001ecc44ab68811e17a40e96, type: 3}
   health: 0
   maxHealth: 0
   moveSpeed: 0
