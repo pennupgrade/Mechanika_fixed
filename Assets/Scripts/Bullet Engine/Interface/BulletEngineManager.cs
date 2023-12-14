@@ -24,7 +24,7 @@ public class BulletEngineManager : MonoBehaviour
     public static BulletEngineManager Ins { get; private set; }
 
     private void Awake()
-        => Ins = this;
+        { Ins = this; InitializeBossManager(); Debug.Log("creating"); }
 
     private void Update()
     {

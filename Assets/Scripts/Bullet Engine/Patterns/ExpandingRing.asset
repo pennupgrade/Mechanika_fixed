@@ -19,13 +19,13 @@ MonoBehaviour:
   - {r: 0.066037714, g: 0.06398182, b: 0.06261123, a: 0}
   Duration: 0
   Speed: 0
-  BulletRadius: 0.64
-  Density: 5
-  StartRadius: 1
-  FormingTime: 1.5
-  AngularSpeed: 1.5
-  AngularSpeedVariance: 0.5
-  ExpansionSpeed: 2.5
+  BulletRadius: 0.34
+  Density: 75
+  StartRadius: 0.2
+  FormingTime: 0.7
+  AngularSpeed: 0.5
+  AngularSpeedVariance: 0.15
+  ExpansionSpeed: 5
   SpikeCountRange:
     x: 4
     y: 8

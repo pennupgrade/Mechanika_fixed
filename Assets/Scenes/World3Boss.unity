@@ -989,6 +989,7 @@ MonoBehaviour:
   moveState: 0
   Animator: {fileID: 0}
   sr: {fileID: 413283802}
+  CQRing: {fileID: 11400000, guid: 6cc91b785362bf74a8e8839c4f5055c1, type: 2}
 --- !u!61 &413283801
 BoxCollider2D:
   m_ObjectHideFlags: 0
