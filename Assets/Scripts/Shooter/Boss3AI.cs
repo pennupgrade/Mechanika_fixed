@@ -91,7 +91,6 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     {
         rb.MovePosition(rb.position + Time.fixedDeltaTime*mspeed*MoveDir);
         fp.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward; 
-
         
         int2 ori = EnemyUtils.AngleDegreesToFourOrientation(fp.eulerAngles.z);
         Animator.SetInteger("Vertical", ori.y);

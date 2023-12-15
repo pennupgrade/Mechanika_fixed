@@ -35,7 +35,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: visceraIdleBack
-  m_Speed: 0.472
+  m_Speed: 0.236
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
@@ -139,7 +139,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: visceraIdleFront
-  m_Speed: 0.472
+  m_Speed: 0.236
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
