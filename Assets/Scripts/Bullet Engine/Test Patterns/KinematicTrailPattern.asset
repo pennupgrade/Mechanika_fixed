@@ -20,7 +20,7 @@ MonoBehaviour:
   Speed: 0
   BulletRadius: 0.4
   Density: 0
-  SpawnRate: 1
+  SpawnRate: 2
   StartSpeedRandomRange:
     x: 5
     y: 7

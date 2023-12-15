@@ -188,9 +188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   patterns:
-  - {fileID: 11400000, guid: eb030acb1103a094381ee676ee557aad, type: 2}
-  - {fileID: 11400000, guid: eb030acb1103a094381ee676ee557aad, type: 2}
-  - {fileID: 11400000, guid: eb030acb1103a094381ee676ee557aad, type: 2}
+  - {fileID: 11400000, guid: 1be83fb99a451e644ad1c52af1a5f662, type: 2}
 --- !u!1 &484939379
 GameObject:
   m_ObjectHideFlags: 0

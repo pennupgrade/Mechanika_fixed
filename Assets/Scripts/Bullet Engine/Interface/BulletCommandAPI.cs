@@ -53,6 +53,14 @@ public struct GroupParameter
             engine.TransformBullets(g, bulletFunc);
     }
 
+    //
+    public void ShiftColors(int shiftCount = 1)
+    {
+        BulletMaterial[] mats = groups.Select(g => g.drawer.Material).ToArray();
+        for(int i=0; i<mats.Length; i++) 
+            groups[i].drawer.Material = mats[(i+shiftCount) % mats.Length];
+    }
+
 }
 
 public struct PositionParameter

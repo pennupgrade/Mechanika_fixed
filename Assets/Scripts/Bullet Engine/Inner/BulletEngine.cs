@@ -173,7 +173,7 @@ public class EngineDrawer
     float[] radiusArr;
     Vector4[] directionArr;
 
-    Material material;
+    public BulletMaterial Material { get; set; }
 
     public void Add(ITBullet b)
     { transforms.Add(Matrix4x4.Translate(b.Position.xyz(-1f))); radiuses.Add(b.Radius); directions.Add(b.Direction.xyz().xyzw()); }
@@ -197,8 +197,8 @@ public class EngineDrawer
     {
 
         //
-        this.material = bulletMat.GetMaterial();
-        this.material.enableInstancing = true;
+        this.Material = bulletMat;
+        this.Material.GetMaterial().enableInstancing = true;
 
     }
 
@@ -206,7 +206,7 @@ public class EngineDrawer
     {
         UpdateBlocks();
         transformArr = transforms.ToArray();
-        BulletPropertyBlock.DrawMeshInstanced(MeshUtils.QuadMesh, 0, material, transformArr, Layer, BulletEngineManager.Ins.ArenaCamera);
+        BulletPropertyBlock.DrawMeshInstanced(MeshUtils.QuadMesh, 0, Material.GetMaterial(), transformArr, Layer, BulletEngineManager.Ins.ArenaCamera);
     }
 
     public void Dispose() { }

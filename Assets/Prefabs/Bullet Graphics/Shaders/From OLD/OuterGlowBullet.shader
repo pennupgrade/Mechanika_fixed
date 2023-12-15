@@ -78,7 +78,7 @@ Shader "Unlit/BulletShaders/OuterGlowBullet"
                 float isLine = step(abs(rtheta - thetaLength * .3 * (rand * 2. - 1.)), max(0., .02 - pow(r - .4, 2.0) / (i.radius * (2. - .7 + rand * 23. + randLength * 4.))));
 
                 float ball = step(r, i.radius);
-                float emit = max((1. / pow(falloff * (r - (i.radius - offset)), 2.0)), isLine);
+                float emit = max(min(1., 1. / pow(falloff * (r - (i.radius - offset)), 2.0)), isLine);
                 float3 col = _Color.rgb *emit + ball;
                 col *= smoothstep(2.4, 1.9, r);
                 float exists = length(emit+ball);
