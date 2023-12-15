@@ -53,12 +53,13 @@ public struct BulletDeath<T> : ITBullet where T : struct, ITBullet
 public struct BulletKinematic : ITBullet, IBulletKinematic
 {
 
-    public BulletKinematic(float2 p = new(), float2 v = new(), float2 a = new(), float r = 1.0f, float lifeTime = 10f, bool wallInteract = false, bool dieOnWall = true, int damage = 1)
+    public BulletKinematic(float2 p = new(), float2 v = new(), float2 a = new(), float r = 1.0f, float lifeTime = 10f, bool wallInteract = false, bool dieOnWall = true, int damage = 1, float friction = 0f)
     {
         this.p = p; this.v = v; this.a = a; time = new float2(0f, lifeTime);
         this.r = r;
         this.wallInteract = wallInteract; this.dieOnWall = dieOnWall;
         Damage = damage;
+        this.friction = friction;
     }
 
     public int Damage { get; private set; }
@@ -79,11 +80,14 @@ public struct BulletKinematic : ITBullet, IBulletKinematic
     bool wallInteract;
     bool dieOnWall;
 
+    float friction;
+
     public bool Update(float dt)
     {
 
         p += v * dt + dt * dt * a * .5f;
         v += a * dt;
+        v *= pow(1f-friction, dt);
         time.x += dt;
 
         return time.x <= time.y;

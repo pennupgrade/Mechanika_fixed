@@ -322,6 +322,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
         Debug.Log("death");
         SFXPlayer.PlaySound("MISC_4");
         BulletEngineManager.bossEngine?.RemoveAllInteractables();
+        BulletEngineManager.EndAllCoroutines();
 
         GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
         Destroy(expl, 2);
