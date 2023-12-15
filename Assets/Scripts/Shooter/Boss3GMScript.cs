@@ -19,7 +19,7 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
     private bool started, hpDialogue, dialoguePlaying;
     private bool[] commands;
     private (float X, int Y) [] rAttacks;
-    private (float X, int Y) [] bAttacks;
+    private (float X, Boss3AI.ExecutionEnum Y) [] bAttacks;
     private int nextIndexR, nextIndexB, minLeft, secLeft;
     private AudioSource AS;
 

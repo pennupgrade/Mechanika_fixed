@@ -1,4 +1,6 @@
 
+using static Boss3AI.ExecutionEnum;
+
 public static class SaveData
 {
     public static bool[] Weapons= new bool[3];
@@ -27,9 +29,9 @@ public static class SaveData
     (299, 3), (303, 3), (307, 33), (311, 1), (316, 7), (320, 7), (324, 7), (326, 5), (328, 7), (332, 7),
     (336, 7), (340, 7), (343, 3), (347, 4), (351, 1), (355, 0), (359, 1), (363, 33), (367, 66), (371, 66),
     (375, 66), (379, 1), (383, 2), (387, 1), (391, 4), (395, 1), (399, 4), (403, 5), (407, 3)};
-    public static (float X, int Y) [] bAttacks3 = {(8, 0), (12, 0), (16, 0), (20, 0), (24, 0), (28, 0),
-    (32, 0), (36, 1), (38, 1), (40, 1), (42, 1), (44, 1), (46, 1), (48, 1), (52, 0), (56, 1), (60, 1),
-    (64, 1), (68, 1), (72, 1), (76, 1), (78, 1), (80, 1), (82, 1), (85, 0), (89, 0), 
+    public static (float X, Boss3AI.ExecutionEnum Y) [] bAttacks3 = {(8, CQ_RING), (12, CQ_RING), (16, CQ_RING), (20, CQ_RING), (24, CQ_RING), (28, CQ_RING),
+    (32, CQ_RING), (36, EXPANDING_RING), (38, EXPANDING_RING), (40, EXPANDING_RING), (42, EXPANDING_RING), (44, EXPANDING_RING), (46, EXPANDING_RING), (48, EXPANDING_RING), (52, CQ_RING), (56, EXPANDING_RING), (60, EXPANDING_RING),
+    (64, EXPANDING_RING), (68, EXPANDING_RING), (72, EXPANDING_RING), (76, EXPANDING_RING), (78, EXPANDING_RING), (80, EXPANDING_RING), (82, EXPANDING_RING), (85, CQ_RING), (89, CQ_RING), 
     (93, 0), (104, 0), (106, 0), (108, 0), (110, 0), (112, 0), (114, 0), (116, 0), (118, 0), (120, 0), 
     (122, 0), (124, 0), (126, 0), (140, 0), (148, 0), (164, 0),
     (176, 0), (178, 0), (180, 0), (182, 0), (184, 0), (186, 0), (188, 0),
