@@ -201,6 +201,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
             yield return new WaitForSeconds(1.2f);
             GameObject bullet = Instantiate (ChargedShotPrefab, fp.position, fp.rotation);
             bullet.GetComponent<IBullet>().SetValues (chargedShotDMG, chargedShotSpeed, 3, 0, Vector2.zero);
+            SFXPlayer.PlaySound("WP_3B");
         } Attack0Missile();
         warning = false;
         yield return new WaitForSeconds(0.4f);
@@ -409,15 +410,18 @@ public class Boss2AI : MonoBehaviour, IEnemy
     private IEnumerator Destruction(){
         LaserController.DisableParticles();
         cam.GetComponent<CamShake>().Shake();
+        SFXPlayer.PlaySound("MISC_4");
         for (int i = 0; i<8; i++){
             if(i==3){
                 var temp = sr.color;
                 temp.a = 0.7f;
                 sr.color = temp;
+                SFXPlayer.PlaySound("MISC_4");
             } else if (i==6){
                 var temp = sr.color;
                 temp.a = 0.4f;
                 sr.color = temp;
+                SFXPlayer.PlaySound("MISC_4");
             }
             var a = Random.value*3-1.5f;
             var b = Random.value*3-1.5f;

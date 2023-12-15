@@ -348,15 +348,18 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
 
     private IEnumerator Destruction(){
         cam.GetComponent<CamShake>().Shake();
+        SFXPlayer.PlaySound("MISC_4");
         for (int i = 0; i<8; i++){
             if(i==3){
                 var temp = sr.color;
                 temp.a = 0.7f;
                 sr.color = temp;
+                SFXPlayer.PlaySound("MISC_4");
             } else if (i==6){
                 var temp = sr.color;
                 temp.a = 0.4f;
                 sr.color = temp;
+                SFXPlayer.PlaySound("MISC_4");
             }
             var a = Random.value*3-1.5f;
             var b = Random.value*3-1.5f;

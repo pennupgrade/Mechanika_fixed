@@ -180,6 +180,8 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     }
 
     private void FireCepheid(){
+        if (cepheidMode % 2 == 0) SFXPlayer.PlaySound("WP_1A", 0.4f);
+        else  SFXPlayer.PlaySound("WP_1B", 0.4f);
         GameObject bullet = Instantiate (CepheidPrefab, transform.position+0.15f*Vector3.up, Quaternion.identity);
         bullet.GetComponent<IBullet>().SetValues (w1DMG+(int)(w1DMG*((100.0f - energy)/100)), 8+(4*(100.0f - energy)/100), 1.5f, -3, 0.6f*velocity);
         bullet.GetComponent<CepheidBulletScript>().SetMode(cepheidMode);
@@ -190,6 +192,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
         bullet.transform.eulerAngles = (a*Vector2.Angle(new Vector2(1,0), lookDir)-90+6*(Random.value-0.5f))* Vector3.forward;
     }
     private void FireDISC(){
+        SFXPlayer.PlaySound("WP_2A");
         GameObject bullet = Instantiate (DISCPrefab, transform.position+0.15f*Vector3.up, Quaternion.identity);
         bullet.GetComponent<IBullet>().SetValues (w2DMG, 6.4f, 4, -1.5f, velocity);
         var a = 1;
@@ -199,6 +202,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     private void FireSenbonzakura(float charge){
         var spread = 45-(20*charge);
         var range = 0.4f+0.3f*charge;
+        SFXPlayer.PlaySound("WP_3A");
         for (int i = 0; i<15;i++){
             GameObject bullet = Instantiate (SenbonzakuraPrefab, transform.position+0.15f*Vector3.up, Quaternion.identity);
             bullet.GetComponent<IBullet>().SetValues (w3DMG, 10+5*charge+3*Random.value, range+0.2f*Random.value, 8-4*charge, 0.5f*velocity);
@@ -210,6 +214,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     }
     private void FireNOVA(float charge){
         if (charge<0.4f) return;
+        SFXPlayer.PlaySound("WP_4A");
         GameObject bullet = Instantiate (NOVAPrefab, transform.position+0.15f*Vector3.up, Quaternion.identity);
         bullet.GetComponent<IBullet>().SetValues ((int)(w4DMG*(charge)*(charge/4)), 6+0.4f*charge, 2.2f, -5, 0.2f*velocity);
         var a = 1;
@@ -224,6 +229,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
         else if (energy > 60) {count = 2;}
         else count = 1;
         EnergyUpdate(-energy+10);
+        SFXPlayer.PlaySound("WP_5A");
         for(int i = 0; i<count; i++){
             GameObject bullet = Instantiate (MeteorPrefab, transform.position+0.15f*Vector3.up, Quaternion.identity);
             bullet.GetComponent<MeteorMissileScript>().SetValues (w5DMG-20+20*count, 4, 3, 10, 5, 110, gameObject);

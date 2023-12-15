@@ -56,6 +56,7 @@ public class BounceBulletScript : MonoBehaviour, IBullet
             GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
             Destroy(expl, 2);
         }
+        SFXPlayer.PlaySound("WP_3B");
         Destroy(gameObject);
     }
 

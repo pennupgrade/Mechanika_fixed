@@ -199,6 +199,7 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
                 count = 4;
                 deg = 40;
             }
+            SFXPlayer.PlaySound("WP_5A");
             for(int i = 0; i<count; i++){
             GameObject missile = Instantiate (hybridMissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, -deg-deg*i));
             missile.GetComponent<IMissile>().SetSpeed(5,50,26);
@@ -223,6 +224,7 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
         } 
     }
     private IEnumerator Mage2(){
+        SFXPlayer.PlaySound("MISC_1");
         for(int i = 0; i<3; i++){
             GameObject missile = Instantiate (mageBulletPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 8*(Random.value-0.5f)));
             missile.GetComponent<IMissile>().SetSpeed(6,3,15);
@@ -324,6 +326,8 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
 
     public void Damage (int dmg, bool stun){
         if(enemyType==2||enemyType==1) dmg -= 10;
+        if (dmg > 400) SFXPlayer.PlaySound("HIT_SELF1");
+        else SFXPlayer.PlaySound("HIT_BIG2");
         health-=dmg; if (health<1) Destruction();
         if (stun){stunTimer += 1; stunned = true;}
         if(enemyType==2){
@@ -335,6 +339,7 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
     public void MeleeDamage (int dmg, bool stun){
         dmg = dmg/2;
         if (meleeTimer>0.001) return;
+        SFXPlayer.PlaySound("HIT_SELF1");
         health-=dmg/2; if (health<1) Destruction();
         meleeTimer = 0.5f;
         if (stun){stunTimer += 1; stunned = true;}
@@ -400,6 +405,7 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
         }
         transform.parent.gameObject.GetComponent<GM3Script>().ReportDeath();
         isDead = true;
+        SFXPlayer.PlaySound("DIE");
         Destroy(gameObject);
         
         if(Random.value>0.75) Instantiate (medkitPrefab, rb.position, Quaternion.identity);

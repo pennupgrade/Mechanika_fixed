@@ -198,6 +198,7 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
             missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(t, 50);
         }
         if (enemyType == 2){
+            SFXPlayer.PlaySound("WP_5A");
             for(int i = 0; i<2; i++){
             GameObject missile = Instantiate (hybridMissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, -60-60*i));
             missile.GetComponent<IMissile>().SetSpeed(5,50,26);
@@ -218,6 +219,7 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
     }
     private void FireSpecial2(){
         if(enemyType != 3 || specialCD2Timer>0.001) return;
+        SFXPlayer.PlaySound("MISC_1");
         specialCD2Timer = specialCD2+4*(Random.value-0.5f);
         frozen = true; freezeTimer = 0.5f;
         GameObject center = Instantiate (ringCenterPrefab, transform.position, Quaternion.identity);
@@ -283,6 +285,8 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
 
     public void Damage (int dmg, bool stun){
         if(enemyType==2||enemyType==1) dmg -= 10;
+        if (dmg > 400) SFXPlayer.PlaySound("HIT_SELF1");
+        else SFXPlayer.PlaySound("HIT_BIG2");
         health-=dmg; if (health<1) Destruction();
         if (stun){stunTimer += 1; stunned = true;}
         Hbar.SetHealth(health, maxHealth);
@@ -290,6 +294,7 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
     public void MeleeDamage (int dmg, bool stun){
         dmg = (int)(dmg/1.5f);
         if (meleeTimer>0.001) return;
+        SFXPlayer.PlaySound("HIT_SELF1");
         health-=dmg/2; if (health<1) Destruction();
         meleeTimer = 0.5f;
         if (stun){stunTimer += 1; stunned = true;}
@@ -334,6 +339,7 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
         }
         transform.parent.gameObject.GetComponent<GM3Script>().ReportDeath();
         isDead = true;
+        SFXPlayer.PlaySound("DIE");
         Destroy(gameObject);
         if(Random.value>0.92) Instantiate (medkitPrefab, rb.position, Quaternion.identity);
     }

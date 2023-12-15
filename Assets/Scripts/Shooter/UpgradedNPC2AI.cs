@@ -242,12 +242,15 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
     public void Damage (int dmg, bool stun){
         if(state==0) SetState(1);
         if(enemyType==2) dmg -= 10;
+        if (dmg > 400) SFXPlayer.PlaySound("HIT_SELF1");
+        else SFXPlayer.PlaySound("HIT_BIG1");
         health-=dmg; if (health<1) Destruction();
         if (stun){stunTimer += 1; stunned = true;}
         Hbar.SetHealth(health, maxHealth);
     }
     public void MeleeDamage (int dmg, bool stun){
         if (meleeTimer>0.001) return;
+        SFXPlayer.PlaySound("HIT_SELF1");
         health-=dmg/3; if (health<1) Destruction();
         meleeTimer = 0.5f;
         if (stun){stunTimer += 1; stunned = true;}
@@ -273,6 +276,7 @@ public class UpgradedNPC2AI : MonoBehaviour, IEnemy
             GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
             Destroy(expl, 2);
         }
+        SFXPlayer.PlaySound("DIE");
         Destroy(gameObject);
         if(Random.value>0.5) Instantiate (MedkitPrefab, rb.position-2*MoveDir, Quaternion.identity);
     }

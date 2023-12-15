@@ -67,7 +67,7 @@ public class MeteorMissileScript : MonoBehaviour
         }
         Destroy(transform.GetChild(0).gameObject, 2);
         transform.DetachChildren();
-        
+        SFXPlayer.PlaySound("WP_3B");
         Destroy(gameObject);
     }
 
