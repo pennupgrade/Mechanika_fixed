@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Unity.Mathematics;
 
 public class Boss3GMScript : MonoBehaviour, IGameManager
 {
@@ -22,6 +23,8 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
     private (float X, int Y) [] bAttacks;
     private int nextIndexR, nextIndexB, minLeft, secLeft;
     private AudioSource AS;
+
+    [SerializeField] float AudioDebugStartTime = 0f;
 
     void Start(){
         SaveData.SceneNum = SceneManager.GetActiveScene().buildIndex;
@@ -66,14 +69,23 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
 
     public void StartFight(){
         started = true;
-        dsptimesong = (float) AudioSettings.dspTime;
         AS.Play();
+
+        dsptimesong = (float) AudioSettings.dspTime - AudioDebugStartTime;
+        AS.time = AudioDebugStartTime;
+        songPosition = (float) (AudioSettings.dspTime - dsptimesong);
+        songPosInBeats = songPosition / secPerBeat;
+        while(rAttacks[nextIndexR].Item1 < songPosInBeats) nextIndexR++;
+        while(bAttacks[nextIndexB].Item1 < songPosInBeats) nextIndexB++;
+        nextIndexR = math.max(0, nextIndexR-1);
+        nextIndexB = math.max(0, nextIndexB-1);
+
         CountDown.gameObject.SetActive(true);
     }
 
     private void SpawnHeal(){
         for(int i=0;i<1;i++){
-            int v = Random.Range(0,2);
+            int v = UnityEngine.Random.Range(0,2);
             Instantiate(heal, transform.GetChild(v).position, Quaternion.identity);
         }
     }
