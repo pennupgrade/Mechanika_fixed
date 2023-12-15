@@ -22,6 +22,8 @@ public class BallPattern : APattern
     public Color BeginColor;
     public Color OutlineColor;
 
+    public bool BounceOffWall = true;
+
     public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction, float2? position = null)
     {
         List<(string, BulletMaterial?)> groups = new();
@@ -34,12 +36,20 @@ public class BallPattern : APattern
         GroupParameter beginGroup = new(engine, (engine.UniqueGroup, new BulletMaterial(Shader, BeginColor)));
         GroupParameter outlineGroup = new(engine, (engine.UniqueGroup, new BulletMaterial(Shader, OutlineColor)));
 
-        List<Action<int, float>> recursiveActions = new() { (i, d) => { BulletCommandInstantAPI.SetBulletVelocity(engine, group.Merge(outlineGroup).Merge(beginGroup), math.normalize(playerTransform.position.xy() - startPos) * Speed); finishAction(); } }; 
+        GroupParameter allGroup = group.Merge(outlineGroup).Merge(beginGroup);
+        List<Action<int, float>> recursiveActions = new() { (i, d) => { BulletCommandInstantAPI.SetBulletVelocity(engine, allGroup, math.normalize(playerTransform.position.xy() - startPos) * Speed); finishAction(); } }; 
         for (float d = BallRadius; d > 0; d -= 1f / RadialDensity)
         {
             recursiveActions.Add((i, d) =>
             {
-                StartCommand(engine.CreateBulletCircleGradual(i == 1 ? outlineGroup : group, new PositionParameter(startPos), d, Density, FormingTime / (RadialDensity * BallRadius), (polar, time) => new BulletKinematicPolar(new(), new(), new(), AngularVelocity, polar + new float2(time * AngularVelocity, 0f), BulletRadius, Duration)),
+                StartCommand(engine.CreateBulletCircleGradual(i == 1 ? outlineGroup : group, new PositionParameter(startPos), d, Density, FormingTime / (RadialDensity * BallRadius), (polar, time) => new BulletKinematicPolar(new(), new(), new(), AngularVelocity, polar + new float2(time * AngularVelocity, 0f), BulletRadius, Duration, false, BulletDamage, BounceOffWall ?
+                (normal, triggerBullet) => allGroup.TransformAllBullets(engine, b =>
+                {
+                    BulletKinematicPolar cb = (BulletKinematicPolar) b;
+                    float2 newV = triggerBullet.Velocity - 2f * normal * math.dot(triggerBullet.Velocity, normal);
+                    cb.Velocity = newV;
+                    return cb;
+                }) : null)),
                 () => recursiveActions[i - 1](i - 1, d + 1f/RadialDensity));
             });
         }

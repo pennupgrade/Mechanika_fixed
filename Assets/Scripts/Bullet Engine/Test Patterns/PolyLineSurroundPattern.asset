@@ -20,8 +20,12 @@ MonoBehaviour:
   Speed: 14
   BulletRadius: 0.3
   Density: 3
+  BulletDamage: 40
   Radius: 12
   SideCount: 6
   OverExtendAmount: 0.3
   BulletSpeedMultiplier: 0.5
   BulletRadiusChangeToEnd: 0.2
+  BulletLifeTime: 10
+  BounceOffWall: 0
+  DieOnWall: 0

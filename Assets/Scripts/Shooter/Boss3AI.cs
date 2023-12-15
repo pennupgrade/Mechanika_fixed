@@ -406,22 +406,28 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         {
             case ExecutionEnum.CQ_RING:
             ExecuteCQRing(); break;
-            case ExecutionEnum.EXPANDING_RING:
-            ExecuteExpandingRing(); break;
+            case ExecutionEnum.EXPANDING_RING_1:
+            ExecuteExpandingRing1(); break;
+            case ExecutionEnum.EXPANDING_RING_2:
+            ExecuteExpandingRing2(); break;
             case ExecutionEnum.ALT_RING_COLORS:
             AlternateRingColors(); break;
             case ExecutionEnum.HOMING_RING:
             ExecuteHomingRing(); break;
             case ExecutionEnum.FIRST_PIANO_BOXES:
             ExecuteFirstPianoBoxes(); break;
+            case ExecutionEnum.INTIMIDATION_TRAIL_1:
+            ExecuteIntimidationTrail1(); break;
         }
     }    
 
     // Bullet Engine Patterns
     [Header("Patterns")]
-    [SerializeField] APattern ExpandingRing;
+    [SerializeField] APattern ExpandingRing1;
+    [SerializeField] APattern ExpandingRing2;
     [SerializeField] APattern HomingRing;
     [SerializeField] APattern FirstPianoBoxes;
+    [SerializeField] APattern IntimidationTrail1;
     
     void ExecuteCQRing() 
     {
@@ -432,11 +438,16 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         }
     }
 
-    void ExecuteExpandingRing(int count = 1, float delaySeconds = 2) 
+    void ExecuteExpandingRing1(int count = 1, float delaySeconds = 2) 
     {
         if(count <= 0) return;
-        ExpandingRing.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, 
-            () => StartCoroutine(Utils.WaitThenAction(4, () => ExecuteExpandingRing(count-1))));
+        ExpandingRing1.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, 
+            () => StartCoroutine(Utils.WaitThenAction(4, () => ExecuteExpandingRing1(count-1))));
+    }
+
+    void ExecuteExpandingRing2(int count = 1, float delaySeconds = 2) 
+    {
+        ExpandingRing2.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
     }
 
     void AlternateRingColors() => ExpandingCirclePattern.ShiftAllGroupColors();
@@ -456,12 +467,19 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         //execute
     }
 
+    void ExecuteIntimidationTrail1()
+    {
+        IntimidationTrail1.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
+    }
+
     public enum ExecutionEnum
     {
         CQ_RING,
-        EXPANDING_RING,
+        EXPANDING_RING_1,
+        EXPANDING_RING_2,
         ALT_RING_COLORS,
         HOMING_RING,
-        FIRST_PIANO_BOXES
+        FIRST_PIANO_BOXES,
+        INTIMIDATION_TRAIL_1
     }
 }

@@ -44,7 +44,7 @@ public class CloudPattern : APattern
             for(int i=0; i<BulletCount; i++)
             {
                 float2 p = startPos + (float2) UnityEngine.Random.insideUnitCircle * Radius;
-                engine.Add(groups.GetNext(), new BulletKinematic(p, UnityEngine.Random.insideUnitCircle * InitialVelocity, 0f, BulletRadius + UnityEngine.Random.Range(0f, 1f) * AddedBulletRadiusVariation, 10f, true));
+                engine.Add(groups.GetNext(), new BulletKinematic(p, UnityEngine.Random.insideUnitCircle * InitialVelocity, 0f, BulletRadius + UnityEngine.Random.Range(0f, 1f) * AddedBulletRadiusVariation, 10f, true, false, BulletDamage));
                 yield return new WaitForSeconds(delayTime);
             }
 

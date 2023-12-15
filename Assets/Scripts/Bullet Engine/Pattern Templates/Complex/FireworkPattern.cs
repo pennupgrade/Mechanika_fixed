@@ -46,6 +46,10 @@ public class FireworkPattern : APattern
     public float StartOffsetAmount;
     public float StartOffsetVariation;
 
+    [Space(10f)]
+    public bool DieOnWall = true;
+    public bool BounceOffWall = false;
+
     public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction, float2? position = null)
     {
         GroupParameter groups = GroupParameter.CreateGroups(engine, Colors, Shader);
@@ -66,7 +70,7 @@ public class FireworkPattern : APattern
         StartCommand(engine.CreateBulletCircleGradual(groups, new Position(startPos), CircleRadius, Density, Duration, (polar, tt) => 
         {
             return new BulletPolarFunction(new KinematicBodyStatic(startPos), (float o, float t) => CircleRadius + 0.5f * FireworkThickness * sin(o*10f) - (CircleRadius * 0.6f*t/(TimeUntilFireworkExplosion+Duration)), 
-                polar.x + AngularVelocity * tt, r => AngularVelocity, BulletRadius + BulletRadiusOffsetTrig.y*(.5f+.5f*sin(polar.x*BulletRadiusOffsetTrig.x)), tt, TimeUntilFireworkExplosion+10f);
+                polar.x + AngularVelocity * tt, r => AngularVelocity, BulletRadius + BulletRadiusOffsetTrig.y*(.5f+.5f*sin(polar.x*BulletRadiusOffsetTrig.x)), tt, TimeUntilFireworkExplosion+10f, BulletDamage);
         }, new float3(), false, false), () =>
         {
             IEnumerator Coro() 
@@ -81,7 +85,9 @@ public class FireworkPattern : APattern
                 groups.TransformAllBullets(engine, b => 
                 {
                     BulletPolarFunction cb = (BulletPolarFunction) b;
-                    return new BulletKinematicBody(new KinematicBodyPoint(cb.Position, cb.Velocity + AdditionalExplosionVelocity * normalize(cb.Position - cb.origin.Position), MagnetismAfterExplosion, playerPoint), TimeAfterFireworkExplosion, BulletRadius);
+                    return new BulletKinematicBody(
+                        new KinematicBodyPoint(cb.Position, cb.Velocity + AdditionalExplosionVelocity * normalize(cb.Position - cb.origin.Position), MagnetismAfterExplosion, playerPoint), 
+                        TimeAfterFireworkExplosion, BulletRadius, BounceOffWall, DieOnWall, BulletDamage);
                 });
                 yield return new WaitForSeconds(ChaseTime);
                 groups.TransformAllBullets(engine, b => 

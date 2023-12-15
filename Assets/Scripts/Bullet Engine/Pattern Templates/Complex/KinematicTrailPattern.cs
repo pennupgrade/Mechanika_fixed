@@ -28,8 +28,10 @@ public class KinematicTrailPattern : APattern
 
     [Space(10f)]
     [Header("Assuming No Position Override")]
-    float SpawnDistanceFromBoss;
-    float SpawnPositionVariance;
+    public float SpawnDistanceFromTarget;
+    public float SpawnPositionVariance;
+    public bool SpawnRelativeToBossNotPlayer = true;
+    public bool VelocityPerpendicularToPlayer = false;
 
     [Space(10f)]
     [Header("Extra Bullet Parameters")]
@@ -37,6 +39,7 @@ public class KinematicTrailPattern : APattern
     [Tooltip("Change in the radius of the bullets being spawned with respect to time.")] public float BulletRadiusTimeSlope = 0f;
     public float BulletLifeTime = 10f;
     public bool BounceOffWalls;
+    public bool DieOnWall = true;
 
     public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction, float2? position = null)
     {
@@ -45,14 +48,21 @@ public class KinematicTrailPattern : APattern
         GroupParameter groups = GroupParameter.CreateGroups(engine, Colors, Shader);
 
         // Start Position
-        float2 bossStartPos = bossTransform.position.xy() + 
-                              SpawnDistanceFromBoss * normalize(bossTransform.position.xy() - playerTransform.position.xy()) + 
-                              SpawnPositionVariance*normalize(UnityEngine.Random.insideUnitCircle);
+        float2 bossStartPos = SpawnRelativeToBossNotPlayer ?
+                              bossTransform.position.xy() + 
+                              SpawnDistanceFromTarget * normalize(bossTransform.position.xy() - playerTransform.position.xy()) + 
+                              SpawnPositionVariance*normalize(UnityEngine.Random.insideUnitCircle)
+                              :
+                              playerTransform.position.xy() + SpawnDistanceFromTarget * normalize(UnityEngine.Random.insideUnitCircle)
+                                                            + SpawnPositionVariance * normalize(UnityEngine.Random.insideUnitCircle);
 
         float2 startPos = position == null ? bossStartPos : (float2) position;
 
         // Start velocity
-        float2 initialVelocity = UnityEngine.Random.Range(StartSpeedRandomRange.x, StartSpeedRandomRange.y) * normalize(
+        float2 initialVelocity = VelocityPerpendicularToPlayer ?
+                UnityEngine.Random.Range(StartSpeedRandomRange.x, StartSpeedRandomRange.y) * math.mul(new float2x2(0, 1, -1, 0), normalize(playerTransform.position.xy() - startPos))
+                :
+                UnityEngine.Random.Range(StartSpeedRandomRange.x, StartSpeedRandomRange.y) * normalize(
                 normalize(playerTransform.position.xy() - bossTransform.position.xy()) * (1f-VelocityRandomness) + 
                 normalize(UnityEngine.Random.insideUnitCircle)                         * VelocityRandomness);
 
@@ -82,12 +92,12 @@ public class KinematicTrailPattern : APattern
                             0f, 
                             BulletRadius + BulletRadiusTimeSlope*timePassed, 
                             BulletLifeTime, 
-                            BounceOffWalls));
+                            BounceOffWalls, DieOnWall, BulletDamage));
                     timeUntilBulletSpawn = SpawnRate;
                 }
             }
 
-            finishAction();
+            finishAction?.Invoke();
   
         }
 

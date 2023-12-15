@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 008fcf80a23114b4790264ad69b4773a, type: 3}
-  m_Name: ExpandingRing
+  m_Name: ExpandingRing1
   m_EditorClassIdentifier: 
   Shader: OuterGlowBullet
   Colors:
@@ -20,6 +20,7 @@ MonoBehaviour:
   Speed: 0
   BulletRadius: 0.26
   Density: 14
+  BulletDamage: 40
   StartRadius: 0.2
   FormingTime: 0.01
   AngularSpeed: 0.3
@@ -30,3 +31,4 @@ MonoBehaviour:
     y: 8
   SpikeOffset: 1
   SpikeSlope: 1
+  TimeUntilAlternate: 0.7

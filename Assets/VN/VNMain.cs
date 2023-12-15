@@ -158,6 +158,10 @@ public partial class VNMain : MonoBehaviour
                 case "onend":
                 tagProcessQueue.Add(tag.Substring(tag.IndexOf(' ')+1));
                     break;
+
+                case "skipfight":
+                Boss2GMScript.SkipFight();
+                    break;
             }
     }
 
