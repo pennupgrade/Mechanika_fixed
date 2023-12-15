@@ -40860,7 +40860,7 @@ MonoBehaviour:
   heal: {fileID: 3926523850701580197, guid: ad4bd5a1dcb4a254e81a07d31fb737e4, type: 3}
   Boss: {fileID: 413283800}
   songPosInBeats: 0
-  AudioDebugStartTime: 60
+  AudioDebugStartTime: 30
 --- !u!1 &1809895742
 GameObject:
   m_ObjectHideFlags: 0
