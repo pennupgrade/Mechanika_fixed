@@ -413,6 +413,8 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
             ExecuteHomingRing(); break;
             case ExecutionEnum.FIRST_PIANO_BOXES:
             ExecuteFirstPianoBoxes(); break;
+            case ExecutionEnum.INTIMIDATION_TRAIL_1:
+            ExecuteIntimidationTrail1(); break;
         }
     }    
 
@@ -422,6 +424,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     [SerializeField] APattern ExpandingRing2;
     [SerializeField] APattern HomingRing;
     [SerializeField] APattern FirstPianoBoxes;
+    [SerializeField] APattern IntimidationTrail1;
     
     void ExecuteCQRing() 
     {
@@ -461,6 +464,11 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         //execute
     }
 
+    void ExecuteIntimidationTrail1()
+    {
+        IntimidationTrail1.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
+    }
+
     public enum ExecutionEnum
     {
         CQ_RING,
@@ -468,6 +476,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         EXPANDING_RING_2,
         ALT_RING_COLORS,
         HOMING_RING,
-        FIRST_PIANO_BOXES
+        FIRST_PIANO_BOXES,
+        INTIMIDATION_TRAIL_1
     }
 }

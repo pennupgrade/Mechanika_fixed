@@ -32,7 +32,7 @@ public static class SaveData
     public static (float X, Boss3AI.ExecutionEnum Y) [] bAttacks3 = {(8, CQ_RING), (12, CQ_RING), (16, CQ_RING), (20, CQ_RING), (24, CQ_RING), (28, CQ_RING),
     (32, CQ_RING), (36, EXPANDING_RING_1), (38, EXPANDING_RING_1), (40, EXPANDING_RING_1), (42, EXPANDING_RING_1), (44, EXPANDING_RING_1), (46, EXPANDING_RING_1), (48, EXPANDING_RING_1), (52, CQ_RING), (56, EXPANDING_RING_1), (60, EXPANDING_RING_1),
     (64, EXPANDING_RING_2), (64, FIRST_PIANO_BOXES), (68, EXPANDING_RING_2), (72, EXPANDING_RING_2), (76, EXPANDING_RING_2), (78, EXPANDING_RING_2), (80, EXPANDING_RING_2), (82, EXPANDING_RING_2), (85, CQ_RING), (89, CQ_RING), 
-    (93, 0), (104, 0), (106, 0), (108, 0), (110, 0), (112, 0), (114, 0), (116, 0), (118, 0), (120, 0), 
+    (93, 0), (99, INTIMIDATION_TRAIL_1), (101, INTIMIDATION_TRAIL_1), (103, INTIMIDATION_TRAIL_1), (104, 0), (106, 0), (108, 0), (110, 0), (112, 0), (114, 0), (116, 0), (118, 0), (120, 0), 
     (122, 0), (124, 0), (126, 0), (140, 0), (148, 0), (164, 0),
     (176, 0), (178, 0), (180, 0), (182, 0), (184, 0), (186, 0), (188, 0),
     (196, 0), (300, 0), (304, 0), (308, 0),

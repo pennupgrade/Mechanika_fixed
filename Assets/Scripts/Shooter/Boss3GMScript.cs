@@ -85,9 +85,9 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
 
         CountDown.gameObject.SetActive(true);
 
-        Shader.SetGlobalFloat("_Boss3StartTime", 0f);//Time.timeSinceLevelLoad);
+        Shader.SetGlobalFloat("_Boss3StartTime", Time.timeSinceLevelLoad);
         Shader.SetGlobalFloat("_Boss3BeatOffset", 0f);
-        Shader.SetGlobalFloat("_Boss3BeatMultiplier", 1f);
+        Shader.SetGlobalFloat("_Boss3BeatMultiplier", 1f); //only this uniform breaks things?? D:
     }
 
     private void SpawnHeal(){

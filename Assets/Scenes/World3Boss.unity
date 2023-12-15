@@ -991,9 +991,11 @@ MonoBehaviour:
   moveState: 0
   Animator: {fileID: 413283805}
   sr: {fileID: 413283802}
-  ExpandingRing: {fileID: 11400000, guid: 6cc91b785362bf74a8e8839c4f5055c1, type: 2}
+  ExpandingRing1: {fileID: 11400000, guid: 6cc91b785362bf74a8e8839c4f5055c1, type: 2}
+  ExpandingRing2: {fileID: 11400000, guid: e2d292bc06c17ff4c94428d9a48388cb, type: 2}
   HomingRing: {fileID: 11400000, guid: 6cc91b785362bf74a8e8839c4f5055c1, type: 2}
-  FirstPianoBoxes: {fileID: 11400000, guid: 6cc91b785362bf74a8e8839c4f5055c1, type: 2}
+  FirstPianoBoxes: {fileID: 11400000, guid: 6dcacca966747904bbf322196e4939ee, type: 2}
+  IntimidationTrail1: {fileID: 11400000, guid: e1e026c2bc4bfc44c9683d68cf355c58, type: 2}
 --- !u!61 &413283801
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -40858,7 +40860,7 @@ MonoBehaviour:
   heal: {fileID: 3926523850701580197, guid: ad4bd5a1dcb4a254e81a07d31fb737e4, type: 3}
   Boss: {fileID: 413283800}
   songPosInBeats: 0
-  AudioDebugStartTime: 0
+  AudioDebugStartTime: 60
 --- !u!1 &1809895742
 GameObject:
   m_ObjectHideFlags: 0

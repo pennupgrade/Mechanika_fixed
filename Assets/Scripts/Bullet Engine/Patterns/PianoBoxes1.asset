@@ -12,18 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 098c220f6cb17b945b8386fdabfc9f02, type: 3}
   m_Name: PianoBoxes1
   m_EditorClassIdentifier: 
-  Shader: 
-  Colors: []
-  Duration: 0
+  Shader: BoxBullet
+  Colors:
+  - {r: 1, g: 0, b: 0.1764706, a: 0}
+  - {r: 1, g: 0.5411765, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  Duration: 15
   Speed: 0
-  BulletRadius: 0
+  BulletRadius: 0.45
   Density: 0
   BulletDamage: 40
-  BulletRadiusVariation: 0
+  BulletRadiusVariation: 0.2
   BulletVelocityMultiplier: 1
-  LifeTime: 10
-  SpawnDelay: 1
+  LifeTime: 5
+  SpawnDelay: 0.35
   MinimumDistanceToPlayer: 8
-  MaximumDistanceFromPlayer: 26
+  MaximumDistanceFromPlayer: 19
   DieOnWall: 1
   BounceOffWall: 0

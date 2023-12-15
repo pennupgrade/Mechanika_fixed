@@ -16,17 +16,20 @@ MonoBehaviour:
   Colors:
   - {r: 1, g: 0, b: 0, a: 0}
   - {r: 1, g: 0.26940826, b: 0, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
   Duration: 0
   Speed: 0
   BulletRadius: 0.26
-  Density: 14
+  Density: 28
+  BulletDamage: 40
   StartRadius: 0.2
   FormingTime: 0.01
   AngularSpeed: 0.3
   AngularSpeedVariance: 0.15
   ExpansionSpeed: 5
   SpikeCountRange:
-    x: 4
-    y: 8
+    x: 8
+    y: 12
   SpikeOffset: 1
   SpikeSlope: 1
+  TimeUntilAlternate: -1
