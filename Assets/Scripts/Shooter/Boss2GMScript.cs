@@ -159,6 +159,11 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
         SceneManager.LoadSceneAsync("MainMenu");
     }
 
+    public static void SkipFight() {
+        var boss = GameObject.Find("Boss2GM").GetComponent<Boss2GMScript>();
+        boss.StartCoroutine(boss.Win());
+    }
+
     private IEnumerator SetPanelFalse(){
         if(SaveData.Weapons[0]) Player.GetComponent<MikuMechControl>().UnlockWeapon(3);
         if(SaveData.Weapons[1]) Player.GetComponent<MikuMechControl>().UnlockWeapon(4);

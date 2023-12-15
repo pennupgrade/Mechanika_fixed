@@ -57,7 +57,7 @@ public class DISCBulletScript : MonoBehaviour, IBullet
 
     private IEnumerator stopDamage(){
         doesDamage = false;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.15f);
         doesDamage = true;
     }
 
