@@ -59,7 +59,7 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
         }
 
         if(Boss.health==0&&!hpDialogue){
-            Dialogue("Venge", "Core overloaded, huh. Reconfiguring energy circulation. Now this unit will last just... a bit... longer...");
+            Dialogue("Venge", "Core overloaded, huh. Reconfiguring energy circulation. Now this unit will last just a bit longer...");
             hpDialogue=true;
         }
     }
@@ -83,27 +83,27 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
             Boss.SetMode(-10); Dialogue("Objectives:", "1. Overload V53-A's core by depleting its shields\n2. Survive");
         } else if(!commands[1]&&songPosition>17){ commands[1] = true;
             if(SaveData.Deaths[SceneManager.GetActiveScene().buildIndex]<4)
-                Dialogue("Venge", "Hmm... Should I go easy on you?");
+                Dialogue("Venge", "Hear that ringin’ in your ears? These new engines have a nice kick to them.");
             else Dialogue("Venge", "Don't think I'm about to go easy on you.");
         } else if(!commands[2]&&songPosition>60){ commands[2] = true;
-            Boss.SetMode(1); Dialogue("Venge", "It's time for me to show you your limits.");
+            Boss.SetMode(1); Dialogue("Venge", "R&D will have a field day with those weapons of yours, once I’ve scavenged what’s left.");
         } else if(!commands[3]&&songPosition>110){ commands[3] = true;
             Boss.SetMode(0); 
         } else if(!commands[4]&&songPosition>140){ commands[4] = true;
             Boss.SetMode(1); SpawnHeal();
         } else if(!commands[5]&&songPosition>165){ commands[5] = true;
-            if(SaveData.Deaths[SceneManager.GetActiveScene().buildIndex]<5)
+            if(SaveData.Deaths[SceneManager.GetActiveScene().buildIndex]<3)
                 Dialogue("Venge", "Well you're pretty good. I'm surprised.");
             else Dialogue("Venge", "Wow, you're really stretching my limits, huh. I'm not quite done yet, miss.");
         } else if(!commands[6]&&songPosition>208){ commands[6] = true;
-            Boss.SetMode(1); Dialogue("Venge", "You ready?"); SpawnHeal();
+            Boss.SetMode(1); Dialogue("Venge", "Six feet under is such a hassle. I’ll leave your ashes to the wind."); SpawnHeal();
         } else if (!commands[7]&&songPosition>292){ commands[7] = true;
             bool a = Boss.CheckDefeated();
             if(a) {
                 StartCoroutine(Win());
                 Dialogue("Venge","Damn it...");
             }
-            else Dialogue("Venge","Might wanna up your game.");
+            else Dialogue("Venge","Try to impress me next time.");
         }
     }
 
