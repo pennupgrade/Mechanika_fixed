@@ -16,6 +16,6 @@ public class DebugMiku : MonoBehaviour, IBulletEngineInteractable
     public Transform Transform => this.transform;
     public bool CanBeHit => true;
     
-    public void Hit()
+    public void Hit(int damage)
         => Debug.Log("HIT!");
 }

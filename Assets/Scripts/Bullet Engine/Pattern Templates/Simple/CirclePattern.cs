@@ -32,7 +32,7 @@ public class CirclePattern : APattern
         StartCommand(engine.CreateBulletCircleGradual(group, position == null ? new PositionParameter(bossTransform) : new PositionParameter(startPos), CircleRadius, Density, FormingTime, (polar, time) => new BulletKinematicPolar(0f, 0f, new(), AngularVelocity, polar + new float2(AngularVelocity * time, 0f), BulletRadius, Duration), TrigSize.xyz(UnityEngine.Random.Range(0f, 2f * math.PI))), () =>
         {
             BulletCommandInstantAPI.SetBulletVelocity(engine, group, normalize(playerTransform.position.xy() - startPos) * Speed);
-            finishAction();
+            finishAction?.Invoke();
         });
     }
 

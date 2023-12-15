@@ -46,7 +46,7 @@ public class PolyLineSurroundPattern : APattern
                 {
                     finishes++;
                     if(finishes == SideCount)
-                        finishAction();
+                        finishAction?.Invoke();
                 });
         }
         

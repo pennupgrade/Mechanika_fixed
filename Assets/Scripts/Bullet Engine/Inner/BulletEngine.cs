@@ -70,7 +70,7 @@ public partial class BulletEngine
                 disposalIndices = new();
                 kvp.Value.ForEachIndex((b, ii) =>
                 {
-                    if (Utilities.Collision.CircleCircle(b.Position, b.Radius, i.Position, i.Radius)) { i.Hit(); disposalIndices.Add(ii); }
+                    if (Utilities.Collision.CircleCircle(b.Position, b.Radius, i.Position, i.Radius)) { i.Hit(b.Damage); disposalIndices.Add(ii); }
                 });
                 int offset = 0;
                 disposalIndices.ForEach(ind => { RemoveAt(g, ind + offset); offset--; });
@@ -135,6 +135,9 @@ public partial class BulletEngine
 
         foreach(var kvp in bullets)
         {
+            GroupAccessor g = GetGroupAccessor(kvp.Key);
+            List<int> disposalIndices = new();
+
             for(int i=0; i<kvp.Value.Count; i++)
             {
                 b = kvp.Value[i];
@@ -145,10 +148,13 @@ public partial class BulletEngine
                 wallNormal = Utilities.Collision.PointCollideArena(this, p - boundOrigin, r);
                 if(wallNormal != null) 
                 {
-                    b.OnHitWall((float2) wallNormal);
+                    if(b.OnHitWall((float2) wallNormal)) disposalIndices.Add(i);
                     kvp.Value[i] = b;
                 }
             }
+
+            int offset = 0;
+            disposalIndices.ForEach(ind => { RemoveAt(g, ind + offset); offset--; });
         }
     }
 
@@ -173,7 +179,9 @@ public class EngineDrawer
     float[] radiusArr;
     Vector4[] directionArr;
 
-    public BulletMaterial Material { get; set; }
+    public BulletMaterial Material { get => bulletMat; set { bulletMat = value; material = bulletMat.GetMaterial(); material.enableInstancing = true; } }
+    BulletMaterial bulletMat;
+    Material material;
 
     public void Add(ITBullet b)
     { transforms.Add(Matrix4x4.Translate(b.Position.xyz(-1f))); radiuses.Add(b.Radius); directions.Add(b.Direction.xyz().xyzw()); }
@@ -198,7 +206,6 @@ public class EngineDrawer
 
         //
         this.Material = bulletMat;
-        this.Material.GetMaterial().enableInstancing = true;
 
     }
 
@@ -206,7 +213,7 @@ public class EngineDrawer
     {
         UpdateBlocks();
         transformArr = transforms.ToArray();
-        BulletPropertyBlock.DrawMeshInstanced(MeshUtils.QuadMesh, 0, Material.GetMaterial(), transformArr, Layer, BulletEngineManager.Ins.ArenaCamera);
+        BulletPropertyBlock.DrawMeshInstanced(MeshUtils.QuadMesh, 0, material, transformArr, Layer, BulletEngineManager.Ins.ArenaCamera);
     }
 
     public void Dispose() { }

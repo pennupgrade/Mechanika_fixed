@@ -431,10 +431,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     public Vector2 MousePos { get {return mousePos;} set{}}
 
     // Bullet Engine Interface for Boss 2
-    public void Hit()
-    {
-        Damage(40, false); // to be changed
-    }
+    public void Hit(int damage = 40) => Damage(damage, false);
     public bool CanBeHit => !dashing;
     public Unity.Mathematics.float2 Position => transform.position.xy();
     public float Radius => 0.5f; //TEMP

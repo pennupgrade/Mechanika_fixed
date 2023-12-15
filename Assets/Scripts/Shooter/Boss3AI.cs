@@ -445,7 +445,16 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         => HomingRing.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
 
     void ExecuteFirstPianoBoxes()
-        => FirstPianoBoxes.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
+    {   
+        //global uniform to set boxbullet shader to normal rot speed just in case
+        FirstPianoBoxes.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
+    }
+
+    void ExecuteSecondPianoBoxes()
+    {
+        //global uniform to speed up boxbullet shader
+        //execute
+    }
 
     public enum ExecutionEnum
     {
