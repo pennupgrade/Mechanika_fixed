@@ -16,23 +16,23 @@ MonoBehaviour:
   Colors:
   - {r: 0.8584906, g: 0.044544328, b: 0.044544328, a: 0}
   - {r: 0.83826756, g: 0.043137245, b: 0.85882354, a: 0}
-  - {r: 0, g: 0, b: 0, a: 0}
-  Duration: 0
+  Duration: 8
   Speed: 0
   BulletRadius: 0.4
   Density: 0
   BulletDamage: 40
-  SpawnRate: 0.01
+  SpawnRate: 0.02
   StartSpeedRandomRange:
-    x: 6
-    y: 8
+    x: 12
+    y: 14
   VelocityRandomness: 1
   PlayerMagnetism: 0
   SpawnDistanceFromTarget: 14
   SpawnPositionVariance: 2
   SpawnRelativeToBossNotPlayer: 0
-  BulletVelocityMultiplier: 0.5
+  VelocityPerpendicularToPlayer: 1
+  BulletVelocityMultiplier: 0.3
   BulletRadiusTimeSlope: 0.01
-  BulletLifeTime: 7
+  BulletLifeTime: 4
   BounceOffWalls: 0
   DieOnWall: 1

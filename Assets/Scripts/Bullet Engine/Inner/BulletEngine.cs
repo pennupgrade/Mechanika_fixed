@@ -18,6 +18,8 @@ public partial class BulletEngine
     public static readonly int MaxBulletCount = 4096;
 
     //
+    public static void DestroyAllEngines() => Engines.Clear();
+    public void RemoveAllInteractables() => interactables.Clear();
     static List<BulletEngine> Engines = new();
     public static void UpdateAll(float dt) => Engines.ForEach(m => m.Update(dt));
     public static void CheckAll() => Engines.ForEach(m => m.Check());
@@ -28,7 +30,7 @@ public partial class BulletEngine
     //
     readonly Dictionary<string, List<ITBullet>> bullets = new();
     readonly Dictionary<string, EngineDrawer> drawers = new();
-    readonly IReadOnlyList<IBulletEngineInteractable> interactables = new List<IBulletEngineInteractable>();
+    readonly IList<IBulletEngineInteractable> interactables = new List<IBulletEngineInteractable>();
 
     //
     public void CreateGroup(string group, BulletMaterial? mat) { if (mat is null) CreateGroup(group); else CreateGroup(group, (BulletMaterial) mat); }

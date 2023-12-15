@@ -19,6 +19,7 @@ public class SFXPlayer : MonoBehaviour
     {
         players.Add(this);
         if(ins != null) return;
+        players.Clear();
         ins = this;
     }
 

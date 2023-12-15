@@ -126,6 +126,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     }
     public void SetState(int s){}
     public void SetAttack(int a){
+        if(Player == null) return;
         if (a == 0){
             SingleRocket();
         } else if (a == 1) {
@@ -224,8 +225,9 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         missile.GetComponent<ExploderBullet>().SetTargetAndHomingAccel(t);
     }
     private IEnumerator ElectricBarrage(){
-        if(Player==null) {StopAllCoroutines(); yield break;}
+        
         for (int i = 0; i<5; i++){ 
+            if(Player==null) {StopAllCoroutines(); yield break;}
             GameObject missile = Instantiate (MissilePrefab, fp.position, transform.rotation*Quaternion.Euler(0, 0, -40-24*(3-i)));
             missile.GetComponent<IMissile>().SetSpeed(6,3,9);
             missile.GetComponent<IMissile>().SetValues (electricDMG, 5, 60, true, Player);
@@ -402,6 +404,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
 public partial class Boss3AI : MonoBehaviour, IEnemy
 {
     public void SetBulletEngine(ExecutionEnum a){
+        if(Player == null) return;
         switch(a) 
         {
             case ExecutionEnum.CQ_RING:
