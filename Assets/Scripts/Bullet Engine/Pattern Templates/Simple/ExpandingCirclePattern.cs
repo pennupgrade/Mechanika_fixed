@@ -32,12 +32,23 @@ public class ExpandingCirclePattern : APattern
     public float SpikeOffset;
     public float SpikeSlope;
 
+    [Space(10f)]
+    public float TimeUntilAlternate = -1f;
+
+    static List<GroupParameter> allGroupParams = new();
+    public static void ShiftAllGroupColors(int amount = 1)
+    {
+        foreach(GroupParameter g in allGroupParams)
+            g.ShiftColors(amount);
+    }
+
     public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction, float2? position = null)
     {
     
         float spikeCount = UnityEngine.Random.Range(SpikeCountRange.x, SpikeCountRange.y);
 
         GroupParameter groups = GroupParameter.CreateGroups(engine, Colors, Shader);
+        allGroupParams.Add(groups);
 
         float2 startPos = position == null ? bossTransform.position.xy() : (float2) position;
 
@@ -65,6 +76,16 @@ public class ExpandingCirclePattern : APattern
             }, theta => 0, true, false);
 
             finishAction();
+
+            if(TimeUntilAlternate < 0) yield break;
+            yield return new WaitForSeconds(TimeUntilAlternate);
+
+            groups.TransformAllBullets(engine, b =>
+            {
+                BulletPolarFunction cb = (BulletPolarFunction) b;
+                cb.angularVelocity = f => -cb.angularVelocity(f);
+                return cb;
+            });
         }
 
         StartCommand(Coro());

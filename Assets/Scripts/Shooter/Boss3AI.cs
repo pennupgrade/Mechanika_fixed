@@ -10,7 +10,7 @@ using Random = UnityEngine.Random;
 
 using Utilities;
 
-public class Boss3AI : MonoBehaviour, IEnemy
+public partial class Boss3AI : MonoBehaviour, IEnemy
 {
     public GameObject cam;
     public Slider Bar;
@@ -150,46 +150,9 @@ public class Boss3AI : MonoBehaviour, IEnemy
         } else if (a == 7) {
             Dash();
             StartCoroutine(DashRockets());
-            ExecuteRing();
+            ExecuteHomingRing();
         }
     }
-    public void SetBulletEngine(int a){
-        switch(a) 
-        {
-            case 0:
-            ExecuteCQRing(); break;
-            case 1:
-            ExecuteRing(); break;
-            case 2:
-            ExecuteFireRing(); break;
-            case 3:
-            ExecuteBouncingTrail(); break;
-            case 4:
-            ExecuteBouncingCircle(); break;
-        }
-    }    
-
-    // Bullet Engine Patterns
-    [Header("Patterns")]
-    [SerializeField] APattern CQRing;
-
-    // Bullet Engine Attacks
-    void ExecuteCQRing() 
-    { //not bullet engine sry
-        int count = 18;
-        for (int i = 0; i<count; i++){
-            GameObject bullet = Instantiate (BulletPrefab, transform.position, transform.rotation*Quaternion.Euler(0, 0, i*360/count));
-            bullet.GetComponent<IBullet>().SetValues (bulletDMG, 9, 0.65f+0.2f*Random.value, 9, Vector2.zero);
-        }
-    }
-    void ExecuteRing(int count = 1, float delaySeconds = 2) {
-        if(count <= 0) return;
-        CQRing.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, 
-            () => StartCoroutine(Utils.WaitThenAction(4, () => ExecuteRing(count-1))));
-    }
-    void ExecuteFireRing() {}
-    void ExecuteBouncingTrail() {}
-    void ExecuteBouncingCircle() {}
     
     // attacks
     private IEnumerator DashRockets(){
@@ -300,12 +263,12 @@ public class Boss3AI : MonoBehaviour, IEnemy
         } else if (num == 2){
             for (int i = 0; i<5; i++){ 
                 GameObject missile = Instantiate (MissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, -20-25*(5-i)));
-                missile.GetComponent<IMissile>().SetSpeed(12, 1, 14);
+                missile.GetComponent<IMissile>().SetSpeed(11, 1, 14);
                 missile.GetComponent<IMissile>().SetValues (missileDMG, 3.9f, 20, true, Player);
                 missile.GetComponent<ExplosiveMissile>().SetHoming();
                 missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 40);
                 GameObject missile2 = Instantiate (MissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 20+25*(5-i)));
-                missile2.GetComponent<IMissile>().SetSpeed(13, 1, 14);
+                missile2.GetComponent<IMissile>().SetSpeed(11, 1, 14);
                 missile2.GetComponent<IMissile>().SetValues (missileDMG, 3.9f, 20, true, Player);
                 missile2.GetComponent<ExplosiveMissile>().SetHoming();
                 missile2.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 40);
@@ -314,15 +277,15 @@ public class Boss3AI : MonoBehaviour, IEnemy
         } else {
             for (int i = 0; i<10; i++){ 
                 GameObject missile = Instantiate (MissilePrefab, fp.position, transform.rotation*Quaternion.Euler(0, 0, -30-25*(5-i)));
-                missile.GetComponent<IMissile>().SetSpeed(8, 4, 17);
+                missile.GetComponent<IMissile>().SetSpeed(8, 4, 16);
                 missile.GetComponent<IMissile>().SetValues (400, 4, 85, true, Player);
                 missile.GetComponent<ExplosiveMissile>().SetHoming();
-                missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 50);
+                missile.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 60);
                 GameObject missile2 = Instantiate (MissilePrefab, fp.position, transform.rotation*Quaternion.Euler(0, 0, 30+25*(5-i)));
-                missile2.GetComponent<IMissile>().SetSpeed(8, 4, 17);
+                missile2.GetComponent<IMissile>().SetSpeed(8, 4, 16);
                 missile2.GetComponent<IMissile>().SetValues (400, 4, 85, true, Player);
                 missile2.GetComponent<ExplosiveMissile>().SetHoming();
-                missile2.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 50);
+                missile2.GetComponent<ExplosiveMissile>().SetTargetAndHomingAccel(transform.position, 60);
                 yield return new WaitForSeconds(0.117647f);
             }
         }
@@ -436,3 +399,60 @@ public class Boss3AI : MonoBehaviour, IEnemy
     }
 }
 
+public partial class Boss3AI : MonoBehaviour, IEnemy
+{
+    public void SetBulletEngine(ExecutionEnum a){
+        switch(a) 
+        {
+            case ExecutionEnum.CQ_RING:
+            ExecuteCQRing(); break;
+            case ExecutionEnum.EXPANDING_RING:
+            ExecuteExpandingRing(); break;
+            case ExecutionEnum.ALT_RING_COLORS:
+            AlternateRingColors(); break;
+            case ExecutionEnum.HOMING_RING:
+            ExecuteHomingRing(); break;
+            case ExecutionEnum.FIRST_PIANO_BOXES:
+            ExecuteFirstPianoBoxes(); break;
+        }
+    }    
+
+    // Bullet Engine Patterns
+    [Header("Patterns")]
+    [SerializeField] APattern ExpandingRing;
+    [SerializeField] APattern HomingRing;
+    [SerializeField] APattern FirstPianoBoxes;
+    
+    void ExecuteCQRing() 
+    {
+        int count = 18;
+        for (int i = 0; i<count; i++){
+            GameObject bullet = Instantiate (BulletPrefab, transform.position, transform.rotation*Quaternion.Euler(0, 0, i*360/count));
+            bullet.GetComponent<IBullet>().SetValues (bulletDMG, 9, 0.65f+0.2f*Random.value, 9, Vector2.zero);
+        }
+    }
+
+    void ExecuteExpandingRing(int count = 1, float delaySeconds = 2) 
+    {
+        if(count <= 0) return;
+        ExpandingRing.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, 
+            () => StartCoroutine(Utils.WaitThenAction(4, () => ExecuteExpandingRing(count-1))));
+    }
+
+    void AlternateRingColors() => ExpandingCirclePattern.ShiftAllGroupColors();
+
+    void ExecuteHomingRing()
+        => HomingRing.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
+
+    void ExecuteFirstPianoBoxes()
+        => FirstPianoBoxes.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
+
+    public enum ExecutionEnum
+    {
+        CQ_RING,
+        EXPANDING_RING,
+        ALT_RING_COLORS,
+        HOMING_RING,
+        FIRST_PIANO_BOXES
+    }
+}

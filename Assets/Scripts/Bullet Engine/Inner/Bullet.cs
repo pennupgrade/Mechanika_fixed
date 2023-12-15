@@ -156,7 +156,7 @@ public struct BulletPolarFunction : ITBullet //r(theta, time)
     float time;
     float theta;
 
-    Func<float, float> angularVelocity;
+    public Func<float, float> angularVelocity;
 
     //
     public float2 Position { get; set; }
