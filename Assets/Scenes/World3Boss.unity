@@ -990,7 +990,9 @@ MonoBehaviour:
   moveState: 0
   Animator: {fileID: 0}
   sr: {fileID: 413283802}
-  CQRing: {fileID: 11400000, guid: 6cc91b785362bf74a8e8839c4f5055c1, type: 2}
+  ExpandingRing: {fileID: 0}
+  HomingRing: {fileID: 0}
+  FirstPianoBoxes: {fileID: 0}
 --- !u!61 &413283801
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -33805,7 +33807,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -3
+  m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -37544,7 +37546,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -2
+  m_SortingOrder: 2
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -40778,6 +40780,7 @@ MonoBehaviour:
   heal: {fileID: 3926523850701580197, guid: ad4bd5a1dcb4a254e81a07d31fb737e4, type: 3}
   Boss: {fileID: 413283800}
   songPosInBeats: 0
+  AudioDebugStartTime: 0
 --- !u!1 &1809895742
 GameObject:
   m_ObjectHideFlags: 0
