@@ -10,5 +10,5 @@ public interface IBulletEngineInteractable
     float2 Position { get; }
     float Radius { get; }
     
-    void Hit();
+    void Hit(int damage);
 }

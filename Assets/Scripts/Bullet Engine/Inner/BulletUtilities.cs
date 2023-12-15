@@ -5,6 +5,7 @@ using static Unity.Mathematics.math;
 
 using Position = PositionParameter;
 using Group = BulletEngine.GroupAccessor;
+using System.Diagnostics;
 
 namespace BulletUtilities
 {
@@ -30,7 +31,7 @@ namespace BulletUtilities
     {
 
         public float2 Position { get => p; set => p = value; }
-        public float2 Velocity => v;
+        public float2 Velocity { get => v; set => v = value; }
         public float2 Acceleration => a;
 
         public float2 p;
@@ -51,7 +52,7 @@ namespace BulletUtilities
     public interface IKinematicBody
     {
         float2 Position { get; set; }
-        float2 Velocity { get; }
+        float2 Velocity { get; set; }
         float2 Acceleration { get; }
         void Update(float dt);
     }
@@ -60,7 +61,7 @@ namespace BulletUtilities
     {
         
         public float2 Position { get => pos; set => pos = value; }
-        public float2 Velocity => vel;
+        public float2 Velocity { get => vel; set => vel = value; }
         public float2 Acceleration => accMag * normalize(targetPoint.Pos - pos);
 
         public float Magnetism { get => accMag; set => accMag = value; }
@@ -145,7 +146,7 @@ namespace BulletUtilities
             => Position = p;
 
         public float2 Position { get; set; }
-        public float2 Velocity => new();
+        public float2 Velocity { get => new(); set => UnityEngine.Debug.LogError("Setting velocity on static kinematic body."); }
         public float2 Acceleration => new();
 
         public void Update(float dt) {}

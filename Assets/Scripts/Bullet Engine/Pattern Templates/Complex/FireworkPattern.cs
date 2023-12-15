@@ -94,7 +94,7 @@ public class FireworkPattern : APattern
                 });
             }
             StartCommand(Coro());
-            finishAction();
+            finishAction?.Invoke();
         });
 
     }

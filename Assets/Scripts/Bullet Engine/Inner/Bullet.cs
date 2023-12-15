@@ -15,9 +15,11 @@ public interface ITBullet
     float Radius { get; }
     float2 Direction { get; }
 
+    int Damage => 1;
+
     bool Update(float dt);
 
-    void OnHitWall(float2 wallNormal) {}
+    bool OnHitWall(float2 wallNormal) => true;
 
 }
 
@@ -51,12 +53,15 @@ public struct BulletDeath<T> : ITBullet where T : struct, ITBullet
 public struct BulletKinematic : ITBullet, IBulletKinematic
 {
 
-    public BulletKinematic(float2 p = new(), float2 v = new(), float2 a = new(), float r = 1.0f, float lifeTime = 10f, bool wallInteract = false)
+    public BulletKinematic(float2 p = new(), float2 v = new(), float2 a = new(), float r = 1.0f, float lifeTime = 10f, bool wallInteract = false, bool dieOnWall = false, float damage = 1f)
     {
         this.p = p; this.v = v; this.a = a; time = new float2(0f, lifeTime);
         this.r = r;
-        this.wallInteract = wallInteract;
+        this.wallInteract = wallInteract; this.dieOnWall = dieOnWall;
+        Damage = damage;
     }
+
+    public float Damage { get; private set; }
 
     public float2 p;
     public float2 v;
@@ -72,6 +77,7 @@ public struct BulletKinematic : ITBullet, IBulletKinematic
     float2 time;
 
     bool wallInteract;
+    bool dieOnWall;
 
     public bool Update(float dt)
     {
@@ -84,11 +90,13 @@ public struct BulletKinematic : ITBullet, IBulletKinematic
 
     }
 
-    public void OnHitWall(float2 wallNormal)
+    public bool OnHitWall(float2 wallNormal)
     {
-        if(!wallInteract) return;
+        if(dieOnWall) return true;
+        if(!wallInteract) return false;
         v -= 2f * wallNormal * dot(wallNormal, v);
         p += wallNormal*0.005f;
+        return false;
     }
 
 }
@@ -137,16 +145,21 @@ public struct BulletPolarFunction : ITBullet //r(theta, time)
 {
 
     //
-    public BulletPolarFunction(float2 origin, Func<float, float, float> function, float theta, float r = 1.0f, float angularVelocity = 1f, float timeStart = 0f, float lifeTime = 10f)
+    public BulletPolarFunction(float2 origin, Func<float, float, float> function, float theta, float r = 1.0f, float angularVelocity = 1f, float timeStart = 0f, float lifeTime = 10f, float damage = 1f)
         : this(new KinematicBodyConstAcc(origin), function, theta, f => angularVelocity, r, timeStart, lifeTime) { }
 
-    public BulletPolarFunction(IKinematicBody origin, Func<float, float, float> function, float theta, Func<float, float> angularVelocity, float r = 1.0f, float timeStart = 0f, float lifeTime = 10f)
+    public BulletPolarFunction(IKinematicBody origin, Func<float, float, float> function, float theta, Func<float, float> angularVelocity, float r = 1.0f, float timeStart = 0f, float lifeTime = 10f, float damage = 1f)
     {
         this.function = function; this.origin = origin; this.angularVelocity = angularVelocity;
         this.theta = theta; time = timeStart; this.lifeTime = lifeTime;
         Radius = r;
-        Position = float2(0f); Update(0f);
+        Damage = damage;
+        
+        Position = float2(0f); 
+        Update(0f);
     }
+
+    public float Damage { get; private set; }
 
     public IKinematicBody origin;
     float lifeTime;
@@ -193,8 +206,13 @@ public struct BulletKinematicBody : ITBullet
     Timer timer;
     float radius;
 
-    public BulletKinematicBody(IKinematicBody body, float lifeTime, float bulletRadius)
-    { this.body = body; timer = new(lifeTime); radius = bulletRadius; }
+    public float Damage { get; private set; }
+
+    bool dieOnWall;
+    bool bounceOffWall;
+
+    public BulletKinematicBody(IKinematicBody body, float lifeTime, float bulletRadius, bool bounceOffWall = false, bool dieOnWall = false, float damage = 1f)
+    { this.body = body; timer = new(lifeTime); radius = bulletRadius; Damage = damage; this.dieOnWall = dieOnWall; this.bounceOffWall = bounceOffWall; }
 
     public bool Update(float dt)
     {
@@ -206,5 +224,14 @@ public struct BulletKinematicBody : ITBullet
 
     public float2 Direction => normalize(body.Velocity);
     public float Radius => radius;
+
+    public bool OnHitWall(float2 wallNormal)
+    {
+        if(dieOnWall) return true;
+        if(!bounceOffWall) return false;
+        body.Velocity -= 2f * wallNormal * dot(wallNormal, body.Velocity);
+        body.Position += wallNormal*0.005f;
+        return false;
+    }
 
 }

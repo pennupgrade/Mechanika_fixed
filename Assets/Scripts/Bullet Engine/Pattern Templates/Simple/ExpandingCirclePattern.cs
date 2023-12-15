@@ -75,7 +75,7 @@ public class ExpandingCirclePattern : APattern
                     }, polar.x + w2*spawnTime, BulletRadius, w2, spawnTime);
             }, theta => 0, true, false);
 
-            finishAction();
+            finishAction?.Invoke();
 
             if(TimeUntilAlternate < 0) yield break;
             yield return new WaitForSeconds(TimeUntilAlternate);

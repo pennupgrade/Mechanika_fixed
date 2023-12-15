@@ -991,9 +991,9 @@ MonoBehaviour:
   moveState: 0
   Animator: {fileID: 413283805}
   sr: {fileID: 413283802}
-  ExpandingRing: {fileID: 0}
-  HomingRing: {fileID: 0}
-  FirstPianoBoxes: {fileID: 0}
+  ExpandingRing: {fileID: 11400000, guid: 6cc91b785362bf74a8e8839c4f5055c1, type: 2}
+  HomingRing: {fileID: 11400000, guid: 6cc91b785362bf74a8e8839c4f5055c1, type: 2}
+  FirstPianoBoxes: {fileID: 11400000, guid: 6cc91b785362bf74a8e8839c4f5055c1, type: 2}
 --- !u!61 &413283801
 BoxCollider2D:
   m_ObjectHideFlags: 0

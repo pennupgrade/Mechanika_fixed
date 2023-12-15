@@ -27,7 +27,7 @@ public class StarPattern : APattern
         StartCommand(engine.CreateBulletSpikeBall(group, new PositionParameter(startPos), 10, new float2(StarSize*.5f, StarSize), 0f, Density, FormingSpeed, (polar, time) => new BulletKinematicPolar(new(), 0f, 0f, AngularVelocity, polar + float2(time*AngularVelocity, 0f), BulletRadius, Duration), UnityEngine.Random.Range(0f, 2f * math.PI)), () =>
         {
             engine.SetBulletVelocity(group, normalize(playerTransform.position.xy() - startPos) * ThrowSpeed);
-            finishAction();
+            finishAction?.Invoke();
         });
     }
 

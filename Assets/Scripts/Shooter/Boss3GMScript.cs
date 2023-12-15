@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using Unity.Mathematics;
+using UnityEngine.Diagnostics;
+using UnityEditor;
 
 public class Boss3GMScript : MonoBehaviour, IGameManager
 {
@@ -48,7 +50,8 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
         songPosInBeats = songPosition / secPerBeat;
         minLeft = (293-(int)songPosition)/60; if(minLeft<0) minLeft=0;
         secLeft = (293-(int)songPosition)%60; if(secLeft<0) secLeft=0;
-        CountDown.text="Time Remaining:\n" + minLeft.ToString().PadLeft(1,'0')+":"+secLeft.ToString().PadLeft(2,'0');
+        float debugSec = songPosition;//Utilities.Utils.amod(math.max(0, 293 - songPosition), 60);
+        CountDown.text="Time Remaining:\n" + minLeft.ToString().PadLeft(1,'0')+":"+secLeft.ToString().PadLeft(2,'0') + " - " + debugSec.ToString();
 
         Commander();
 
