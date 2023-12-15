@@ -60,9 +60,19 @@ Shader "Unlit/BulletShaders/OuterGlowBullet"
 
             float4 _Color;
 
+            float _Boss3StartTime;
+            float _Boss3BeatOffset = 0.;
+            float _BeatTimeMultiplier = 1.;
+
             fixed4 frag(vOut i) : SV_Target
             {
                 UNITY_SETUP_INSTANCE_ID(i);
+
+                //
+                float bossTime = _Time.y - _Boss3StartTime;
+                bossTime = amod(bossTime + _Boss3BeatOffset,  60./85.); bossTime *= 0.5;
+                float beat = smoothstep(0., 0.01, bossTime) * smoothstep(0.05, 0.02, bossTime);
+                i.radius += beat*0.13;
 
                 i.uv = pixelate(i.uv);
 

@@ -84,6 +84,10 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
         nextIndexB = math.max(0, nextIndexB-1);
 
         CountDown.gameObject.SetActive(true);
+
+        Shader.SetGlobalFloat("_Boss3StartTime", 0f);//Time.timeSinceLevelLoad);
+        Shader.SetGlobalFloat("_Boss3BeatOffset", 0f);
+        Shader.SetGlobalFloat("_Boss3BeatMultiplier", 1f);
     }
 
     private void SpawnHeal(){

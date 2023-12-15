@@ -37,6 +37,7 @@ public class KinematicTrailPattern : APattern
     [Tooltip("Change in the radius of the bullets being spawned with respect to time.")] public float BulletRadiusTimeSlope = 0f;
     public float BulletLifeTime = 10f;
     public bool BounceOffWalls;
+    public bool DieOnWall = true;
 
     public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction, float2? position = null)
     {
@@ -82,7 +83,7 @@ public class KinematicTrailPattern : APattern
                             0f, 
                             BulletRadius + BulletRadiusTimeSlope*timePassed, 
                             BulletLifeTime, 
-                            BounceOffWalls));
+                            BounceOffWalls, DieOnWall, BulletDamage));
                     timeUntilBulletSpawn = SpawnRate;
                 }
             }

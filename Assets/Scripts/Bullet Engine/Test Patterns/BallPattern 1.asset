@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 349c98a2b8f8c254eaa9cc092927a5a2, type: 3}
-  m_Name: BallPattern
+  m_Name: BallPattern 1
   m_EditorClassIdentifier: 
-  Shader: 
+  Shader: OuterGlowBullet
   Colors:
-  - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0, g: 0, b: 0, a: 0}
-  Duration: 0
-  Speed: 0
-  BulletRadius: 0
-  Density: 0
+  - {r: 0.16565657, g: 0, b: 1, a: 0}
+  - {r: 0, g: 0.21316099, b: 1, a: 0}
+  Duration: 14
+  Speed: 4
+  BulletRadius: 0.4
+  Density: 3
+  BulletDamage: 40
   BallRadius: 2
   RadialDensity: 4
   AngularVelocity: 2
@@ -28,5 +28,6 @@ MonoBehaviour:
   BeginOffset:
     x: 0
     y: 0
-  BeginColor: {r: 0, g: 0, b: 0, a: 0}
-  OutlineColor: {r: 0, g: 0, b: 0, a: 0}
+  BeginColor: {r: 1, g: 0, b: 0, a: 0}
+  OutlineColor: {r: 1, g: 0.29396662, b: 0, a: 0}
+  BounceOffWall: 1

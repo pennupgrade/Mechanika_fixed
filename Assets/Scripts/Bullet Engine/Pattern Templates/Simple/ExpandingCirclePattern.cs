@@ -83,9 +83,11 @@ public class ExpandingCirclePattern : APattern
             groups.TransformAllBullets(engine, b =>
             {
                 BulletPolarFunction cb = (BulletPolarFunction) b;
-                cb.angularVelocity = f => -cb.angularVelocity(f);
+                cb.angularVelocityMultiplier *= -2f;
                 return cb;
             });
+
+            yield break;
         }
 
         StartCommand(Coro());

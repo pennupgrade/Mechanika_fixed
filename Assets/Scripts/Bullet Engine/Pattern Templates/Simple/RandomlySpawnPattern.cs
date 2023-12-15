@@ -26,6 +26,7 @@ public class RandomlySpawnPattern : APattern
     [Space(10f)]
     public float SpawnDelay = 1f;
     public float MinimumDistanceToPlayer = 8f;
+    public float MaximumDistanceFromPlayer = 26f;
 
     [Space(10f)]
     public bool DieOnWall = true;
@@ -41,7 +42,7 @@ public class RandomlySpawnPattern : APattern
             float elapsedTime = 0f;
             while(elapsedTime <= Duration)
             {
-                float2 p = engine.BoundOrigin + new float2(UnityEngine.Random.Range(-0.5f, 0.5f), UnityEngine.Random.Range(-.5f,.5f)) * engine.BoundSize;
+                float2 p = engine.BoundOrigin + (float2) UnityEngine.Random.insideUnitCircle * MaximumDistanceFromPlayer; //new float2(UnityEngine.Random.Range(-0.5f, 0.5f), UnityEngine.Random.Range(-.5f,.5f)) * engine.BoundSize;
                 float2 fromPlayer = p - playerTransform.position.xy();
                 p = playerTransform.position.xy() + normalize(fromPlayer) * max(length(fromPlayer), MinimumDistanceToPlayer);
 
@@ -59,6 +60,8 @@ public class RandomlySpawnPattern : APattern
                 yield return new WaitForSeconds(SpawnDelay);
             }
         }
+
+        StartCommand(Coro(), finishAction);
 
     }
 }

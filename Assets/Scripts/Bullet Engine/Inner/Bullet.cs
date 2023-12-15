@@ -53,7 +53,7 @@ public struct BulletDeath<T> : ITBullet where T : struct, ITBullet
 public struct BulletKinematic : ITBullet, IBulletKinematic
 {
 
-    public BulletKinematic(float2 p = new(), float2 v = new(), float2 a = new(), float r = 1.0f, float lifeTime = 10f, bool wallInteract = false, bool dieOnWall = false, float damage = 1f)
+    public BulletKinematic(float2 p = new(), float2 v = new(), float2 a = new(), float r = 1.0f, float lifeTime = 10f, bool wallInteract = false, bool dieOnWall = true, int damage = 1)
     {
         this.p = p; this.v = v; this.a = a; time = new float2(0f, lifeTime);
         this.r = r;
@@ -61,7 +61,7 @@ public struct BulletKinematic : ITBullet, IBulletKinematic
         Damage = damage;
     }
 
-    public float Damage { get; private set; }
+    public int Damage { get; private set; }
 
     public float2 p;
     public float2 v;
@@ -104,7 +104,7 @@ public struct BulletKinematic : ITBullet, IBulletKinematic
 public struct BulletKinematicPolar : ITBullet, IBulletKinematic
 {
 
-    public BulletKinematicPolar(float2 p = new(), float2 v = new(), float2 a = new(), float angularVelocity = 0f, float2 polarCoords = new(), float bulletRadius = 0.4f, float lifeTime = 10f)
+    public BulletKinematicPolar(float2 p = new(), float2 v = new(), float2 a = new(), float angularVelocity = 0f, float2 polarCoords = new(), float bulletRadius = 0.4f, float lifeTime = 10f, bool dieOnWall = true, int bulletDamage = 40, Action<float2, BulletKinematicPolar> onWallAction = null)
     {
         origin = new(p, v, a);
         this.polarCoords = polarCoords;
@@ -114,6 +114,9 @@ public struct BulletKinematicPolar : ITBullet, IBulletKinematic
 
         this.lifeTime = lifeTime;
         
+        Damage = bulletDamage;
+        this.dieOnWall = dieOnWall;
+        this.onHitWallAction = onWallAction;
     }
 
     KinematicBodyConstAcc origin;
@@ -139,6 +142,16 @@ public struct BulletKinematicPolar : ITBullet, IBulletKinematic
         return lifeTime > 0;
     }
 
+    public int Damage { get; private set; }
+    readonly bool dieOnWall;
+    Action<float2, BulletKinematicPolar> onHitWallAction;
+    public bool OnHitWall(float2 wallNormal)
+    {
+        if(dieOnWall) return true;
+        onHitWallAction?.Invoke(wallNormal, this);
+        return false;
+    }
+
 }
 
 public struct BulletPolarFunction : ITBullet //r(theta, time)
@@ -148,18 +161,19 @@ public struct BulletPolarFunction : ITBullet //r(theta, time)
     public BulletPolarFunction(float2 origin, Func<float, float, float> function, float theta, float r = 1.0f, float angularVelocity = 1f, float timeStart = 0f, float lifeTime = 10f, float damage = 1f)
         : this(new KinematicBodyConstAcc(origin), function, theta, f => angularVelocity, r, timeStart, lifeTime) { }
 
-    public BulletPolarFunction(IKinematicBody origin, Func<float, float, float> function, float theta, Func<float, float> angularVelocity, float r = 1.0f, float timeStart = 0f, float lifeTime = 10f, float damage = 1f)
+    public BulletPolarFunction(IKinematicBody origin, Func<float, float, float> function, float theta, Func<float, float> angularVelocity, float r = 1.0f, float timeStart = 0f, float lifeTime = 10f, int damage = 40)
     {
         this.function = function; this.origin = origin; this.angularVelocity = angularVelocity;
         this.theta = theta; time = timeStart; this.lifeTime = lifeTime;
         Radius = r;
         Damage = damage;
-        
+        this.angularVelocityMultiplier = 1f;
+
         Position = float2(0f); 
         Update(0f);
     }
 
-    public float Damage { get; private set; }
+    public int Damage { get; private set; }
 
     public IKinematicBody origin;
     float lifeTime;
@@ -170,6 +184,7 @@ public struct BulletPolarFunction : ITBullet //r(theta, time)
     float theta;
 
     public Func<float, float> angularVelocity;
+    public float angularVelocityMultiplier; //BANDAID
 
     //
     public float2 Position { get; set; }
@@ -192,7 +207,7 @@ public struct BulletPolarFunction : ITBullet //r(theta, time)
         Position = origin.Position + r * PolarToCartesian(theta);
 
         time += dt;
-        theta += angularVelocity(r)*dt;
+        theta += angularVelocityMultiplier*angularVelocity(r)*dt;
 
         return time <= lifeTime;
     }
@@ -206,12 +221,12 @@ public struct BulletKinematicBody : ITBullet
     Timer timer;
     float radius;
 
-    public float Damage { get; private set; }
+    public int Damage { get; private set; }
 
     bool dieOnWall;
     bool bounceOffWall;
 
-    public BulletKinematicBody(IKinematicBody body, float lifeTime, float bulletRadius, bool bounceOffWall = false, bool dieOnWall = false, float damage = 1f)
+    public BulletKinematicBody(IKinematicBody body, float lifeTime, float bulletRadius, bool bounceOffWall = false, bool dieOnWall = true, int damage = 40)
     { this.body = body; timer = new(lifeTime); radius = bulletRadius; Damage = damage; this.dieOnWall = dieOnWall; this.bounceOffWall = bounceOffWall; }
 
     public bool Update(float dt)
