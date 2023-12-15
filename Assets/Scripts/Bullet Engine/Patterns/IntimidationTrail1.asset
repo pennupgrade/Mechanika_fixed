@@ -27,12 +27,12 @@ MonoBehaviour:
     y: 14
   VelocityRandomness: 1
   PlayerMagnetism: 0
-  SpawnDistanceFromTarget: 14
+  SpawnDistanceFromTarget: 8
   SpawnPositionVariance: 2
   SpawnRelativeToBossNotPlayer: 0
   VelocityPerpendicularToPlayer: 1
-  BulletVelocityMultiplier: 0.3
+  BulletVelocityMultiplier: 1
   BulletRadiusTimeSlope: 0.01
-  BulletLifeTime: 4
+  BulletLifeTime: 1.75
   BounceOffWalls: 0
   DieOnWall: 1
