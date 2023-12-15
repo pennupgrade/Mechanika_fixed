@@ -6,6 +6,7 @@ using static BulletCommandGradualAPI;
 using static Utilities.MathUtils;
 using Utilities;
 using System.Linq;
+using Unity.VisualScripting;
 
 [CreateAssetMenu(menuName = "ScriptableObject/Patterns/Simple/Ball", fileName = "BallPattern")]
 public class BallPattern : APattern
@@ -17,7 +18,7 @@ public class BallPattern : APattern
     public float AngularVelocity = 2.0f;
     public float FormingTime = 4.0f;
 
-    public float2 BeginOffset;
+    public float BeginOffset;
 
     public Color BeginColor;
     public Color OutlineColor;
@@ -29,7 +30,7 @@ public class BallPattern : APattern
         List<(string, BulletMaterial?)> groups = new();
         foreach (Color c in Colors) groups.Add((engine.UniqueGroup, new BulletMaterial(Shader, c)));
         GroupParameter group = new(engine, groups);
-        float2 startPos = position == null ? bossTransform.position.xy() + BeginOffset : (float2) position;
+        float2 startPos = position == null ? bossTransform.position.xy() + (float2) (BeginOffset*UnityEngine.Random.insideUnitCircle) : (float2) position;
         float2 toPlayer = startPos - playerTransform.position.xy();
         startPos = playerTransform.position.xy() + math.normalize(toPlayer) * math.max(math.length(toPlayer), BallRadius * 3.05f+BulletRadius);
 
