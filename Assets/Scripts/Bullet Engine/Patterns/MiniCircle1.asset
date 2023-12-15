@@ -18,11 +18,13 @@ MonoBehaviour:
   - {r: 1, g: 0.9614235, b: 0, a: 0}
   Duration: 1
   Speed: 0
-  BulletRadius: 0.4
+  BulletRadius: 0.25
   Density: 0
   BulletDamage: 40
   BulletCount: 10
   InitialVelocity: 4
-  Friction: 0.4
+  Friction: 0.8
+  MinimumDistanceToPlayer: 7
+  MaximumDistanceFromPlayer: 10
   BounceOffWall: 1
   DieOnWall: 0
