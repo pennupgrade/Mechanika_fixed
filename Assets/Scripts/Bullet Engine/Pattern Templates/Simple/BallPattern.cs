@@ -47,7 +47,7 @@ public class BallPattern : APattern
         {
             recursiveActions.Add((i, d) =>
             {
-                float r = BulletRadius + (i == 1 ? BulletRadius : 0);
+                float r = BulletRadius + (i == 1 ? AdditionalRadiusForOutline : 0);
                 StartCommand(engine.CreateBulletCircleGradual(i == 1 ? outlineGroup : group, new PositionParameter(startPos), d, Density, FormingTime / (RadialDensity * BallRadius), (polar, time) => new BulletKinematicPolar(new(), new(), new(), AngularVelocity, polar + new float2(time * AngularVelocity, 0f), r, Duration, false, BulletDamage, BounceOffWall ?
                 (normal, triggerBullet) => allGroup.TransformAllBullets(engine, b =>
                 {

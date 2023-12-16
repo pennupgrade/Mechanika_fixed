@@ -1105,7 +1105,7 @@ MonoBehaviour:
   MiniCircleExplode2: {fileID: 11400000, guid: 6cd5756425ca2df489cfe70ee0d1b2aa, type: 2}
   FollowTrail1: {fileID: 11400000, guid: faffe7eab037aea45a6cc48c895692ff, type: 2}
   FireBall1: {fileID: 11400000, guid: 544f05c331015264bb9715da2ca37bc7, type: 2}
-  FireBall2: {fileID: 0}
+  FireBall2: {fileID: 11400000, guid: 1a7962e2e086fa24cabf59d71de3a7ba, type: 2}
 --- !u!61 &413283801
 BoxCollider2D:
   m_ObjectHideFlags: 0
