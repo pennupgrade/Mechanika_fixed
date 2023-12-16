@@ -182,8 +182,6 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
 
         Animator.SetInteger("Horizontal", ori.x);
         Animator.SetInteger("Vertical", ori.y);
-
-        Animator.SetBool("IsMoving", (MoveDir.magnitude >= 0.0001f));
     }
 
     private void FireBullet(){
