@@ -76,6 +76,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
         //dash
         if((Input.GetKeyDown(KeyCode.Space)||Input.GetKeyDown(KeyCode.LeftShift)||Input.GetKeyDown(KeyCode.Mouse1)) && dashCDTimer<0.01f && energy-dashEnergy >= 0){
             dashCDTimer=dashCD; dashing = true; dashTimer = 0.25f; energy-=dashEnergy; tr.emitting = true;
+            SFXPlayer.PlaySound("WP_4A", 0.3f);
         }
         if (dashing&&dashTimer<0.001f) {dashing = false; tr.emitting = false;}
 

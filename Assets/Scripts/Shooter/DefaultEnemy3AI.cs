@@ -244,6 +244,7 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
         if (enemyType == 2) {
             dashTimer = 1;
             dashCDTimer = 6;
+            SFXPlayer.PlaySound("MISC_1", 0.6f);
         } else {
             dashTimer = 0.25f;
             dashCDTimer = 5+Random.value;

@@ -233,7 +233,6 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
         } 
     }
     private IEnumerator Mage2(){
-        SFXPlayer.PlaySound("MISC_1");
         for(int i = 0; i<3; i++){
             GameObject missile = Instantiate (mageBulletPrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, 8*(Random.value-0.5f)));
             missile.GetComponent<IMissile>().SetSpeed(6,3,15);
@@ -270,6 +269,7 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
         } else{
             specialCD2Timer = specialCD2+4*(Random.value-0.5f);
             frozen = true; freezeTimer = 0.5f;
+            SFXPlayer.PlaySound("MISC_1");
             GameObject center = Instantiate (ringCenterPrefab, transform.position, Quaternion.identity);
             center.GetComponent<BulletCenter>().initFields(8, Player);
         }
@@ -282,6 +282,7 @@ public class UpgradedEnemy3AI : MonoBehaviour, IEnemy
         dashing = true;
         if (enemyType == 2) {
             Decloak();
+            SFXPlayer.PlaySound("MISC_1", 0.6f);
             dashTimer = 1.2f;
             dashCDTimer = 9;
         } else {

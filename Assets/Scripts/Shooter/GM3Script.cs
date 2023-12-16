@@ -14,12 +14,10 @@ public class GM3Script : MonoBehaviour
         new int[] {0, 0},
         new int[] {0, 1},
         new int[] {1, 1},
-        new int[] {0, 1, 1},
         new int[] {1, 3},
         new int[] {0, 3, 3}
     };
     private int[][] enemyComp2 = {
-        new int[] {0, 1, 1, -1, 3},
         new int[] {2, 2, -1, 0},
         new int[] {1, 1, -1, 2, -1, 2},
         new int[] {2, 2, 2, -1, 3},
