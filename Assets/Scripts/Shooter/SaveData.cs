@@ -1,7 +1,7 @@
 
 using static Boss3AI.ExecutionEnum;
 
-public static class SaveData
+public class SaveData
 {
     public static bool[] Weapons= new bool[3];
     public static bool W2VNCompleted = false;

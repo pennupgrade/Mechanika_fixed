@@ -154,7 +154,7 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
         yield return StartCoroutine(SetPanelTrue());
         yield return new WaitForSeconds(2);
         yield return StartCoroutine(FadeInText(MissionComplete));
-        SaveData.SceneNum = 4;
+        SaveData.SceneNum = 3;
         yield return new WaitForSeconds(5);
         SceneManager.LoadSceneAsync("MainMenu");
     }

@@ -50,7 +50,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
         frozen = false; shieldRegen = false; dashing = false; knockback = 0;
         shieldRegenTimer = 0; weaponCDTimer = 0; dashCDTimer = 0; hurtTimer = 0;
         dashTimer = 0; chargeTimer = 0; meleeTimer = 0;
-        stunTimer = 0; stunned = false; W3Locked = true; W4Locked = true; W5Locked = true;
+        stunTimer = 0; stunned = false; W3Locked = false; W4Locked = false; W5Locked = true;
         lerpingEnergy = false; lerpingHealth=false; lerpingShield=false;
         WeaponUpdate(1);
         StartCoroutine(EnergyRegen());
@@ -334,7 +334,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     }
 
     public void Damage(int dmg, bool stun){
-        //return;
+        return;
         if (dashing) return;
         if (hurtTimer < 0.001f) {
             hurtTimer = 0.4f;
@@ -351,7 +351,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     }
 
     public void MeleeDamage(int dmg, bool stun){
-        //return;
+        return;
         if (meleeTimer>0.001 || dashing) return;
         SFXPlayer.PlaySound("MIKU_HURT_BIG");
         if (shield>0) {ShieldUpdate(-dmg);}
