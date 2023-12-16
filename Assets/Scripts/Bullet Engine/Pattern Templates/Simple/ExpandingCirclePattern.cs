@@ -34,6 +34,7 @@ public class ExpandingCirclePattern : APattern
 
     [Space(10f)]
     public float TimeUntilAlternate = -1f;
+    public float AfterAlternateMagntiudeMultiplier = 2f;
 
     [Space(10f)]
     public float BulletLifetime = 10f;
@@ -86,7 +87,7 @@ public class ExpandingCirclePattern : APattern
             groups.TransformAllBullets(engine, b =>
             {
                 BulletPolarFunction cb = (BulletPolarFunction) b;
-                cb.angularVelocityMultiplier *= -2f;
+                cb.angularVelocityMultiplier *= -1f * AfterAlternateMagntiudeMultiplier;
                 return cb;
             });
 

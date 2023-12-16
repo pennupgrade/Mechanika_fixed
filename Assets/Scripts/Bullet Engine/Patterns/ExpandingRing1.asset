@@ -23,8 +23,8 @@ MonoBehaviour:
   BulletDamage: 40
   StartRadius: 0.2
   FormingTime: 0.01
-  AngularSpeed: 0.3
-  AngularSpeedVariance: 0.15
+  AngularSpeed: 0.15
+  AngularSpeedVariance: 0.07
   ExpansionSpeed: 5
   SpikeCountRange:
     x: 4
@@ -32,3 +32,5 @@ MonoBehaviour:
   SpikeOffset: 1
   SpikeSlope: 1
   TimeUntilAlternate: 0.7
+  AfterAlternateMagntiudeMultiplier: 2
+  BulletLifetime: 10

@@ -27,4 +27,4 @@ MonoBehaviour:
   AngularSpeed: 0.7
   AngularSpeedVariance: 0.2
   TimeUntilAlternate: 0.4
-  BulletLifeTime: 3.2
+  BulletLifeTime: 2.5
