@@ -176,12 +176,13 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     private IEnumerator RocketBarrage(bool regular){
         if(Player==null) {StopAllCoroutines(); yield break;}
         for(int i = 0; i<4; i++){
+            GameObject missile, missile2;
             if (regular) {
-                GameObject missile = Instantiate (RocketPrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -130+35*i));
-                GameObject missile2 = Instantiate (RocketPrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 130-35*i));
+                missile = Instantiate (RocketPrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -130+35*i));
+                missile2 = Instantiate (RocketPrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 130-35*i));
             } else {
-                GameObject missile = Instantiate (BlueRocketPrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -130+35*i));
-                GameObject missile2 = Instantiate (BlueRocketPrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 130-35*i));
+                missile = Instantiate (BlueRocketPrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -130+35*i));
+                missile2 = Instantiate (BlueRocketPrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 130-35*i));
             }
             missile.GetComponent<IMissile>().SetSpeed(8,40,28);
             missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.35294f * (2 - i) + 0.70588f, 92, true, Player);
