@@ -162,7 +162,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
         lookDir = mousePos - rb.position;
         //stunned
         if (stunned){
-            moveSpeed = mspeed*0.5f;
+            moveSpeed = mspeed*0.65f;
             if (stunTimer<0.001f) {moveSpeed = mspeed+4*((400-health)/400.0f); stunned = false;}
         }
         if (frozen){
@@ -347,7 +347,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
         }
 
         shieldRegenTimer = 16;
-        if (stun){stunTimer = 0.5f; stunned = true;}
+        if (stun){stunTimer = 0.4f; stunned = true;}
     }
 
     public void MeleeDamage(int dmg, bool stun){
@@ -361,7 +361,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
 
         shieldRegenTimer = 16;
         meleeTimer = 0.3f;
-        if (stun){stunTimer = 0.5f; stunned = true;}
+        if (stun){stunTimer = 0.4f; stunned = true;}
     }
 
     public bool[] UnlockWeapon(int weapon){

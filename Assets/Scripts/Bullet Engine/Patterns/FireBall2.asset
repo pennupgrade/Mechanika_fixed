@@ -28,5 +28,5 @@ MonoBehaviour:
   BeginColor: {r: 0.6431373, g: 0.07450981, b: 0.23529412, a: 0}
   OutlineColor: {r: 0.7882353, g: 0.09411765, b: 0.2901961, a: 0}
   BounceOffWall: 1
-  MinimumRadiusesFromPlayer: 2.05
+  MinimumRadiusesFromPlayer: 2.5
   AdditionalRadiusForOutline: 0.2

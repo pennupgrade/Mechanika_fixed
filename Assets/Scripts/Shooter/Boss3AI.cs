@@ -255,7 +255,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     private IEnumerator MissileBarrage(int num){
         if(Player==null) {StopAllCoroutines(); yield break;}
         if (num == 1){
-            for (int i = 0; i<5; i++){ 
+            for (int i = 0; i<4; i++){ 
                 GameObject missile = Instantiate (MissilePrefab, fp.position, transform.rotation*Quaternion.Euler(0, 0, -30-25*(5-i)));
                 missile.GetComponent<IMissile>().SetSpeed(8, 2.2f, 12);
                 missile.GetComponent<IMissile>().SetValues (missileDMG, 4, 85, true, Player);
@@ -269,7 +269,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
                 yield return new WaitForSeconds(0.117647f);
             }
         } else if (num == 2){
-            for (int i = 0; i<5; i++){ 
+            for (int i = 0; i<4; i++){ 
                 GameObject missile = Instantiate (MissilePrefab, fp.position, fp.rotation*Quaternion.Euler(0, 0, -20-25*(5-i)));
                 missile.GetComponent<IMissile>().SetSpeed(10, 1, 14);
                 missile.GetComponent<IMissile>().SetValues (missileDMG, 3.9f, 20, true, Player);
