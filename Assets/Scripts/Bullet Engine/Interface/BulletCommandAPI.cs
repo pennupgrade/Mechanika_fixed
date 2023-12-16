@@ -31,7 +31,11 @@ public struct GroupParameter
             groups.Add((engine.UniqueGroup, new BulletMaterial(shader, c)));
         return new(engine, groups);
     }
-    public GroupParameter Merge(GroupParameter o) { foreach (var g in o.Groups) groups.Add(g); return this; }
+    public GroupParameter Merge(GroupParameter o) 
+    {   
+        
+        foreach (var g in o.Groups) groups.Add(g); return this; 
+    }
 
     /// <summary>
     /// Iterate through the groups and do whatever with each group.
