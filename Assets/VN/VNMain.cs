@@ -164,6 +164,8 @@ public partial class VNMain : MonoBehaviour
                     break;
 
                 case "skipfight":
+
+                UnityEngine.Debug.LogWarning("awda");
                 bool currentVNRunThrough = SceneManager.GetActiveScene().name == "World2Boss" ? SaveData.W2VNCompleted
                                                                                               : SaveData.W3VNCompleted;
                 if(currentVNRunThrough) break;
