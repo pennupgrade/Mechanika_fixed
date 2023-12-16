@@ -38,7 +38,7 @@ public class DefaultNPC2AI : MonoBehaviour, IEnemy
         seeker = GetComponent<Seeker>(); MoveDir=Vector2.zero;
         fp = gameObject.transform.GetChild(0);
         state = 0; frameTimer = 1;
-        bulletDMG=80; maxBullets=10; missileDMG=160;
+        bulletDMG=80; maxBullets=10; missileDMG=150;
         moveSpeed=8; turnSpeed=80;
         bulletCD=0.7f; bulletSpeed = 9.5f; bulletReload=3; missileCD=10;
         maxHealth = 220; health=maxHealth; bulletsLeft = maxBullets;
