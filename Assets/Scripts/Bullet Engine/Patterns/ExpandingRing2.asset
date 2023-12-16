@@ -20,7 +20,7 @@ MonoBehaviour:
   Duration: 0
   Speed: 0
   BulletRadius: 0.26
-  Density: 28
+  Density: 20
   BulletDamage: 40
   StartRadius: 0.2
   FormingTime: 0.01
@@ -33,3 +33,4 @@ MonoBehaviour:
   SpikeOffset: 1
   SpikeSlope: 1
   TimeUntilAlternate: -1
+  BulletLifetime: 10

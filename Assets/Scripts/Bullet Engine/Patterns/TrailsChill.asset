@@ -21,7 +21,7 @@ MonoBehaviour:
   BulletRadius: 0.4
   Density: 0
   BulletDamage: 40
-  SpawnRate: 0.05
+  SpawnRate: 0.1
   StartSpeedRandomRange:
     x: 11
     y: 14
