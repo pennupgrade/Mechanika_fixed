@@ -23,12 +23,15 @@ public partial class VNMain : MonoBehaviour
 
     [Header (" -=- Stories -=- ")]
     [SerializeField] TextAsset MikuCharisExchange;
+    [SerializeField] TextAsset MikuVengeExchange;
 
     public static Story MikuCharisStory;
+    public static Story MikuVengeStory;
 
     void InitStories()
     {
         MikuCharisStory = new(MikuCharisExchange.text);
+        MikuVengeStory = new(MikuVengeExchange.text);
     }
 
 }
