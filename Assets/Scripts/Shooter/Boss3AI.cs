@@ -28,7 +28,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     private Vector2 Waypoint, TargetDir, MoveDir, DashDir;
     private Rigidbody2D rb;
     private Transform fp;
-    private bool dashing;
+    private bool dashing, started;
     public GameObject Player;
     [SerializeField] private int moveState;
     private int frameTimer;
@@ -88,6 +88,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
 
     void FixedUpdate()
     {
+        if (!started) return;
         rb.MovePosition(rb.position + Time.fixedDeltaTime*mspeed*MoveDir);
         fp.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward; 
         
@@ -116,6 +117,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         moveState = m;
         if (moveState == -10){
             moveState = 0 ; health = maxHealth;
+            started = true;
             Waypoint = new Vector2(0,36);
             StartCoroutine(BarAnimation());
         }
