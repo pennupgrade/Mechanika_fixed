@@ -34,7 +34,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     private int frameTimer;
 
     [Header("Misc")]
-    [SerializeField] Animator;
+    [SerializeField] Animator Animator;
     [SerializeField] SpriteRenderer sr;
 
     // Start is called before the first frame update

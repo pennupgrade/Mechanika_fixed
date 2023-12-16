@@ -53,6 +53,7 @@ public class MeteorMissileScript : MonoBehaviour
             Destruction();
         }else if (c.gameObject.TryGetComponent<IEnemy>(out IEnemy enemy)){
             enemy.Damage(damage, true);
+            SFXPlayer.PlaySound("WP_3B");
             Destruction();
         }
         
@@ -67,7 +68,6 @@ public class MeteorMissileScript : MonoBehaviour
         }
         Destroy(transform.GetChild(0).gameObject, 2);
         transform.DetachChildren();
-        SFXPlayer.PlaySound("WP_3B");
         Destroy(gameObject);
     }
 

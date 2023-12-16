@@ -73,7 +73,6 @@ public class NPCMissileScript : MonoBehaviour, IMissile
         
         Destroy(transform.GetChild(0).gameObject, 2);
         transform.DetachChildren();
-        SFXPlayer.PlaySound("WP_3B");
         Destroy(gameObject);
     }
 
