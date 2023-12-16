@@ -50,7 +50,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
         frozen = false; shieldRegen = false; dashing = false; knockback = 0;
         shieldRegenTimer = 0; weaponCDTimer = 0; dashCDTimer = 0; hurtTimer = 0;
         dashTimer = 0; chargeTimer = 0; meleeTimer = 0;
-        stunTimer = 0; stunned = false; W3Locked = false; W4Locked = false; W5Locked = false;
+        stunTimer = 0; stunned = false; W3Locked = true; W4Locked = true; W5Locked = true;
         lerpingEnergy = false; lerpingHealth=false; lerpingShield=false;
         WeaponUpdate(1);
         StartCoroutine(EnergyRegen());
