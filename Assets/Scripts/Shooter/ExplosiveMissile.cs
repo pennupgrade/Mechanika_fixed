@@ -68,7 +68,7 @@ public class ExplosiveMissile : MonoBehaviour, IMissile
             if (electric){
                 GameObject elect = Instantiate(electricPrefab, transform.position, Quaternion.identity);
                 elect.GetComponent<ElectricScript>().SetPlayer(player, damage);
-                Destroy(elect, 10+Random.value);
+                Destroy(elect, 7+Random.value);
             } else {
                 GameObject expl;
                 if(homing){

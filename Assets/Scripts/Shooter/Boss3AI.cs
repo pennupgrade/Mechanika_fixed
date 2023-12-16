@@ -161,7 +161,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         for(int i = 0; i<10; i++){
             if (i != 4) {
                 GameObject missile = Instantiate (RocketPrefab, transform.position, fp.rotation);
-                missile.GetComponent<IMissile>().SetSpeed(2,80,40);
+                missile.GetComponent<IMissile>().SetSpeed(2,80,31f);
                 missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.70588f + 0.17647f*(i+1) - 0.058823f*i, 40, true, Player);
             }
             yield return new WaitForSeconds(0.058823f);
