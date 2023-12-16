@@ -28,7 +28,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     private int knockback, dashDMG = 200, dashEnergy = 20; 
     private float dashTimer, dashCDTimer; private float dashCD = 0.75f;
 
-    private int w1DMG = 20, w1Energy = 3, cepheidMode = 1; private float w1CD = 0.18f;
+    private int w1DMG = 22, w1Energy = 3, cepheidMode = 1; private float w1CD = 0.18f;
     private int w2DMG = 92, w2Energy = 20; private float w2CD = 1f;
     private int w3DMG = 24, w3Energy = 22; private float w3CD = 0.4f;
     private int w4DMG = 200, w4Energy = 20; private float w4CD = 0.1f;
@@ -338,7 +338,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
         if (dashing) return;
         if (hurtTimer < 0.001f) {
             hurtTimer = 0.4f;
-            if (dmg > 160) SFXPlayer.PlaySound("MIKU_HURT_BIG");
+            if (dmg > 120) SFXPlayer.PlaySound("MIKU_HURT_BIG");
             else SFXPlayer.PlaySound("MIKU_HURT_SMALL");
         }
         if (shield>0) {ShieldUpdate(-dmg);}

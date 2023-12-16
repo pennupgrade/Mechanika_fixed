@@ -47,12 +47,12 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     void Start()
     {
         MoveDir=Vector2.zero;
-        maxHealth = 12666; health=maxHealth;
+        maxHealth = 11666; health=maxHealth;
         moveState = 0;
         frameTimer = 1;
         trackingBspd = 16;
-        bulletDMG = 72; rocketDMG = 150; missileDMG = 100;
-        electricDMG = 60; magicDMG = 90;
+        bulletDMG = 72; rocketDMG = 150; missileDMG = 90;
+        electricDMG = 60; magicDMG = 80;
         Cturn = 0;
         moveSpeed=6; mspeed = moveSpeed; turnSpeed=100; tspeed = turnSpeed;
         meleeTimer = 0; dashTimer = 0;
