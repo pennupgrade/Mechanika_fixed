@@ -51,8 +51,8 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         moveState = 0;
         frameTimer = 1;
         trackingBspd = 16;
-        bulletDMG = 72; rocketDMG = 180; missileDMG = 140;
-        electricDMG = 60; magicDMG = 100;
+        bulletDMG = 72; rocketDMG = 150; missileDMG = 100;
+        electricDMG = 60; magicDMG = 90;
         Cturn = 0;
         moveSpeed=6; mspeed = moveSpeed; turnSpeed=100; tspeed = turnSpeed;
         meleeTimer = 0; dashTimer = 0;
@@ -162,7 +162,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
             if (i != 4) {
                 GameObject missile = Instantiate (RocketPrefab, transform.position, fp.rotation);
                 missile.GetComponent<IMissile>().SetSpeed(2,80,40);
-                missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.70588f + 0.17647f*(i+1) - 0.058823f*i, 36, true, Player);
+                missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.70588f + 0.17647f*(i+1) - 0.058823f*i, 40, true, Player);
             }
             yield return new WaitForSeconds(0.058823f);
         }
@@ -184,10 +184,10 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
                 missile = Instantiate (BlueRocketPrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -130+35*i));
                 missile2 = Instantiate (BlueRocketPrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 130-35*i));
             }
-            missile.GetComponent<IMissile>().SetSpeed(8,40,28);
-            missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.35294f * (2 - i) + 0.70588f, 92, true, Player);
-            missile2.GetComponent<IMissile>().SetSpeed(8,40,28);
-            missile2.GetComponent<IMissile>().SetValues (rocketDMG, 0.35294f * (2 - i) + 0.70588f, 92, true, Player);
+            missile.GetComponent<IMissile>().SetSpeed(8,30,26);
+            missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.35294f * (2 - i) + 0.70588f, 90, true, Player);
+            missile2.GetComponent<IMissile>().SetSpeed(8,30,26);
+            missile2.GetComponent<IMissile>().SetValues (rocketDMG, 0.35294f * (2 - i) + 0.70588f, 90, true, Player);
             yield return new WaitForSeconds(0.35294f);
         }
     }
