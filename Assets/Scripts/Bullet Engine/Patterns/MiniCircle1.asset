@@ -24,8 +24,8 @@ MonoBehaviour:
   BulletCount: 10
   InitialVelocity: 4
   Friction: 0.8
-  MinimumDistanceToPlayer: 7
-  MaximumDistanceFromPlayer: 10
+  MinimumDistanceToPlayer: 9
+  MaximumDistanceFromPlayer: 11.5
   BounceOffWall: 1
   DieOnWall: 0
   Magnetism: 0

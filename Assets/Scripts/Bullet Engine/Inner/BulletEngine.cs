@@ -18,8 +18,10 @@ public partial class BulletEngine
     public static readonly int MaxBulletCount = 4096;
 
     //
+    bool doesUpdate = true;
     public static void DestroyAllEngines() => Engines.Clear();
     public void RemoveAllInteractables() => interactables.Clear();
+    public void DisableUpdating() => doesUpdate = false;
     static List<BulletEngine> Engines = new();
     public static void UpdateAll(float dt) => Engines.ForEach(m => m.Update(dt));
     public static void CheckAll() => Engines.ForEach(m => m.Check());
@@ -59,7 +61,10 @@ public partial class BulletEngine
 
     //
     public void Update(float dt)
-        => bullets.ForEach((group, bullets) => { var g = GetGroupAccessor(group); bullets.ForEachIndex((b, i) => { if(b.Update(dt)) Set(g, b, i); else RemoveAt(g, i); });  });
+    {
+        if(!doesUpdate) return;
+        bullets.ForEach((group, bullets) => { var g = GetGroupAccessor(group); bullets.ForEachIndex((b, i) => { if(b.Update(dt)) Set(g, b, i); else RemoveAt(g, i); });  });
+    }
 
     public void Check()
     {
