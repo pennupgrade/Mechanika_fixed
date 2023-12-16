@@ -334,7 +334,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     }
 
     public void Damage(int dmg, bool stun){
-        return;
+        //return;
         if (dashing) return;
         if (hurtTimer < 0.001f) {
             hurtTimer = 0.4f;
@@ -351,7 +351,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     }
 
     public void MeleeDamage(int dmg, bool stun){
-        return;
+        //return;
         if (meleeTimer>0.001 || dashing) return;
         SFXPlayer.PlaySound("MIKU_HURT_BIG");
         if (shield>0) {ShieldUpdate(-dmg);}
