@@ -439,6 +439,8 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
             ExecuteChillTrail(); break;
             case ExecutionEnum.CHILL_SURROUND:
             ExecuteChillSurround(); break;
+            case ExecutionEnum.CHILL_SURROUND_POLY:
+            ExecuteChillSurroundPoly(); break;
             case ExecutionEnum.FIREWORK_1:
             ExecuteFireworks1(); break;
             case ExecutionEnum.FIREWORK_2:
@@ -464,6 +466,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     [SerializeField] APattern FireBall2;
     [SerializeField] APattern ChillTrail;
     [SerializeField] APattern ChillSurround;
+    [SerializeField] APattern ChillSurroundPoly;
     [SerializeField] APattern Firework1;
     [SerializeField] APattern Firework2;
     [SerializeField] APattern PianoTrail1;
@@ -551,6 +554,11 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         ChillSurround.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
     }
 
+    void ExecuteChillSurroundPoly()
+    {
+        ChillSurroundPoly.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
+    }
+
     void ExecuteFireworks1()
     {
         Firework1.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
@@ -584,6 +592,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         FIRE_BALL_2,
         CHILL_TRAIL,
         CHILL_SURROUND,
+        CHILL_SURROUND_POLY,
         FIREWORK_1,
         FIREWORK_2,
         PIANO_TRAIL_1

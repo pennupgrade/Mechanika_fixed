@@ -24,6 +24,8 @@ public class CircleSurroundPattern : APattern
     public float AngularSpeedVariance = 1f;
 
     public float TimeUntilAlternate = -1f;
+
+    public float BulletLifeTime = 10f;
     
     public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction, float2? position = null)
     {
@@ -47,7 +49,7 @@ public class CircleSurroundPattern : APattern
                     (theta, time) => 
                     {
                         return StartRadius- time*CloseSpeed;
-                    }, polar.x + w2*spawnTime, BulletRadius, w2, spawnTime);
+                    }, polar.x + w2*spawnTime, BulletRadius, w2, spawnTime, BulletLifeTime, BulletDamage);
             }, theta => 0, true, false);
 
             finishAction?.Invoke();

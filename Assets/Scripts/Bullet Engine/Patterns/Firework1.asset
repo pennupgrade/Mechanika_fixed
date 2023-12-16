@@ -28,9 +28,9 @@ MonoBehaviour:
   FireworkThickness: 0
   AngularVelocity: 2
   TimeUntilFireworkExplosion: 0.7
-  TimeAfterFireworkExplosion: 7
-  ChaseTime: 5
-  AdditionalExplosionVelocity: 8
+  TimeAfterFireworkExplosion: 4
+  ChaseTime: 1
+  AdditionalExplosionVelocity: 10
   BulletRadiusOffsetTrig:
     x: 1
     y: 0

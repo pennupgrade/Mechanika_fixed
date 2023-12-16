@@ -22,8 +22,9 @@ MonoBehaviour:
   Density: 0.8
   BulletDamage: 40
   FormingTime: 1
-  StartRadius: 11.5
+  StartRadius: 13
   CloseSpeed: 1
   AngularSpeed: 0.7
   AngularSpeedVariance: 0.2
   TimeUntilAlternate: 0.4
+  BulletLifeTime: 5

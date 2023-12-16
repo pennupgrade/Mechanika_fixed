@@ -18,7 +18,7 @@ MonoBehaviour:
   - {r: 0.011764706, g: 0.14509805, b: 0.54901963, a: 1}
   - {r: 0.015686275, g: 0.29411766, b: 0.8509804, a: 1}
   Duration: 0.7
-  Speed: 10
+  Speed: 8
   BulletRadius: 0.4
   Density: 2
   BulletDamage: 40
@@ -29,9 +29,9 @@ MonoBehaviour:
   FireworkThickness: 0
   AngularVelocity: 2
   TimeUntilFireworkExplosion: 0.7
-  TimeAfterFireworkExplosion: 7
-  ChaseTime: 5
-  AdditionalExplosionVelocity: 8
+  TimeAfterFireworkExplosion: 4
+  ChaseTime: 1
+  AdditionalExplosionVelocity: 10
   BulletRadiusOffsetTrig:
     x: 1
     y: 0
