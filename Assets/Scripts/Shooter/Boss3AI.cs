@@ -16,7 +16,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     public TextMeshProUGUI BossName;
     [Header("Prefabs")]
 
-    public GameObject explosionPrefab, RocketPrefab, MissilePrefab,
+    public GameObject explosionPrefab, RocketPrefab, BlueRocketPrefab, MissilePrefab,
         MagicBullet, HybridMissile, ExplodingBullet, BulletPrefab;
     [Header("Enemy Values")]
     public int health;
@@ -131,7 +131,9 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         if (a == 0){
             SingleRocket();
         } else if (a == 1) {
-            StartCoroutine(RocketBarrage());
+            StartCoroutine(RocketBarrage(true));
+        } else if (a == 11) {
+        StartCoroutine(RocketBarrage(false));
         } else if (a == 2) {
             StartCoroutine(MagicBullets());
         } else if (a == 3) {
@@ -171,13 +173,18 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         missile.GetComponent<IMissile>().SetSpeed(4,36,26);
         missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.70588f, 110, true, Player);
     }
-    private IEnumerator RocketBarrage(){
+    private IEnumerator RocketBarrage(bool regular){
         if(Player==null) {StopAllCoroutines(); yield break;}
         for(int i = 0; i<4; i++){
-            GameObject missile = Instantiate (RocketPrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -130+35*i));
+            if (regular) {
+                GameObject missile = Instantiate (RocketPrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -130+35*i));
+                GameObject missile2 = Instantiate (RocketPrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 130-35*i));
+            } else {
+                GameObject missile = Instantiate (BlueRocketPrefab, fp.position+fp.right, fp.rotation*Quaternion.Euler(0, 0, -130+35*i));
+                GameObject missile2 = Instantiate (BlueRocketPrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 130-35*i));
+            }
             missile.GetComponent<IMissile>().SetSpeed(8,40,28);
             missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.35294f * (2 - i) + 0.70588f, 92, true, Player);
-            GameObject missile2 = Instantiate (RocketPrefab, fp.position-fp.right, fp.rotation*Quaternion.Euler(0, 0, 130-35*i));
             missile2.GetComponent<IMissile>().SetSpeed(8,40,28);
             missile2.GetComponent<IMissile>().SetValues (rocketDMG, 0.35294f * (2 - i) + 0.70588f, 92, true, Player);
             yield return new WaitForSeconds(0.35294f);
