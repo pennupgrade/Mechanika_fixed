@@ -170,7 +170,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     private void SingleRocket(){
         if(Player==null) return;
         GameObject missile = Instantiate (RocketPrefab, transform.position, fp.rotation);
-        missile.GetComponent<IMissile>().SetSpeed(4,36,26);
+        missile.GetComponent<IMissile>().SetSpeed(4,30,24);
         missile.GetComponent<IMissile>().SetValues (rocketDMG, 0.70588f, 110, true, Player);
     }
     private IEnumerator RocketBarrage(bool regular){
