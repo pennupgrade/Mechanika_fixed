@@ -105,10 +105,11 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
             if(SaveData.Deaths[SceneManager.GetActiveScene().buildIndex]<4)
                 Dialogue("Venge", "Hear that ringin’ in your ears? These new engines have a nice kick to them.");
             else Dialogue("Venge", "Don't think I'm about to go easy on you.");
+            SpawnHeal();
         } else if(!commands[2]&&songPosition>60){ commands[2] = true;
             Boss.SetMode(1); Dialogue("Venge", "R&D will have a field day with those weapons of yours, once I’ve scavenged what’s left.");
         } else if(!commands[3]&&songPosition>110){ commands[3] = true;
-            Boss.SetMode(0); 
+            Boss.SetMode(0); SpawnHeal();
         } else if(!commands[4]&&songPosition>140){ commands[4] = true;
             Boss.SetMode(1); SpawnHeal();
         } else if(!commands[5]&&songPosition>165){ commands[5] = true;
