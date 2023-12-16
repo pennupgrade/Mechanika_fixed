@@ -100,6 +100,10 @@ MonoBehaviour:
       Value: {fileID: 8300000, guid: 25dee3ab1ce27b649a97c2fb288e6a84, type: 3}
     - Key: WP_4A
       Value: {fileID: 8300000, guid: c9130da1c3bc5964690dafda624695ca, type: 3}
+    - Key: MIKU_HURT_BIG
+      Value: {fileID: 8300000, guid: 54f4c818e179b438b8b25c7e54f5c75a, type: 3}
+    - Key: MIKU_HURT_SMALL
+      Value: {fileID: 8300000, guid: 2b07537970e0945868c396c71c4dab24, type: 3}
     - Key: WP_4CHARGE1
       Value: {fileID: 8300000, guid: df85aa1ed490856409a310dd16f13f0d, type: 3}
     - Key: WP_4CHARGE2

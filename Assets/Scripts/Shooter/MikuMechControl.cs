@@ -20,7 +20,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     private bool lerpingHealth, lerpingShield, lerpingEnergy;
     [Header("Player Values")]
     [SerializeField] private int health, maxShield, shield, energy, weaponNum;
-    private float shieldRegenTimer, meleeTimer, weaponCDTimer, chargeTimer;
+    private float shieldRegenTimer, meleeTimer, weaponCDTimer, chargeTimer, hurtTimer;
     private bool frozen, shieldRegen, W3Locked, W4Locked, W5Locked, sussyBakaEngine;
     private float stunTimer;
 
@@ -48,7 +48,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
         mspeed = moveSpeed; weaponNum = 1; cepheidMode = 1;
         energy = 100; health = 390; maxShield = 410; shield = 0;
         frozen = false; shieldRegen = false; dashing = false; knockback = 0;
-        shieldRegenTimer = 0; weaponCDTimer = 0; dashCDTimer = 0;
+        shieldRegenTimer = 0; weaponCDTimer = 0; dashCDTimer = 0; hurtTimer = 0;
         dashTimer = 0; chargeTimer = 0; meleeTimer = 0;
         stunTimer = 0; stunned = false; W3Locked = false; W4Locked = false; W5Locked = false;
         lerpingEnergy = false; lerpingHealth=false; lerpingShield=false;
@@ -155,6 +155,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
         //update timers
         weaponCDTimer = TimerF(weaponCDTimer); dashCDTimer = TimerF(dashCDTimer); dashTimer = TimerF(dashTimer);
         shieldRegenTimer = TimerF(shieldRegenTimer); stunTimer = TimerF(stunTimer); meleeTimer = TimerF(meleeTimer);
+        hurtTimer = TimerF(hurtTimer);
     }
 
     void FixedUpdate(){
@@ -333,8 +334,13 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     }
 
     public void Damage(int dmg, bool stun){
-        return;
+        //return;
         if (dashing) return;
+        if (hurtTimer < 0.001f) {
+            hurtTimer = 0.4f;
+            if (dmg > 160) SFXPlayer.PlaySound("MIKU_HURT_BIG");
+            else SFXPlayer.PlaySound("MIKU_HURT_SMALL");
+        }
         if (shield>0) {ShieldUpdate(-dmg);}
         else {
             HealthUpdate(-dmg);
@@ -345,8 +351,9 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     }
 
     public void MeleeDamage(int dmg, bool stun){
-        return;
+        //return;
         if (meleeTimer>0.001 || dashing) return;
+        SFXPlayer.PlaySound("MIKU_HURT_BIG");
         if (shield>0) {ShieldUpdate(-dmg);}
         else {
             HealthUpdate(-dmg);
