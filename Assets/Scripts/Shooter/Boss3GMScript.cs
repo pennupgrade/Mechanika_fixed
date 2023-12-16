@@ -51,7 +51,7 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
         minLeft = (293-(int)songPosition)/60; if(minLeft<0) minLeft=0;
         secLeft = (293-(int)songPosition)%60; if(secLeft<0) secLeft=0;
         float debugSec = songPosition;//Utilities.Utils.amod(math.max(0, 293 - songPosition), 60);
-        CountDown.text="Time Remaining:\n" + minLeft.ToString().PadLeft(1,'0')+":"+secLeft.ToString().PadLeft(2,'0') + " - " + debugSec.ToString();
+        CountDown.text="Time Remaining:\n" + minLeft.ToString().PadLeft(1,'0')+":"+secLeft.ToString().PadLeft(2,'0');// + " - " + debugSec.ToString();
 
         Commander();
 
@@ -82,6 +82,7 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
         while(bAttacks[nextIndexB].Item1 < songPosInBeats) nextIndexB++;
         nextIndexR = math.max(0, nextIndexR-1);
         nextIndexB = math.max(0, nextIndexB-1);
+        Player.GetComponent<MikuMechControl>().SusEngine();
 
         CountDown.gameObject.SetActive(true);
 

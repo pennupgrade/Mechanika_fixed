@@ -21,7 +21,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     [Header("Player Values")]
     [SerializeField] private int health, maxShield, shield, energy, weaponNum;
     private float shieldRegenTimer, meleeTimer, weaponCDTimer, chargeTimer;
-    private bool frozen, shieldRegen, W3Locked, W4Locked, W5Locked;
+    private bool frozen, shieldRegen, W3Locked, W4Locked, W5Locked, sussyBakaEngine;
     private float stunTimer;
 
     [SerializeField] private bool stunned, dashing;
@@ -320,10 +320,11 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     }
 
     public void Death(){
-        Debug.Log("death");
         SFXPlayer.PlaySound("MISC_4");
-        BulletEngineManager.bossEngine?.RemoveAllInteractables();
-        BulletEngineManager.EndAllCoroutines();
+        if (sussyBakaEngine) {
+            BulletEngineManager.bossEngine?.RemoveAllInteractables();
+            BulletEngineManager.EndAllCoroutines();
+        }
 
         GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
         Destroy(expl, 2);
@@ -432,7 +433,9 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     }
 
 
-
+    public void SusEngine() {
+        sussyBakaEngine = true;
+    }
 
     public void Freeze() {frozen = true;}
     public void UnFreeze() {frozen = false;}
