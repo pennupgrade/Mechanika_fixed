@@ -63,7 +63,11 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _Fade: 0.89988434
+<<<<<<< Updated upstream
+    - _Fade: 0.9
+=======
+    - _Fade: 0.8999978
+>>>>>>> Stashed changes
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1

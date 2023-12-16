@@ -67,8 +67,13 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _LaserScale: 3
-    - _LaserXScale: 16.527748
-    - _LastStartTime: 94.62774
+<<<<<<< Updated upstream
+    - _LaserXScale: 33.200836
+    - _LastStartTime: 56.057465
+=======
+    - _LaserXScale: 16.370195
+    - _LastStartTime: 147.30252
+>>>>>>> Stashed changes
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
