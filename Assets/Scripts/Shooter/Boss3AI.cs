@@ -34,7 +34,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     private int frameTimer;
 
     [Header("Misc")]
-    [SerializeField] Animator Animator;
+    [SerializeField] Animator;
     [SerializeField] SpriteRenderer sr;
 
     // Start is called before the first frame update
@@ -317,6 +317,8 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     public void Damage (int dmg, bool stun){
         if(moveSpeed == 0) dmg -= 10;
         health-=dmg;
+        if (dmg > 400) SFXPlayer.PlaySound("HIT_SELF1");
+        else SFXPlayer.PlaySound("HIT_BIG2");
         if (health<0) health = 0;
         Bar.value = health;
         if(health==0){
@@ -325,6 +327,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     }
     public void MeleeDamage (int dmg, bool stun){
         if (meleeTimer>0.001) return;
+        SFXPlayer.PlaySound("HIT_SELF1");
         health-=50;
         if (health<0) health = 0;
         meleeTimer = 0.5f;

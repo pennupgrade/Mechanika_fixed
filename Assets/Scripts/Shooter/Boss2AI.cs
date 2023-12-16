@@ -376,6 +376,8 @@ public class Boss2AI : MonoBehaviour, IEnemy
     public void Damage (int dmg, bool stun){
         if(mode == 0 || mode == -1) dmg -= 10;
         health-=dmg;
+        if (dmg > 400) SFXPlayer.PlaySound("HIT_SELF1");
+        else SFXPlayer.PlaySound("HIT_BIG2");
         if (health<0) health = 0;
         Bar.value = health;
         if(health==0){
@@ -385,6 +387,7 @@ public class Boss2AI : MonoBehaviour, IEnemy
     public void MeleeDamage (int dmg, bool stun){
         if (meleeTimer>0.001) return;
         health-=50;
+        SFXPlayer.PlaySound("HIT_SELF1");
         if (health<0) health = 0;
         meleeTimer = 0.5f;
         Bar.value = health;
