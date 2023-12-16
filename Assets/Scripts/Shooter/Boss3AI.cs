@@ -419,6 +419,8 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
             ExecuteHomingRing(); break;
             case ExecutionEnum.FIRST_PIANO_BOXES:
             ExecuteFirstPianoBoxes(); break;
+            case ExecutionEnum.SECOND_PIANO_BOXES:
+            ExecuteSecondPianoBoxes(); break;
             case ExecutionEnum.INTIMIDATION_TRAIL_1:
             ExecuteIntimidationTrail1(); break;
             case ExecutionEnum.MINI_CIRCLE_EXPLODE_1:
@@ -431,6 +433,14 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
             ExecuteFireBall1(); break;
             case ExecutionEnum.FIRE_BALL_2:
             ExecuteFireBall2(); break;
+            case ExecutionEnum.CHILL_TRAIL:
+            ExecuteChillTrail(); break;
+            case ExecutionEnum.CHILL_SURROUND:
+            ExecuteChillSurround(); break;
+            case ExecutionEnum.FIREWORK_1:
+            ExecuteFireworks1(); break;
+            case ExecutionEnum.FIREWORK_2:
+            ExecuteFireworks2(); break;
         }
     }    
 
@@ -440,12 +450,17 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     [SerializeField] APattern ExpandingRing2;
     [SerializeField] APattern HomingRing;
     [SerializeField] APattern FirstPianoBoxes;
+    [SerializeField] APattern SecondPianoBoxes;
     [SerializeField] APattern IntimidationTrail1;
     [SerializeField] APattern MiniCircleExplode1;
     [SerializeField] APattern MiniCircleExplode2;
     [SerializeField] APattern FollowTrail1;
     [SerializeField] APattern FireBall1;
     [SerializeField] APattern FireBall2;
+    [SerializeField] APattern ChillTrail;
+    [SerializeField] APattern ChillSurround;
+    [SerializeField] APattern Firework1;
+    [SerializeField] APattern Firework2;
     
     void ExecuteCQRing() 
     {
@@ -482,7 +497,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     void ExecuteSecondPianoBoxes()
     {
         //global uniform to speed up boxbullet shader
-        //execute
+        SecondPianoBoxes.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
     }
 
     void ExecuteIntimidationTrail1()
@@ -515,6 +530,26 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         FireBall2.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
     }
 
+    void ExecuteChillTrail()
+    {
+        ChillTrail.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
+    }
+
+    void ExecuteChillSurround()
+    {
+        ChillSurround.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
+    }
+
+    void ExecuteFireworks1()
+    {
+        Firework1.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
+    }
+
+    void ExecuteFireworks2()
+    {
+        Firework2.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
+    }
+
     public enum ExecutionEnum
     {
         CQ_RING,
@@ -523,11 +558,16 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         ALT_RING_COLORS,
         HOMING_RING,
         FIRST_PIANO_BOXES,
+        SECOND_PIANO_BOXES,
         INTIMIDATION_TRAIL_1,
         MINI_CIRCLE_EXPLODE_1,
         MINI_CIRCLE_EXPLODE_2,
         FOLLOW_TRAIL_1,
         FIRE_BALL_1,
-        FIRE_BALL_2
+        FIRE_BALL_2,
+        CHILL_TRAIL,
+        CHILL_SURROUND,
+        FIREWORK_1,
+        FIREWORK_2
     }
 }

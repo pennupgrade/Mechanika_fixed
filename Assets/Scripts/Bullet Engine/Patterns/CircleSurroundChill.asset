@@ -14,16 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Shader: OuterGlowBullet
   Colors:
-  - {r: 1, g: 0, b: 0.7679591, a: 0}
-  - {r: 0.5169749, g: 0, b: 1, a: 0}
+  - {r: 0.4339623, g: 0, b: 0.08492546, a: 0}
+  - {r: 0.3773585, g: 0, b: 0.29173115, a: 0}
   Duration: 0
   Speed: 0
   BulletRadius: 0.4
-  Density: 0
+  Density: 0.8
   BulletDamage: 40
-  FormingTime: 0.5
-  StartRadius: 8
-  CloseSpeed: 2
-  AngularSpeed: 4
-  AngularSpeedVariance: 1
-  TimeUntilAlternate: 0.7
+  FormingTime: 1
+  StartRadius: 11.5
+  CloseSpeed: 1
+  AngularSpeed: 0.7
+  AngularSpeedVariance: 0.2
+  TimeUntilAlternate: 0.4

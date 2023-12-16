@@ -14,26 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Shader: OuterGlowBullet
   Colors:
-  - {r: 1, g: 0, b: 0, a: 0}
-  - {r: 1, g: 0.46850994, b: 0, a: 0}
+  - {r: 0.25458714, g: 0, b: 0.6037736, a: 0}
+  - {r: 0, g: 0.10002518, b: 1, a: 0}
   Duration: 12
   Speed: 0
   BulletRadius: 0.4
   Density: 0
   BulletDamage: 40
-  SpawnRate: 0.1
+  SpawnRate: 0.05
   StartSpeedRandomRange:
     x: 11
     y: 14
   VelocityRandomness: 0
-  PlayerMagnetism: 6
-  SpawnDistanceFromTarget: 8
+  PlayerMagnetism: 10
+  SpawnDistanceFromTarget: 5
   SpawnPositionVariance: 2
-  SpawnRelativeToBossNotPlayer: 1
-  VelocityPerpendicularToPlayer: 0
-  VelocityAwayFromTarget: 1
-  BulletVelocityMultiplier: 1
+  SpawnRelativeToBossNotPlayer: 0
+  VelocityPerpendicularToPlayer: 1
+  VelocityAwayFromTarget: 0
+  BulletVelocityMultiplier: 0.5
   BulletRadiusTimeSlope: 0.005
-  BulletLifeTime: 10
+  BulletLifeTime: 5
   BounceOffWalls: 0
   DieOnWall: 1

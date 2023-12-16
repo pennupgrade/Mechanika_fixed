@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Shader: OuterGlowBullet
   Colors:
-  - {r: 1, g: 0.43529412, b: 0, a: 0}
+  - {r: 1, g: 0.039215688, b: 0, a: 0}
   Duration: 14
   Speed: 6
   BulletRadius: 0.4
@@ -25,7 +25,7 @@ MonoBehaviour:
   AngularVelocity: 2
   FormingTime: 0.7
   BeginOffset: 7
-  BeginColor: {r: 1, g: 0.43529412, b: 0, a: 0}
+  BeginColor: {r: 1, g: 0.039114445, b: 0, a: 0}
   OutlineColor: {r: 1, g: 0.43574882, b: 0, a: 0}
   BounceOffWall: 1
   MinimumRadiusesFromPlayer: 2.05
