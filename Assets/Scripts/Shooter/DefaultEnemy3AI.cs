@@ -5,6 +5,8 @@ using Pathfinding;
 using Unity.Mathematics;
 using Random = UnityEngine.Random;
 
+using Utilities;
+
 public class DefaultEnemy3AI : MonoBehaviour, IEnemy
 {
     public Healthbar Hbar;
@@ -28,6 +30,9 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
     private GameObject Player;
     [SerializeField] private int enemyType, state;
     private int frameTimer;
+
+    [Header("Misc")]
+    [SerializeField] Animator Animator;
 
     // Start is called before the first frame update
     void Start()
@@ -171,7 +176,12 @@ public class DefaultEnemy3AI : MonoBehaviour, IEnemy
         } else {
             rb.MovePosition(rb.position - Time.fixedDeltaTime*moveSpeed*bounceVector);
         }
-        fp.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward; 
+        fp.eulerAngles += Cturn * Time.fixedDeltaTime * Vector3.forward;
+
+        int2 ori = EnemyUtils.AngleDegreesToFourOrientation(fp.eulerAngles.z);
+
+        Animator.SetInteger("Horizontal", ori.x);
+        Animator.SetInteger("Vertical", ori.y);
     }
 
     private void FireBullet(){

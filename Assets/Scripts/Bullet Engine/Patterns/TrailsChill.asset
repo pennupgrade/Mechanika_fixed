@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69e9afeea91e40845adade3a961e749f, type: 3}
+  m_Name: TrailsChill
+  m_EditorClassIdentifier: 
+  Shader: OuterGlowBullet
+  Colors:
+  - {r: 0.25458714, g: 0, b: 0.6037736, a: 0}
+  - {r: 0, g: 0.10002518, b: 1, a: 0}
+  Duration: 12
+  Speed: 0
+  BulletRadius: 0.4
+  Density: 0
+  BulletDamage: 40
+  SpawnRate: 0.05
+  StartSpeedRandomRange:
+    x: 11
+    y: 14
+  VelocityRandomness: 0
+  PlayerMagnetism: 10
+  SpawnDistanceFromTarget: 5
+  SpawnPositionVariance: 2
+  SpawnRelativeToBossNotPlayer: 0
+  VelocityPerpendicularToPlayer: 1
+  VelocityAwayFromTarget: 0
+  BulletVelocityMultiplier: 0.5
+  BulletRadiusTimeSlope: 0.005
+  BulletLifeTime: 5
+  BounceOffWalls: 0
+  DieOnWall: 1

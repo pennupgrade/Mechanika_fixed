@@ -45,6 +45,7 @@ public class FireworkPattern : APattern
     [Space(10f)]
     public float StartOffsetAmount;
     public float StartOffsetVariation;
+    public bool RandomOffPlayer = false;
 
     [Space(10f)]
     public bool DieOnWall = true;
@@ -57,9 +58,12 @@ public class FireworkPattern : APattern
         Position playerPoint = new (playerTransform);
         Position bossPoint = new (bossTransform);
 
-        float2 startPos = position == null ? 
+        float2 startPos = position != null ? (float2) position :
+            !RandomOffPlayer ?
             bossTransform.position.xy() + StartOffsetAmount * normalize(bossPoint.Pos - playerPoint.Pos) + StartOffsetVariation * normalize(UnityEngine.Random.insideUnitCircle)
-            : (float2) position;
+            :
+            playerTransform.position.xy() + (float2) StartOffsetAmount * normalize(UnityEngine.Random.insideUnitCircle)
+                                          + (float2) (StartOffsetVariation * UnityEngine.Random.insideUnitCircle);
 
         float2 toPlayer = normalize(playerPoint.Pos - startPos);
 
@@ -71,7 +75,7 @@ public class FireworkPattern : APattern
         {
             return new BulletPolarFunction(new KinematicBodyStatic(startPos), (float o, float t) => CircleRadius + 0.5f * FireworkThickness * sin(o*10f) - (CircleRadius * 0.6f*t/(TimeUntilFireworkExplosion+Duration)), 
                 polar.x + AngularVelocity * tt, r => AngularVelocity, BulletRadius + BulletRadiusOffsetTrig.y*(.5f+.5f*sin(polar.x*BulletRadiusOffsetTrig.x)), tt, TimeUntilFireworkExplosion+10f, BulletDamage);
-        }, new float3(), false, false), () =>
+        }, new float3(), false, false, true), () =>
         {
             IEnumerator Coro() 
             {

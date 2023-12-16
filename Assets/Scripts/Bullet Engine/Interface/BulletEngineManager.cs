@@ -39,4 +39,6 @@ public class BulletEngineManager : MonoBehaviour
         BulletEngine.DisposeAll();
         bossEngine = null;
     }
+
+    public static void EndAllCoroutines() => Ins.StopAllCoroutines();
 }

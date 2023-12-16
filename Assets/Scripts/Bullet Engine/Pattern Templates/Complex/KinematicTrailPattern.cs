@@ -32,6 +32,7 @@ public class KinematicTrailPattern : APattern
     public float SpawnPositionVariance;
     public bool SpawnRelativeToBossNotPlayer = true;
     public bool VelocityPerpendicularToPlayer = false;
+    public bool VelocityAwayFromTarget = true;
 
     [Space(10f)]
     [Header("Extra Bullet Parameters")]
@@ -43,7 +44,7 @@ public class KinematicTrailPattern : APattern
 
     public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction, float2? position = null)
     {
-    
+        Debug.Log("trail");
         //
         GroupParameter groups = GroupParameter.CreateGroups(engine, Colors, Shader);
 
@@ -59,7 +60,11 @@ public class KinematicTrailPattern : APattern
         float2 startPos = position == null ? bossStartPos : (float2) position;
 
         // Start velocity
-        float2 initialVelocity = VelocityPerpendicularToPlayer ?
+        float2 initialVelocity = VelocityAwayFromTarget ?
+                UnityEngine.Random.Range(StartSpeedRandomRange.x, StartSpeedRandomRange.y) *
+                math.normalize(startPos - (SpawnRelativeToBossNotPlayer ? bossTransform.position.xy() : playerTransform.position.xy()))
+                :
+                VelocityPerpendicularToPlayer ?
                 UnityEngine.Random.Range(StartSpeedRandomRange.x, StartSpeedRandomRange.y) * math.mul(new float2x2(0, 1, -1, 0), normalize(playerTransform.position.xy() - startPos))
                 :
                 UnityEngine.Random.Range(StartSpeedRandomRange.x, StartSpeedRandomRange.y) * normalize(

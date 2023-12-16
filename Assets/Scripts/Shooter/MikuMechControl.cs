@@ -322,6 +322,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
         Debug.Log("death");
         SFXPlayer.PlaySound("MISC_4");
         BulletEngineManager.bossEngine?.RemoveAllInteractables();
+        BulletEngineManager.EndAllCoroutines();
 
         GameObject expl = Instantiate(explosionPrefab, transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
         Destroy(expl, 2);
@@ -330,7 +331,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     }
 
     public void Damage(int dmg, bool stun){
-        //return;
+        return;
         if (dashing) return;
         if (shield>0) {ShieldUpdate(-dmg);}
         else {
@@ -342,7 +343,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     }
 
     public void MeleeDamage(int dmg, bool stun){
-        //return;
+        return;
         if (meleeTimer>0.001 || dashing) return;
         if (shield>0) {ShieldUpdate(-dmg);}
         else {

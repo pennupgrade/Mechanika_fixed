@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13c87111d1f700649beac2eea91942fa, type: 3}
+  m_Name: Firework1
+  m_EditorClassIdentifier: 
+  Shader: OuterGlowBullet
+  Colors:
+  - {r: 0.8509804, g: 0.015686275, b: 0.23921569, a: 0}
+  - {r: 0.6509804, g: 0.011764706, b: 0.12941177, a: 0}
+  Duration: 0.7
+  Speed: 10
+  BulletRadius: 0.4
+  Density: 2
+  BulletDamage: 40
+  InitialVelocityVariation: 1
+  MagnetismBeforeExplosion: 3
+  MagnetismAfterExplosion: 7
+  CircleRadius: 5
+  FireworkThickness: 0
+  AngularVelocity: 2
+  TimeUntilFireworkExplosion: 0.7
+  TimeAfterFireworkExplosion: 7
+  ChaseTime: 5
+  AdditionalExplosionVelocity: 8
+  BulletRadiusOffsetTrig:
+    x: 1
+    y: 0
+  StartOffsetAmount: 7
+  StartOffsetVariation: 1
+  RandomOffPlayer: 1
+  DieOnWall: 0
+  BounceOffWall: 0
