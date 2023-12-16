@@ -18,24 +18,24 @@ MonoBehaviour:
   - {r: 0.003921569, g: 0.10980392, b: 0.2509804, a: 0}
   - {r: 0.003921569, g: 0.06666667, b: 0.14901961, a: 0}
   - {r: 0.02745098, g: 0.28627452, b: 0.4509804, a: 0}
-  Duration: 7
+  Duration: 5
   Speed: 0
-  BulletRadius: 0.3
+  BulletRadius: 0.6
   Density: 0
   BulletDamage: 40
-  SpawnRate: 0.2
+  SpawnRate: 0.04
   StartSpeedRandomRange:
-    x: 8
-    y: 12
+    x: 4
+    y: 6
   VelocityRandomness: 0
-  PlayerMagnetism: 2
-  SpawnDistanceFromTarget: 2
-  SpawnPositionVariance: 1
+  PlayerMagnetism: 0.5
+  SpawnDistanceFromTarget: 0
+  SpawnPositionVariance: 2
   SpawnRelativeToBossNotPlayer: 1
   VelocityPerpendicularToPlayer: 0
   VelocityAwayFromTarget: 1
   BulletVelocityMultiplier: 1
   BulletRadiusTimeSlope: 0.015
-  BulletLifeTime: 6
+  BulletLifeTime: 2.6
   BounceOffWalls: 0
   DieOnWall: 1

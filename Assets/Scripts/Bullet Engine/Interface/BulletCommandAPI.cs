@@ -158,7 +158,7 @@ public static class BulletCommandGradualAPI
     /// <param name="time"></param>
     /// <param name="generatorFunction"></param>
     /// <returns></returns>
-    public static IEnumerator CreateBulletCircleGradual(this BulletEngine engine, GroupParameter groups, Position pos, float radius, float distDensity, float time, Func<float2, float, ITBullet> generatorFunction, Func<float, float> thetaRadiusOffsetFunc, bool posOrigin = true, bool overridePosition = true)
+    public static IEnumerator CreateBulletCircleGradual(this BulletEngine engine, GroupParameter groups, Position pos, float radius, float distDensity, float time, Func<float2, float, ITBullet> generatorFunction, Func<float, float> thetaRadiusOffsetFunc, bool posOrigin = true, bool overridePosition = true, bool precisionMode = false)
     {
         float theta = 0f;
         float dTheta = 1f / (distDensity * radius);
@@ -168,6 +168,13 @@ public static class BulletCommandGradualAPI
 
         while(theta < 2f * PI)
         {
+            //bandaid
+            if(precisionMode)
+            {
+                theta = TAU * (Time.timeSinceLevelLoad - startTime)/time;
+                if(Time.timeSinceLevelLoad - startTime >= time) yield break;
+            }
+            
             float r = radius + thetaRadiusOffsetFunc(theta); 
             ITBullet b = generatorFunction(float2(theta, r), Time.timeSinceLevelLoad-startTime); if(overridePosition) b.Position = pos.Pos + posOriginFloat * r * new float2(cos(theta), sin(theta));
             engine.Add(groups.GetNext(), b);
@@ -175,8 +182,8 @@ public static class BulletCommandGradualAPI
             yield return new WaitForSeconds(time / (distDensity * radius * 2f * PI));
         }
     }
-    public static IEnumerator CreateBulletCircleGradual(this BulletEngine engine, GroupParameter groups, Position pos, float radius, float distDensity, float time, Func<float2, float, ITBullet> generatorFunction, float3 trigParams = new(), bool posOrigin = true, bool overridePosition = true)
-        => CreateBulletCircleGradual(engine, groups, pos, radius, distDensity, time, generatorFunction, theta => trigParams.y * sin(theta * trigParams.x + trigParams.z), posOrigin, overridePosition);
+    public static IEnumerator CreateBulletCircleGradual(this BulletEngine engine, GroupParameter groups, Position pos, float radius, float distDensity, float time, Func<float2, float, ITBullet> generatorFunction, float3 trigParams = new(), bool posOrigin = true, bool overridePosition = true, bool precisionMode = false)
+        => CreateBulletCircleGradual(engine, groups, pos, radius, distDensity, time, generatorFunction, theta => trigParams.y * sin(theta * trigParams.x + trigParams.z), posOrigin, overridePosition, precisionMode);
     public static IEnumerator CreateBulletCircleGradual(this BulletEngine engine, GroupParameter groups, Position pos, float radius, float distDensity, float time, Func<float2, ITBullet> generatorFunction, float3 trigParams = new())
         => CreateBulletCircleGradual(engine, groups, pos, radius, distDensity, time, (polar, time) => generatorFunction(polar), trigParams);
 

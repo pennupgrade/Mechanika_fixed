@@ -18,14 +18,14 @@ MonoBehaviour:
   - {r: 0.003921569, g: 0.10980392, b: 0.2509804, a: 0}
   - {r: 0.003921569, g: 0.06666667, b: 0.14901961, a: 0}
   - {r: 0.02745098, g: 0.28627452, b: 0.4509804, a: 0}
-  Duration: 15
+  Duration: 23
   Speed: 0
-  BulletRadius: 0.45
+  BulletRadius: 0.5
   Density: 0
   BulletDamage: 40
   BulletRadiusVariation: 0.2
   BulletVelocityMultiplier: 1
-  LifeTime: 3.7
+  LifeTime: 6
   SpawnDelay: 0.175
   MinimumDistanceToPlayer: 8
   MaximumDistanceFromPlayer: 19

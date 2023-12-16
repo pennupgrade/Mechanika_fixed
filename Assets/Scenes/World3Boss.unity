@@ -1111,6 +1111,7 @@ MonoBehaviour:
   ChillSurround: {fileID: 11400000, guid: e01148fd3bed5e849a7f2bf8154d5367, type: 2}
   Firework1: {fileID: 11400000, guid: 7d5bef8caa1135e4c90c3370374a82d2, type: 2}
   Firework2: {fileID: 11400000, guid: cd382582b6f274549b8252b8e3bedcf0, type: 2}
+  PianoTrail1: {fileID: 11400000, guid: 4447e5eace901484fa98e2b3f553e417, type: 2}
 --- !u!61 &413283801
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -41260,7 +41261,7 @@ MonoBehaviour:
   heal: {fileID: 3926523850701580197, guid: ad4bd5a1dcb4a254e81a07d31fb737e4, type: 3}
   Boss: {fileID: 413283800}
   songPosInBeats: 0
-  AudioDebugStartTime: 160
+  AudioDebugStartTime: 120
 --- !u!1 &1809895742
 GameObject:
   m_ObjectHideFlags: 0

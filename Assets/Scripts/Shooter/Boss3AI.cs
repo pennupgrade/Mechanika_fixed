@@ -441,6 +441,8 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
             ExecuteFireworks1(); break;
             case ExecutionEnum.FIREWORK_2:
             ExecuteFireworks2(); break;
+            case ExecutionEnum.PIANO_TRAIL_1:
+            ExecutePianoTrail1(); break;
         }
     }    
 
@@ -461,6 +463,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     [SerializeField] APattern ChillSurround;
     [SerializeField] APattern Firework1;
     [SerializeField] APattern Firework2;
+    [SerializeField] APattern PianoTrail1;
     
     void ExecuteCQRing() 
     {
@@ -550,6 +553,11 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         Firework2.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
     }
 
+    void ExecutePianoTrail1()
+    {
+        PianoTrail1.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
+    }
+
     public enum ExecutionEnum
     {
         CQ_RING,
@@ -568,6 +576,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         CHILL_TRAIL,
         CHILL_SURROUND,
         FIREWORK_1,
-        FIREWORK_2
+        FIREWORK_2,
+        PIANO_TRAIL_1
     }
 }

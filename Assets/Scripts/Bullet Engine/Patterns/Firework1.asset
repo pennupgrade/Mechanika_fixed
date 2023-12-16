@@ -34,7 +34,8 @@ MonoBehaviour:
   BulletRadiusOffsetTrig:
     x: 1
     y: 0
-  StartOffsetAmount: 4
+  StartOffsetAmount: 7
   StartOffsetVariation: 1
-  DieOnWall: 1
+  RandomOffPlayer: 1
+  DieOnWall: 0
   BounceOffWall: 0

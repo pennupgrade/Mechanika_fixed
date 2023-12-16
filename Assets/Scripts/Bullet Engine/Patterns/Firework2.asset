@@ -22,7 +22,7 @@ MonoBehaviour:
   BulletRadius: 0.4
   Density: 2
   BulletDamage: 40
-  InitialVelocityVariation: 1
+  InitialVelocityVariation: 5
   MagnetismBeforeExplosion: 3
   MagnetismAfterExplosion: 7
   CircleRadius: 5
@@ -35,7 +35,8 @@ MonoBehaviour:
   BulletRadiusOffsetTrig:
     x: 1
     y: 0
-  StartOffsetAmount: 4
+  StartOffsetAmount: 6
   StartOffsetVariation: 1
+  RandomOffPlayer: 0
   DieOnWall: 1
   BounceOffWall: 0

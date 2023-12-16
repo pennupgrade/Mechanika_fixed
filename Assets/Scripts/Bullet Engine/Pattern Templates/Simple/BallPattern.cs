@@ -41,15 +41,15 @@ public class BallPattern : APattern
         GroupParameter beginGroup = new(engine, (engine.UniqueGroup, new BulletMaterial(Shader, BeginColor)));
         GroupParameter outlineGroup = new(engine, (engine.UniqueGroup, new BulletMaterial(Shader, OutlineColor)));
 
-        GroupParameter allGroup = group.Merge(outlineGroup).Merge(beginGroup);
-        List<Action<int, float>> recursiveActions = new() { (i, d) => { BulletCommandInstantAPI.SetBulletVelocity(engine, allGroup, math.normalize(playerTransform.position.xy() - startPos) * Speed); finishAction?.Invoke(); } }; 
+        //GroupParameter allGroup = group.Merge(outlineGroup).Merge(beginGroup);
+        List<Action<int, float>> recursiveActions = new() { (i, d) => { BulletCommandInstantAPI.SetBulletVelocity(engine, group.Merge(outlineGroup).Merge(beginGroup), math.normalize(playerTransform.position.xy() - startPos) * Speed); finishAction?.Invoke(); } }; 
         for (float d = BallRadius; d > 0; d -= 1f / RadialDensity)
         {
             recursiveActions.Add((i, d) =>
             {
                 float r = BulletRadius + (i == 1 ? AdditionalRadiusForOutline : 0);
                 StartCommand(engine.CreateBulletCircleGradual(i == 1 ? outlineGroup : group, new PositionParameter(startPos), d, Density, FormingTime / (RadialDensity * BallRadius), (polar, time) => new BulletKinematicPolar(new(), new(), new(), AngularVelocity, polar + new float2(time * AngularVelocity, 0f), r, Duration, false, BulletDamage, BounceOffWall ?
-                (normal, triggerBullet) => allGroup.TransformAllBullets(engine, b =>
+                (normal, triggerBullet) => group.TransformAllBullets(engine, b =>
                 {
                     BulletKinematicPolar cb = (BulletKinematicPolar) b;
                     float2 newV = triggerBullet.Velocity - 2f * normal * math.dot(triggerBullet.Velocity, normal);
