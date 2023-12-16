@@ -74,14 +74,16 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
         started = true;
         AS.Play();
 
-        dsptimesong = (float) AudioSettings.dspTime - AudioDebugStartTime;
-        AS.time = AudioDebugStartTime;
+        dsptimesong = (float) AudioSettings.dspTime;// - AudioDebugStartTime;
+        //AS.time = AudioDebugStartTime;
         songPosition = (float) (AudioSettings.dspTime - dsptimesong);
         songPosInBeats = songPosition / secPerBeat;
-        while(rAttacks[nextIndexR].Item1 < songPosInBeats) nextIndexR++;
-        while(bAttacks[nextIndexB].Item1 < songPosInBeats) nextIndexB++;
-        nextIndexR = math.max(0, nextIndexR-1);
-        nextIndexB = math.max(0, nextIndexB-1);
+        //while(rAttacks[nextIndexR].Item1 < songPosInBeats) nextIndexR++;
+        //while(bAttacks[nextIndexB].Item1 < songPosInBeats) nextIndexB++;
+        //nextIndexR = math.max(0, nextIndexR-1);
+        //nextIndexB = math.max(0, nextIndexB-1);
+
+
         Player.GetComponent<MikuMechControl>().SusEngine();
 
         CountDown.gameObject.SetActive(true);
@@ -165,7 +167,10 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
         if(death){
         SaveData.Deaths[SceneManager.GetActiveScene().buildIndex] += 1;
         StartCoroutine(RestartCor());
-        } else SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+        } else {
+            SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+            AudioListener.pause = false;
+        }
     }
     private IEnumerator RestartCor(){
         yield return new WaitForSeconds(2);

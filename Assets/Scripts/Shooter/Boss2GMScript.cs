@@ -190,7 +190,10 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
         if(death){
         SaveData.Deaths[SceneManager.GetActiveScene().buildIndex] += 1;
         StartCoroutine(RestartCor());
-        } else SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+        } else {
+            SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+            AudioListener.pause = false;
+        }
     }
     private IEnumerator RestartCor(){
         yield return new WaitForSeconds(2);
