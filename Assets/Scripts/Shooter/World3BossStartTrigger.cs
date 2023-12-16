@@ -16,16 +16,16 @@ public class World3BossStartTrigger : MonoBehaviour
             wall.SetActive(true);
             //start VN
 
-            // Action onVNFinish = () => 
-            // {
+            Action onVNFinish = () => 
+            {
                 GM.StartFight();
                 Destroy(gameObject);
                 SaveData.W3VNCompleted = true;
                 Player.GetComponent<MikuMechControl>().UnFreeze();
-            // };
+            };
             
-            // Player.GetComponent<MikuMechControl>().Freeze();
-            // VNMain.Activate(VNMain.MikuVengeStory, onVNFinish, SaveData.W3VNCompleted);
+            Player.GetComponent<MikuMechControl>().Freeze();
+            VNMain.Activate(VNMain.MikuVengeStory, onVNFinish, SaveData.W3VNCompleted);
             
         }
     }

@@ -602,6 +602,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MikuCharisExchange: {fileID: 4900000, guid: 0aaf8582bd4499b48a05184e097920e8, type: 3}
+  MikuVengeExchange: {fileID: 4900000, guid: 49300a829dd0f164a94b5e6c467c7054, type: 3}
   SkipFolder: {fileID: 4681247693936095497}
   SkipObject: {fileID: 4681247694730987058}
   ChoiceFolder: {fileID: 4681247693345642505}

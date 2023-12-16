@@ -179,15 +179,13 @@ Vanilla, of course.
 Charis visibly recomposes herself.
 #setvisible true
 #switchspeaker
-A perfectly suitable, if not rather bland choice.
+I could never ally myself with someone of such bland tastes.
 #setvisible false
-Charis pulls out a holo tablet, taps some buttons on her screen, and swipes the screen away.
-A few minutes later, a waiter drone enters the office with the sundaes.
+Charis pults away her holotablet.
 #setvisible true
-Let us enjoy these, and return to business matters, then.
-#setvisible false
-She was right. The sundae is excellent.
--> charis3
+Erinye Protocol: Activation.
+You will pay for your lack of refinement.
+-> END
 = c3
 #switchspeaker
 #playsound miku13
@@ -208,9 +206,9 @@ It’s a bit different from the one at Jet’s Diner in Neo-Philly. Less rich an
 -> charisr1
 
 ===charis3===
-Can't find this
+Vanilla was the <i> Wrong </i> Answer
 -> END
 
 ===charisr1===
-Can't find this
+#skipfight
 -> END
