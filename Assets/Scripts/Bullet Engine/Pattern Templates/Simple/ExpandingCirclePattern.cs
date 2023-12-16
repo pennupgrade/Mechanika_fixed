@@ -35,6 +35,9 @@ public class ExpandingCirclePattern : APattern
     [Space(10f)]
     public float TimeUntilAlternate = -1f;
 
+    [Space(10f)]
+    public float BulletLifetime = 10f;
+
     static List<GroupParameter> allGroupParams = new();
     public static void ShiftAllGroupColors(int amount = 1)
     {
@@ -72,7 +75,7 @@ public class ExpandingCirclePattern : APattern
                         float ltheta = Utils.amod(theta + w1*time, size) - size*.5f;
                         ltheta = abs(ltheta);
                         return overallRadius + SpikeOffset - SpikeSlope * ltheta;// * overallRadius;
-                    }, polar.x + w2*spawnTime, BulletRadius, w2, spawnTime);
+                    }, polar.x + w2*spawnTime, BulletRadius, w2, spawnTime, BulletLifetime, BulletDamage);
             }, theta => 0, true, false);
 
             finishAction?.Invoke();

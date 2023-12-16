@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEditor.Animations;
 
 using Unity.Mathematics;
 using Random = UnityEngine.Random;
@@ -413,6 +412,8 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
             ExecuteExpandingRing1(); break;
             case ExecutionEnum.EXPANDING_RING_2:
             ExecuteExpandingRing2(); break;
+            case ExecutionEnum.EXPANDING_RING_3:
+            ExecuteExpandingRing3(); break;
             case ExecutionEnum.ALT_RING_COLORS:
             AlternateRingColors(); break;
             case ExecutionEnum.HOMING_RING:
@@ -435,6 +436,10 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
             ExecuteFireBall1(); break;
             case ExecutionEnum.FIRE_BALL_2:
             ExecuteFireBall2(); break;
+            case ExecutionEnum.FIRE_BALL_3:
+            ExecuteFireBall3(); break;
+            case ExecutionEnum.FIRE_BALL_4:
+            ExecuteFireBall4(); break;
             case ExecutionEnum.CHILL_TRAIL:
             ExecuteChillTrail(); break;
             case ExecutionEnum.CHILL_SURROUND:
@@ -454,6 +459,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     [Header("Patterns")]
     [SerializeField] APattern ExpandingRing1;
     [SerializeField] APattern ExpandingRing2;
+    [SerializeField] APattern ExpandingRing3;
     [SerializeField] APattern HomingRing;
     [SerializeField] APattern FirstPianoBoxes;
     [SerializeField] APattern SecondPianoBoxes;
@@ -464,6 +470,8 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     [SerializeField] APattern FollowTrail1;
     [SerializeField] APattern FireBall1;
     [SerializeField] APattern FireBall2;
+    [SerializeField] APattern FireBall3;
+    [SerializeField] APattern FireBall4;
     [SerializeField] APattern ChillTrail;
     [SerializeField] APattern ChillSurround;
     [SerializeField] APattern ChillSurroundPoly;
@@ -487,9 +495,14 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
             () => StartCoroutine(Utils.WaitThenAction(4, () => ExecuteExpandingRing1(count-1))));
     }
 
-    void ExecuteExpandingRing2(int count = 1, float delaySeconds = 2) 
+    void ExecuteExpandingRing2() 
     {
         ExpandingRing2.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
+    }
+
+    void ExecuteExpandingRing3() 
+    {
+        ExpandingRing3.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
     }
 
     void AlternateRingColors() => ExpandingCirclePattern.ShiftAllGroupColors();
@@ -544,6 +557,16 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         FireBall2.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
     }
 
+    void ExecuteFireBall3()
+    {
+        FireBall3.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
+    }
+
+    void ExecuteFireBall4()
+    {
+        FireBall4.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
+    }
+
     void ExecuteChillTrail()
     {
         ChillTrail.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
@@ -579,6 +602,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         CQ_RING,
         EXPANDING_RING_1,
         EXPANDING_RING_2,
+        EXPANDING_RING_3,
         ALT_RING_COLORS,
         HOMING_RING,
         FIRST_PIANO_BOXES,
@@ -590,6 +614,8 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         FOLLOW_TRAIL_1,
         FIRE_BALL_1,
         FIRE_BALL_2,
+        FIRE_BALL_3,
+        FIRE_BALL_4,
         CHILL_TRAIL,
         CHILL_SURROUND,
         CHILL_SURROUND_POLY,

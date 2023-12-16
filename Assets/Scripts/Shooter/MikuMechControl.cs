@@ -331,7 +331,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     }
 
     public void Damage(int dmg, bool stun){
-        return;
+        //return;
         if (dashing) return;
         if (shield>0) {ShieldUpdate(-dmg);}
         else {
@@ -343,7 +343,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     }
 
     public void MeleeDamage(int dmg, bool stun){
-        return;
+        //return;
         if (meleeTimer>0.001 || dashing) return;
         if (shield>0) {ShieldUpdate(-dmg);}
         else {

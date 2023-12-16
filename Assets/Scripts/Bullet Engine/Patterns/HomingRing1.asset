@@ -22,12 +22,12 @@ MonoBehaviour:
   BulletRadius: 0.4
   Density: 0
   BulletDamage: 40
-  BulletCount: 24
+  BulletCount: 12
   InitialVelocity: 7
   Friction: 0
   MinimumDistanceToPlayer: 8
   MaximumDistanceFromPlayer: 10
   BounceOffWall: 1
   DieOnWall: 1
-  Magnetism: 8
+  Magnetism: 5
   SpawnOnBoss: 1

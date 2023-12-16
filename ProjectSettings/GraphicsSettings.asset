@@ -3,7 +3,7 @@
 --- !u!30 &1
 GraphicsSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 13
+  serializedVersion: 14
   m_Deferred:
     m_Mode: 1
     m_Shader: {fileID: 69, guid: 0000000000000000f000000000000000, type: 0}
@@ -37,7 +37,19 @@ GraphicsSettings:
   - {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
   - {fileID: 10770, guid: 0000000000000000f000000000000000, type: 0}
   - {fileID: 10783, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 4800000, guid: ba4f8eec0f6e48f4795035e8cd991da8, type: 3}
+  - {fileID: 4800000, guid: bf3f6e16318f34c4288e16a824cbff46, type: 3}
+  - {fileID: 4800000, guid: d90467570ef0e924f85ecfa2ca1db877, type: 3}
+  - {fileID: 4800000, guid: 9bfea31bec78a9b4892ac0f2de85cc6d, type: 3}
+  - {fileID: 4800000, guid: 41ece0eaad5174240920a3d195d0d162, type: 3}
+  - {fileID: 4800000, guid: da16926d6ccdfe44b9c6b5a6e6ddc8e9, type: 3}
+  - {fileID: 4800000, guid: 94831478422cead439edb7e77f1e743b, type: 3}
+  - {fileID: 4800000, guid: 00dfe63203121e849a9f8ae1850c4d60, type: 3}
+  - {fileID: 4800000, guid: 69ee02771271bca4ebb4a7c1d111170d, type: 3}
+  - {fileID: 4800000, guid: 2085d562bc3d6794ea402f96c0eef6af, type: 3}
+  - {fileID: 4800000, guid: 340f0885f54a1124e83004e6a46d332a, type: 3}
   m_PreloadedShaders: []
+  m_PreloadShadersBatchTimeLimit: -1
   m_SpritesDefaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_CustomRenderPipeline: {fileID: 0}
   m_TransparencySortMode: 0
@@ -47,7 +59,7 @@ GraphicsSettings:
   m_TierSettings: []
   m_LightmapStripping: 0
   m_FogStripping: 0
-  m_InstancingStripping: 0
+  m_InstancingStripping: 2
   m_LightmapKeepPlain: 1
   m_LightmapKeepDirCombined: 1
   m_LightmapKeepDynamicPlain: 1
@@ -62,3 +74,4 @@ GraphicsSettings:
   m_LightsUseColorTemperature: 0
   m_DefaultRenderingLayerMask: 1
   m_LogWhenShaderIsCompiled: 0
+  m_SRPDefaultSettings: {}

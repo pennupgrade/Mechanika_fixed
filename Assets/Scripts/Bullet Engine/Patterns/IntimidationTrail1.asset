@@ -16,7 +16,7 @@ MonoBehaviour:
   Colors:
   - {r: 1, g: 0.3019608, b: 0.42745098, a: 0}
   - {r: 1, g: 0.45882353, b: 0.56078434, a: 0}
-  Duration: 4
+  Duration: 3.04
   Speed: 0
   BulletRadius: 0.4
   Density: 0

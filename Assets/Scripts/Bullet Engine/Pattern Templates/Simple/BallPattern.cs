@@ -61,7 +61,7 @@ public class BallPattern : APattern
             });
         }
 
-        recursiveActions.Add((i, d) => { engine.Add(beginGroup.GetNext(), new BulletKinematicPolar(startPos, new(), new(), AngularVelocity, new(), BulletRadius, Duration)); recursiveActions[i - 1](i - 1, d + 1f / RadialDensity); });
+        recursiveActions.Add((i, d) => { engine.Add(beginGroup.GetNext(), new BulletKinematicPolar(startPos, new(), new(), AngularVelocity, new(), BulletRadius, Duration, true, BulletDamage)); recursiveActions[i - 1](i - 1, d + 1f / RadialDensity); });
 
         recursiveActions.Last()(recursiveActions.Count-1, 0f);
     }

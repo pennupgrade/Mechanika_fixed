@@ -14,23 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Shader: BoxBullet
   Colors:
-  - {r: 0.011764703, g: 0.1844895, b: 0.34901962, a: 0}
+  - {r: 0.27992228, g: 0.011764703, b: 0.34901962, a: 0}
   - {r: 0.25009698, g: 0.003921569, b: 0.2509804, a: 0}
-  - {r: 0.2827127, g: 0, b: 0.6698113, a: 0}
+  - {r: 0.67058825, g: 0, b: 0.6212065, a: 0}
   - {r: 0.4433962, g: 0, b: 0.10070242, a: 0}
-  Duration: 5
+  Duration: 3
   Speed: 0
   BulletRadius: 0.4
   Density: 0
   BulletDamage: 40
-  SpawnRate: 0.06
+  SpawnRate: 0.1
   StartSpeedRandomRange:
-    x: 4
-    y: 6
+    x: 6
+    y: 8
   VelocityRandomness: 0
   PlayerMagnetism: 2
-  SpawnDistanceFromTarget: 0
-  SpawnPositionVariance: 2
+  SpawnDistanceFromTarget: 2
+  SpawnPositionVariance: 1
   SpawnRelativeToBossNotPlayer: 1
   VelocityPerpendicularToPlayer: 0
   VelocityAwayFromTarget: 1
