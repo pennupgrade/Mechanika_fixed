@@ -427,6 +427,8 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
             ExecuteMiniCircleExplode1(); break;
             case ExecutionEnum.MINI_CIRCLE_EXPLODE_2:
             ExecuteMiniCircleExplode2(); break;
+            case ExecutionEnum.MINI_CIRCLE_EXPLODE_3:
+            ExecuteMiniCircleExplode3(); break;
             case ExecutionEnum.FOLLOW_TRAIL_1:
             ExecuteFollowTrail1(); break;
             case ExecutionEnum.FIRE_BALL_1:
@@ -456,6 +458,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     [SerializeField] APattern IntimidationTrail1;
     [SerializeField] APattern MiniCircleExplode1;
     [SerializeField] APattern MiniCircleExplode2;
+    [SerializeField] APattern MiniCircleExplode3;
     [SerializeField] APattern FollowTrail1;
     [SerializeField] APattern FireBall1;
     [SerializeField] APattern FireBall2;
@@ -517,6 +520,11 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     {
         MiniCircleExplode2.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
     }
+
+    void ExecuteMiniCircleExplode3()
+    {
+        MiniCircleExplode3.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
+    }
     
     void ExecuteFollowTrail1()
     {
@@ -570,6 +578,7 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         INTIMIDATION_TRAIL_1,
         MINI_CIRCLE_EXPLODE_1,
         MINI_CIRCLE_EXPLODE_2,
+        MINI_CIRCLE_EXPLODE_3,
         FOLLOW_TRAIL_1,
         FIRE_BALL_1,
         FIRE_BALL_2,
