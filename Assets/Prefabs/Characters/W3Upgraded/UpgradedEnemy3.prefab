@@ -127,6 +127,7 @@ GameObject:
   - component: {fileID: 1287685385508215805}
   - component: {fileID: 1287685385508215804}
   - component: {fileID: 2652936794739858259}
+  - component: {fileID: 3573517012348136515}
   m_Layer: 9
   m_Name: UpgradedEnemy3
   m_TagString: Enemy
@@ -143,7 +144,7 @@ Transform:
   m_GameObject: {fileID: 1287685385508215806}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -64.16, y: 27.81, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
+  m_LocalScale: {x: 6, y: 6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1287685386493246341}
@@ -192,7 +193,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f2fea76b986444800aa04ed42de71740, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -239,7 +240,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.15
 --- !u!114 &1287685385508215804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -300,6 +301,27 @@ MonoBehaviour:
   fp: {fileID: 1287685386493246341}
   enemyType: 0
   state: 0
+  Animator: {fileID: 3573517012348136515}
+--- !u!95 &3573517012348136515
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1287685385508215806}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d4be802dbdcbe41e88e48d0c9009db3f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1287685385538202550
 GameObject:
   m_ObjectHideFlags: 0
