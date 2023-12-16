@@ -973,6 +973,7 @@ MonoBehaviour:
   BossName: {fileID: 954487589}
   explosionPrefab: {fileID: 7737942028605508573, guid: 3ba46da2c5099fa4ca1f860cb92e2026, type: 3}
   RocketPrefab: {fileID: 6643981896476758214, guid: 217fa674d2db647beb3af918fdba34ce, type: 3}
+  BlueRocketPrefab: {fileID: 7204305356834749776, guid: 56ab7fd08609c40199f318e60b999bc9, type: 3}
   MissilePrefab: {fileID: 5079742136851849546, guid: 8e8d03e163b310f489d69d44c0b1c3e6, type: 3}
   MagicBullet: {fileID: 452850481069924787, guid: 849c9c1a90d0acc4a932833dcc080cae, type: 3}
   HybridMissile: {fileID: 7426500325276408725, guid: 39b26330787309345b6c818b8a8114b5, type: 3}
@@ -41034,7 +41035,7 @@ MonoBehaviour:
   heal: {fileID: 3926523850701580197, guid: ad4bd5a1dcb4a254e81a07d31fb737e4, type: 3}
   Boss: {fileID: 413283800}
   songPosInBeats: 0
-  AudioDebugStartTime: 35
+  AudioDebugStartTime: 135
 --- !u!1 &1809895742
 GameObject:
   m_ObjectHideFlags: 0

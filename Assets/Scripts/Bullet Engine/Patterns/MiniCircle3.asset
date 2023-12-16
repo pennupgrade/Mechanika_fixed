@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Shader: BoxBullet
   Colors:
-  - {r: 1, g: 0.084195316, b: 0, a: 0}
+  - {r: 0.6833925, g: 0, b: 1, a: 0}
   - {r: 0.5485883, g: 0, b: 1, a: 0}
   Duration: 0.9
   Speed: 0
