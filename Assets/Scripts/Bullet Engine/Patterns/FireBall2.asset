@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 349c98a2b8f8c254eaa9cc092927a5a2, type: 3}
-  m_Name: FireBall1
+  m_Name: FireBall2
   m_EditorClassIdentifier: 
   Shader: OuterGlowBullet
   Colors:
-  - {r: 1, g: 0.29918304, b: 0, a: 0}
+  - {r: 0, g: 0.042280674, b: 1, a: 0}
   Duration: 14
   Speed: 6
   BulletRadius: 0.4
@@ -26,7 +26,7 @@ MonoBehaviour:
   FormingTime: 0.7
   BeginOffset: 7
   BeginColor: {r: 1, g: 0.29803923, b: 0, a: 0}
-  OutlineColor: {r: 1, g: 0, b: 0.04887724, a: 0}
+  OutlineColor: {r: 0.622107, g: 0, b: 1, a: 0}
   BounceOffWall: 1
   MinimumRadiusesFromPlayer: 2.05
   AdditionalRadiusForOutline: 0.05

@@ -423,6 +423,14 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
             ExecuteIntimidationTrail1(); break;
             case ExecutionEnum.MINI_CIRCLE_EXPLODE_1:
             ExecuteMiniCircleExplode1(); break;
+            case ExecutionEnum.MINI_CIRCLE_EXPLODE_2:
+            ExecuteMiniCircleExplode2(); break;
+            case ExecutionEnum.FOLLOW_TRAIL_1:
+            ExecuteFollowTrail1(); break;
+            case ExecutionEnum.FIRE_BALL_1:
+            ExecuteFireBall1(); break;
+            case ExecutionEnum.FIRE_BALL_2:
+            ExecuteFireBall2(); break;
         }
     }    
 
@@ -434,6 +442,10 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
     [SerializeField] APattern FirstPianoBoxes;
     [SerializeField] APattern IntimidationTrail1;
     [SerializeField] APattern MiniCircleExplode1;
+    [SerializeField] APattern MiniCircleExplode2;
+    [SerializeField] APattern FollowTrail1;
+    [SerializeField] APattern FireBall1;
+    [SerializeField] APattern FireBall2;
     
     void ExecuteCQRing() 
     {
@@ -483,6 +495,26 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         MiniCircleExplode1.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
     }
 
+    void ExecuteMiniCircleExplode2()
+    {
+        MiniCircleExplode2.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
+    }
+    
+    void ExecuteFollowTrail1()
+    {
+        FollowTrail1.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
+    }
+
+    void ExecuteFireBall1()
+    {
+        FireBall1.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
+    }
+
+    void ExecuteFireBall2()
+    {
+        FireBall2.Execute(BulletEngineManager.bossEngine, BulletEngineManager.Ins.Boss, BulletEngineManager.UsedPlayerTransform, null);
+    }
+
     public enum ExecutionEnum
     {
         CQ_RING,
@@ -492,6 +524,10 @@ public partial class Boss3AI : MonoBehaviour, IEnemy
         HOMING_RING,
         FIRST_PIANO_BOXES,
         INTIMIDATION_TRAIL_1,
-        MINI_CIRCLE_EXPLODE_1
+        MINI_CIRCLE_EXPLODE_1,
+        MINI_CIRCLE_EXPLODE_2,
+        FOLLOW_TRAIL_1,
+        FIRE_BALL_1,
+        FIRE_BALL_2
     }
 }

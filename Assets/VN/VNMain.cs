@@ -16,6 +16,7 @@ using static Utilities.Swizzle;
 using static Unity.Mathematics.math;
 using AYellowpaper.SerializedCollections;
 using System.Runtime.InteropServices;
+using UnityEngine.SceneManagement;
 
 public partial class VNMain : MonoBehaviour
 {
@@ -160,6 +161,9 @@ public partial class VNMain : MonoBehaviour
                     break;
 
                 case "skipfight":
+                bool currentVNRunThrough = SceneManager.GetActiveScene().name == "World2Boss" ? SaveData.W2VNCompleted
+                                                                                              : SaveData.W3VNCompleted;
+                if(currentVNRunThrough) break;
                 Boss2GMScript.SkipFight();
                     break;
             }

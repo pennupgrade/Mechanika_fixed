@@ -43,7 +43,7 @@ public class KinematicTrailPattern : APattern
 
     public override void Execute(BulletEngine engine, Transform bossTransform, Transform playerTransform, Action finishAction, float2? position = null)
     {
-    
+        Debug.Log("trail");
         //
         GroupParameter groups = GroupParameter.CreateGroups(engine, Colors, Shader);
 
