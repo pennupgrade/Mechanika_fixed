@@ -15,7 +15,7 @@ MonoBehaviour:
   Shader: OuterGlowBullet
   Colors:
   - {r: 0.98039216, g: 0.22745097, b: 0.39401734, a: 0}
-  Duration: 14
+  Duration: 10
   Speed: 6
   BulletRadius: 0.4
   Density: 1.1
