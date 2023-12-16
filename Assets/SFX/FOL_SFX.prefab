@@ -93,9 +93,9 @@ MonoBehaviour:
     - Key: WP_1B
       Value: {fileID: 8300000, guid: 87b7e95eac348c840965d196ed4c9b22, type: 3}
     - Key: WP_2A
-      Value: {fileID: 8300000, guid: 87cac9f4fc8c679488cb5e9d182c4f30, type: 3}
+      Value: {fileID: 8300000, guid: 21472e98a1b8040f89f6e897a05c0c78, type: 3}
     - Key: WP_3A
-      Value: {fileID: 8300000, guid: b657ff96fcb5d6545a99be7e19cd474d, type: 3}
+      Value: {fileID: 8300000, guid: e219194ea00fb4494a2969a5ca877939, type: 3}
     - Key: WP_3B
       Value: {fileID: 8300000, guid: 25dee3ab1ce27b649a97c2fb288e6a84, type: 3}
     - Key: WP_4A
@@ -107,7 +107,7 @@ MonoBehaviour:
     - Key: WP_4CHARGE3
       Value: {fileID: 8300000, guid: 56fe1922dd39f3c4da1abf3b8fd56c3c, type: 3}
     - Key: WP_5A
-      Value: {fileID: 8300000, guid: 32462a0a0a04bde4eb490c77ae59ceab, type: 3}
+      Value: {fileID: 8300000, guid: 170edf3b42dee44e7888bf322b7d20ea, type: 3}
     - Key: DIE
       Value: {fileID: 8300000, guid: 2f5b7bd739c37ff48b4be61a4f70dac2, type: 3}
     - Key: MISC_1
