@@ -48,6 +48,10 @@ public class GM3Script : MonoBehaviour
         AS = GetComponent<AudioSource>();
         isSpawning = false;
         SaveData.W3EnemyNum=0;
+
+        if(SaveData.Weapons[0]) Player.GetComponent<MikuMechControl>().UnlockWeapon(3);
+        if(SaveData.Weapons[1]) Player.GetComponent<MikuMechControl>().UnlockWeapon(4);
+        if(SaveData.Weapons[2]) Player.GetComponent<MikuMechControl>().UnlockWeapon(5);
     }
     void Update(){
         if(zeroTimer>=0 && SaveData.W3EnemyNum <= 0){

@@ -17,6 +17,10 @@ public class GM2Script : MonoBehaviour, IGameManager
         StartCoroutine(SetPanelFalse());
         SaveData.SceneNum = SceneManager.GetActiveScene().buildIndex;
         dialogueCo = false;
+
+        if(SaveData.Weapons[0]) Player.GetComponent<MikuMechControl>().UnlockWeapon(3);
+        if(SaveData.Weapons[1]) Player.GetComponent<MikuMechControl>().UnlockWeapon(4);
+        if(SaveData.Weapons[2]) Player.GetComponent<MikuMechControl>().UnlockWeapon(5);
     }
     private IEnumerator SetPanelFalse(){
         Image img = BlackPanel.GetComponent<Image>();

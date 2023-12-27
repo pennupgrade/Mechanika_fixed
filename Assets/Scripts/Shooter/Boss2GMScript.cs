@@ -179,6 +179,7 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
         var boss = GameObject.Find("Boss2GM").GetComponent<Boss2GMScript>();
         boss.stopCoroutines();
         boss.StartCoroutine(boss.Skip());
+        SaveData.W2VNCompleted = true;
     }
 
     private IEnumerator SetPanelFalse(){

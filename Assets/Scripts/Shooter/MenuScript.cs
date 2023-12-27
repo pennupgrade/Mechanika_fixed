@@ -11,7 +11,7 @@ public class MenuScript : MonoBehaviour
     public TextMeshProUGUI StartText;
 
     public void PlayButton(){
-        if (SaveData.SceneNum >= 4) {
+        if (SaveData.SceneNum >= 3) {
             StartText.text = "Having dealt with the faction led by Charis, Kumi moves in to deal with the remaining lunar faction. It won't be easy. They are on high alert. Venge has upgraded their units with the latest technology. Kumi will have to show them why she's Vocaloid unit 01.";
         }
         PlayPanel.SetActive(true);
