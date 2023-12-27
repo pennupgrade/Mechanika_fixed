@@ -10,6 +10,7 @@ public class GM2Script : MonoBehaviour, IGameManager
     public TextMeshProUGUI DialogueName, DialogueText;
     public GameObject BlackPanel, DialogueBox, PausePanel;
     private bool dialogueCo;
+    [SerializeField] private GameObject Player;
 
     // Start is called before the first frame update
     void Start()

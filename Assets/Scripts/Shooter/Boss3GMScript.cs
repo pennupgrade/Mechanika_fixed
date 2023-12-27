@@ -26,8 +26,6 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
     private int nextIndexR, nextIndexB, minLeft, secLeft;
     private AudioSource AS;
 
-    [SerializeField] float AudioDebugStartTime = 0f;
-
     void Start(){
         SaveData.SceneNum = SceneManager.GetActiveScene().buildIndex;
         Player = GameObject.FindWithTag("Player");
