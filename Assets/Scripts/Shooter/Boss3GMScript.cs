@@ -39,7 +39,11 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
         rAttacks = SaveData.rAttacks3;
         bAttacks = SaveData.bAttacks3;
         commands = new bool[9];
-        nextIndexB = 0; nextIndexR = 0; 
+        nextIndexB = 0; nextIndexR = 0;
+
+        if(SaveData.Weapons[0]) Player.GetComponent<MikuMechControl>().UnlockWeapon(3);
+        if(SaveData.Weapons[1]) Player.GetComponent<MikuMechControl>().UnlockWeapon(4);
+        if(SaveData.Weapons[2]) Player.GetComponent<MikuMechControl>().UnlockWeapon(5);
     }
 
     // Update is called once per frame
@@ -142,9 +146,6 @@ public class Boss3GMScript : MonoBehaviour, IGameManager
     }
 
     private IEnumerator SetPanelFalse(){
-        if(SaveData.Weapons[0]) Player.GetComponent<MikuMechControl>().UnlockWeapon(3);
-        if(SaveData.Weapons[1]) Player.GetComponent<MikuMechControl>().UnlockWeapon(4);
-        if(SaveData.Weapons[2]) Player.GetComponent<MikuMechControl>().UnlockWeapon(5);
 
         Image img = BlackPanel.GetComponent<Image>();
         while (img.color.a>0){

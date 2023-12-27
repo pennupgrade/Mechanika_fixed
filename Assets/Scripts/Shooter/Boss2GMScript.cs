@@ -33,6 +33,10 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
         AS = GetComponent<AudioSource>();
         commands = new bool[24];
         nextIndex = 0;
+
+        if(SaveData.Weapons[0]) Player.GetComponent<MikuMechControl>().UnlockWeapon(3);
+        if(SaveData.Weapons[1]) Player.GetComponent<MikuMechControl>().UnlockWeapon(4);
+        if(SaveData.Weapons[2]) Player.GetComponent<MikuMechControl>().UnlockWeapon(5);
     }
 
     // Update is called once per frame
@@ -158,16 +162,26 @@ public class Boss2GMScript : MonoBehaviour, IGameManager
         yield return new WaitForSeconds(5);
         SceneManager.LoadSceneAsync("MainMenu");
     }
+    private IEnumerator Skip(){
+        GetComponent<AudioSource>().Pause();
+        yield return StartCoroutine(SetPanelTrue());
+        yield return new WaitForSeconds(1);
+        yield return StartCoroutine(FadeInText(MissionComplete));
+        SaveData.SceneNum = 3;
+        yield return new WaitForSeconds(3);
+        SceneManager.LoadSceneAsync("MainMenu");
+    }
+    private void stopCoroutines(){
+        StopAllCoroutines();
+    }
 
     public static void SkipFight() {
         var boss = GameObject.Find("Boss2GM").GetComponent<Boss2GMScript>();
-        boss.StartCoroutine(boss.Win());
+        boss.stopCoroutines();
+        boss.StartCoroutine(boss.Skip());
     }
 
     private IEnumerator SetPanelFalse(){
-        if(SaveData.Weapons[0]) Player.GetComponent<MikuMechControl>().UnlockWeapon(3);
-        if(SaveData.Weapons[1]) Player.GetComponent<MikuMechControl>().UnlockWeapon(4);
-        if(SaveData.Weapons[2]) Player.GetComponent<MikuMechControl>().UnlockWeapon(5);
 
         Image img = BlackPanel.GetComponent<Image>();
         while (img.color.a>0){

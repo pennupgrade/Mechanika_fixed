@@ -16,7 +16,7 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     public GameObject NOVAPrefab;
     public GameObject MeteorPrefab, explosionPrefab;
     private TrailRenderer tr;
-    private float moveSpeed=8, mspeed;
+    private float moveSpeed, mspeed;
     private bool lerpingHealth, lerpingShield, lerpingEnergy;
     [Header("Player Values")]
     [SerializeField] private int health, maxShield, shield, energy, weaponNum;
@@ -42,18 +42,22 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     private Animator animator;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        rb = GetComponent<Rigidbody2D>(); tr = GetComponent<TrailRenderer>(); animator = GetComponent<Animator>();
+        moveSpeed = 8;
         mspeed = moveSpeed; weaponNum = 1; cepheidMode = 1;
         energy = 100; health = 390; maxShield = 410; shield = 0;
         frozen = false; shieldRegen = false; dashing = false; knockback = 0;
         shieldRegenTimer = 0; weaponCDTimer = 0; dashCDTimer = 0; hurtTimer = 0;
         dashTimer = 0; chargeTimer = 0; meleeTimer = 0;
-        stunTimer = 0; stunned = false; W3Locked = false; W4Locked = false; W5Locked = true;
+        stunTimer = 0; stunned = false; W3Locked = true; W4Locked = true; W5Locked = true;
         lerpingEnergy = false; lerpingHealth=false; lerpingShield=false;
         WeaponUpdate(1);
         StartCoroutine(EnergyRegen());
+    }
+
+    void Start(){
+        rb = GetComponent<Rigidbody2D>(); tr = GetComponent<TrailRenderer>(); animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -334,7 +338,6 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     }
 
     public void Damage(int dmg, bool stun){
-        //return;
         if (dashing) return;
         if (hurtTimer < 0.001f) {
             hurtTimer = 0.4f;
@@ -351,7 +354,6 @@ public class MikuMechControl : MonoBehaviour, IBulletEngineInteractable
     }
 
     public void MeleeDamage(int dmg, bool stun){
-        //return;
         if (meleeTimer>0.001 || dashing) return;
         SFXPlayer.PlaySound("MIKU_HURT_BIG");
         if (shield>0) {ShieldUpdate(-dmg);}

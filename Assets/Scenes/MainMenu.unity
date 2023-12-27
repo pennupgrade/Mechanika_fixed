@@ -7433,12 +7433,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'This is a sci-fi RPG themed bullet hell with VN elements.
+  m_text: 'This is a RPG bullet hell thingy with VN elements. (its pretty rough,
+    sry)
 
-    By Kevin,
-    Aidan, T, Rin, and Yichen
+    By ngc3132, Aurcereal, SomeInternetBoi, rfk, and As7tesia
 
-    Music by Ghostrifter Official and John Tasoulas'
+    Music
+    by Ghostrifter Official and John Tasoulas'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
   m_sharedMaterial: {fileID: 2164040, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
